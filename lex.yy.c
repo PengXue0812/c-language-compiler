@@ -510,8 +510,9 @@ char *yytext;
 #line 5 "reader.l"
 # include <stdio.h>
 # include "y.tab.h"
-#line 514 "lex.yy.c"
+# include <string.h>
 #line 515 "lex.yy.c"
+#line 516 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -728,10 +729,10 @@ YY_DECL
 		}
 
 	{
-#line 9 "reader.l"
+#line 10 "reader.l"
 
 
-#line 735 "lex.yy.c"
+#line 736 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -790,232 +791,232 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 11 "reader.l"
+#line 12 "reader.l"
 { return WHILE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 12 "reader.l"
+#line 13 "reader.l"
 { return FOR; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 13 "reader.l"
+#line 14 "reader.l"
 { return BREAK; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "reader.l"
+#line 15 "reader.l"
 { return CONTINUE; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 15 "reader.l"
+#line 16 "reader.l"
 { return IF; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 16 "reader.l"
+#line 17 "reader.l"
 { return ELSE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 17 "reader.l"
+#line 18 "reader.l"
 { return PRINTF; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 18 "reader.l"
+#line 19 "reader.l"
 { return SCANF; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 19 "reader.l"
+#line 20 "reader.l"
 { return RETURN; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 20 "reader.l"
+#line 21 "reader.l"
 { return VOID; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 21 "reader.l"
+#line 22 "reader.l"
 { return S_QUO; /* 单引号 */}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 22 "reader.l"
+#line 23 "reader.l"
 { return D_QUO; /* 双引号 */}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 23 "reader.l"
+#line 24 "reader.l"
 { return INT; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 24 "reader.l"
+#line 25 "reader.l"
 { return COMMA; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 25 "reader.l"
+#line 26 "reader.l"
 { return SEMI; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 26 "reader.l"
+#line 27 "reader.l"
 { return ASSIGN_OP; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 27 "reader.l"
+#line 28 "reader.l"
 { return '('; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 28 "reader.l"
+#line 29 "reader.l"
 { return ')'; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 29 "reader.l"
+#line 30 "reader.l"
 { return '['; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 30 "reader.l"
+#line 31 "reader.l"
 { return ']'; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 31 "reader.l"
+#line 32 "reader.l"
 { return '{'; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 32 "reader.l"
+#line 33 "reader.l"
 { return '}'; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 34 "reader.l"
+#line 35 "reader.l"
 {yylval.str = strdup(yytext); return IDENTIFIER;  }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 37 "reader.l"
-{yylval.str= strdup(yytext); return CONST; }
+#line 38 "reader.l"
+{yylval.num= atoi(strdup(yytext)); return CONST; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 40 "reader.l"
+#line 41 "reader.l"
 { return ADD; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 41 "reader.l"
+#line 42 "reader.l"
 { return SUB; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 42 "reader.l"
+#line 43 "reader.l"
 { return MUL; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 43 "reader.l"
+#line 44 "reader.l"
 { return DIV; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 44 "reader.l"
+#line 45 "reader.l"
 { return MOD; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 45 "reader.l"
+#line 46 "reader.l"
 { return POW; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 47 "reader.l"
+#line 48 "reader.l"
 { return EQ_OP; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 48 "reader.l"
+#line 49 "reader.l"
 { return GT_OP; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 49 "reader.l"
+#line 50 "reader.l"
 { return LT_OP; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 50 "reader.l"
+#line 51 "reader.l"
 { return GE_OP; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 51 "reader.l"
+#line 52 "reader.l"
 { return LE_OP; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 52 "reader.l"
+#line 53 "reader.l"
 { return NE_OP; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 54 "reader.l"
+#line 55 "reader.l"
 { return AND;  }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 55 "reader.l"
+#line 56 "reader.l"
 { return OR; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 56 "reader.l"
+#line 57 "reader.l"
 { return NOT; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 57 "reader.l"
+#line 58 "reader.l"
 { return SINGLAND; }
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 60 "reader.l"
+#line 61 "reader.l"
 { /* DO NOTHING */ }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 61 "reader.l"
+#line 62 "reader.l"
 {/* DO NOTHING */}
 	YY_BREAK
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 62 "reader.l"
+#line 63 "reader.l"
 { /* ignore white space */ }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 63 "reader.l"
+#line 64 "reader.l"
 {printf("ERROR!!"); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 64 "reader.l"
+#line 65 "reader.l"
 ECHO;
 	YY_BREAK
-#line 1019 "lex.yy.c"
+#line 1020 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2020,7 +2021,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 64 "reader.l"
+#line 65 "reader.l"
 
 
 // void AddOutput(int Row, char* type, char* text){

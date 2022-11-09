@@ -286,7 +286,8 @@ enum yysymbol_kind_t
   YYSYMBOL_commands = 38,                  /* commands  */
   YYSYMBOL_command = 39,                   /* command  */
   YYSYMBOL_DECLEAR = 40,                   /* DECLEAR  */
-  YYSYMBOL_IDENTIFIERS = 41                /* IDENTIFIERS  */
+  YYSYMBOL_IDENTIFIERS = 41,               /* IDENTIFIERS  */
+  YYSYMBOL_ASSIGN = 42                     /* ASSIGN  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -614,16 +615,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   15
+#define YYLAST   35
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  37
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  5
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  7
+#define YYNRULES  10
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  11
+#define YYNSTATES  17
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   291
@@ -676,7 +677,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    38,    38,    39,    41,    43,    47,    50
+       0,    39,    39,    40,    42,    43,    45,    49,    52,    57,
+      60
 };
 #endif
 
@@ -697,7 +699,7 @@ static const char *const yytname[] =
   "S_QUO", "D_QUO", "INT", "COMMA", "SEMI", "ASSIGN_OP", "ADD", "SUB",
   "MUL", "DIV", "MOD", "POW", "EQ_OP", "GT_OP", "LT_OP", "GE_OP", "LE_OP",
   "NE_OP", "AND", "OR", "NOT", "SINGLAND", "IDENTIFIER", "CONST",
-  "$accept", "commands", "command", "DECLEAR", "IDENTIFIERS", YY_NULLPTR
+  "$accept", "commands", "command", "DECLEAR", "IDENTIFIERS", "ASSIGN", YY_NULLPTR
 };
 
 static const char *
@@ -721,8 +723,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -35,     0,   -35,   -34,   -35,   -15,   -35,   -13,   -35,   -31,
-     -35
+     -35,     0,   -35,   -32,   -14,   -35,   -12,   -11,   -35,    -9,
+     -34,   -35,   -35,   -27,   -35,   -35,   -35
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -730,20 +732,20 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,     0,     3,     0,     7,     5,     4,     0,
-       6
+       2,     0,     1,     0,     0,     3,     0,     0,     8,     6,
+       0,     4,     5,     0,    10,     9,     7
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -35,   -35,   -35,   -35,   -35
+     -35,   -35,   -35,   -35,   -35,   -35
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     4,     5,     7
+       0,     1,     5,     6,     9,     7
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -751,34 +753,40 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,     6,     8,     9,    10,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     3
+       2,    14,    15,     8,    10,    11,    12,    13,    16,     0,
+       0,     0,     0,     0,     0,     3,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     4
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,    35,    17,    16,    35,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    15
+       0,    35,    36,    35,    18,    17,    17,    16,    35,    -1,
+      -1,    -1,    -1,    -1,    -1,    15,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    35
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    38,     0,    15,    39,    40,    35,    41,    17,    16,
-      35
+       0,    38,     0,    15,    35,    39,    40,    42,    35,    41,
+      18,    17,    17,    16,    35,    36,    35
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    37,    38,    38,    39,    40,    41,    41
+       0,    37,    38,    38,    39,    39,    40,    41,    41,    42,
+      42
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     2,     2,     3,     1
+       0,     2,     0,     2,     2,     2,     2,     3,     1,     3,
+       3
 };
 
 
@@ -1241,31 +1249,47 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 5: /* DECLEAR: INT IDENTIFIERS  */
-#line 44 "grammer.y"
+  case 6: /* DECLEAR: INT IDENTIFIERS  */
+#line 46 "grammer.y"
 {
-}
-#line 1249 "y.tab.c"
-    break;
-
-  case 6: /* IDENTIFIERS: IDENTIFIERS COMMA IDENTIFIER  */
-#line 47 "grammer.y"
-                                         {
-    printf("%s\n", (yyvsp[0].str));
 }
 #line 1257 "y.tab.c"
     break;
 
-  case 7: /* IDENTIFIERS: IDENTIFIER  */
-#line 50 "grammer.y"
-           {
+  case 7: /* IDENTIFIERS: IDENTIFIERS COMMA IDENTIFIER  */
+#line 49 "grammer.y"
+                                         {
     printf("%s\n", (yyvsp[0].str));
 }
 #line 1265 "y.tab.c"
     break;
 
+  case 8: /* IDENTIFIERS: IDENTIFIER  */
+#line 52 "grammer.y"
+           {
+    printf("%s\n", (yyvsp[0].str));
+}
+#line 1273 "y.tab.c"
+    break;
 
-#line 1269 "y.tab.c"
+  case 9: /* ASSIGN: IDENTIFIER ASSIGN_OP CONST  */
+#line 57 "grammer.y"
+                                   {
+    printf("%s = %d\n",(yyvsp[-2].str),(yyvsp[0].num));
+}
+#line 1281 "y.tab.c"
+    break;
+
+  case 10: /* ASSIGN: IDENTIFIER ASSIGN_OP IDENTIFIER  */
+#line 61 "grammer.y"
+{
+    printf("%s = %s\n",(yyvsp[-2].str),(yyvsp[0].str));
+}
+#line 1289 "y.tab.c"
+    break;
+
+
+#line 1293 "y.tab.c"
 
       default: break;
     }
@@ -1458,4 +1482,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 57 "grammer.y"
+#line 66 "grammer.y"

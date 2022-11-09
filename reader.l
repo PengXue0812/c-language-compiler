@@ -4,6 +4,7 @@ WHITE_SPACE [ \t\n]
 %{
 # include <stdio.h>
 # include "y.tab.h"
+# include <string.h>
 %}
 
 %% 
@@ -34,7 +35,7 @@ WHITE_SPACE [ \t\n]
 {LETTER}([a-zA-Z_]|{DIGIT})*  {yylval.str = strdup(yytext); return IDENTIFIER;  }
 
 
-(([1-9]){DIGIT}*)|0  {yylval.str= strdup(yytext); return CONST; }
+(([1-9]){DIGIT}*)|0  {yylval.num= atoi(strdup(yytext)); return CONST; }
 
 
 "+"    { return ADD; }

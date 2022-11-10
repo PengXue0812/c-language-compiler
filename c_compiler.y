@@ -52,7 +52,7 @@ int main()
 %type <ast> forstart
 %type <ast> expression
 %type <ast> arguments
-%typr <ast> consts
+%type <ast> consts
 %type <ast> identifiers 
 
 
@@ -76,6 +76,375 @@ int main()
 
 %%
 program:
+    blocks
+    {
+        printf("program->blocks");
+    }
+    ;
+//语句块的集合
+blocks:
+    block
+    {
+        printf("blocks->block")
+    }
+    | blocks block
+    {
+        printf("blocks->blocks block")
+    }
+    ;
+//语句块(包括函数定义,全局变量的定义)
+block:descriptor declares SEMI
+    {
+        printf("block->descriptor declares SEMI")
+    }
+    |descriptor function body
+    {
+        printf("block->descriptor function body")
+    }
+    |descriptor function 'SEMI'
+    {
+        print("block->descriptor function 'SEMI'")
+    }
+//变量
+variable:IDENTIFIER
+    {
+        printf("variable->IDENTIFIER")
+    }
+    |IDENTIFIER '[' ']'
+    {
+        printf("variable->IDENTIFIER '[' ']'")
+    }
+    |IDENTIFIER '[' CONST ']'
+    {
+        printf("variable->IDENTIFIER '[' CONST ']'")
+    }
+    |IDENTIFIER '[' expression ']'
+    {
+        printf("variable->IDENTIFIER '[' expression ']'")
+    }
+    |'*' IDENTIFIER
+    {
+        printf("variable->'*' IDENTIFIER")
+    }
+    ;
+//数字的序列(1,2,3,4)    
+consts:CONST
+    {
+        printf("")
+    }
+    |consts COMMA CONST
+    {
+        printf("")
+    }
+    ;
+//标识符
+descriptor:INT
+    {
+        printf("")
+    }
+    |VOID 
+    {
+        printf("")
+    }
+    |INT '*'
+    {
+        printf("")
+    }
+    ;
+//函数的名字与参数列表
+function:IDENTIFIER '(' ')'
+    {
+        printf("")
+    }
+    |IDENTIFIER '(' params ')'
+    {
+        printf("")
+    }
+    ;
+params:params COMMA param {
+    printf("params: params COMMA param");
+}
+| param {
+    printf("params: param");
+};
+
+param:descriptor IDENTIFIER  {
+    printf("param:descriptor identifiers");
+}
+|descriptor IDENTIFIER  '[' CONST ']' {
+    printf("param:descriptor identifiers '[' CONST ']'");
+}
+|descriptor IDENTIFIER  '[' ']' {
+    printf("param:descriptor identifiers '[' ']' ");
+}
+|descriptor SINGLAND IDENTIFIER{
+    printf("param:descriptor SINGLAND identifiers");
+}
+|descriptor SINGLAND '*' IDENTIFIER{
+    printf("param:descriptor SINGLAND '*' identifiers");
+}
+|descriptor{
+    printf("param:descriptor");
+};
+    
+body:
+'{' statements '}' {
+    printf("body:'{' statements '}'");
+};
+
+statements:statements statement {
+    printf("statements:statements statement");
+}
+|statement {
+    printf("statements:statement");
+};
+
+statement:
+    expression SEMI
+    {
+
+    }
+    | declares SEMI
+    {
+
+    }
+    | body
+    {
+
+    }
+    | RETURN expression SEMI
+    {
+
+    }
+    | RETURN SEMI
+    {
+
+    }
+    | IF '(' expression ')' statement
+    {
+
+    }
+    | IF '(' expression ')' statement ELSE statement %prec LOWER_THAN_ELSE{
+
+    }
+    | WHILE '(' expression ')' statement
+    {
+
+    }
+    | FOR '(' SEMI SEMI ')' statement
+    {
+
+    }
+    | FOR '(' forstart SEMI SEMI ')' statement
+    {
+
+    } 
+    | FOR '(' SEMI expression SEMI ')' statement
+    {
+
+    }
+    | FOR '(' SEMI SEMI expression ')' statement
+    {
+
+    }
+    | FOR '(' forstart SEMI expression SEMI expression ')' statement
+    {
+
+    }
+    | FOR '(' forstart SEMI expression SEMI ')' statement
+    {
+
+    }
+    | FOR '(' forstart SEMI SEMI expression ')' statement
+    {
+
+    }
+    | FOR '(' SEMI expression SEMI expression ')' statement
+    {
+
+    }
+    | BREAK SEMI
+    {
+
+    }
+    | CONTINUE SEMI
+    {
+
+    }
+    | PRINTF '(' D_QUO expression D_QUO ')' SEMI
+    {
+
+    }
+    | PRINTF '(' expression ')' SEMI
+    {
+
+    }
+    | SCANF '(' IDENTIFIER ')' SEMI
+    {
+
+    }
+;
+declare:
+    descriptor declares
+    {
+
+    }
+;
+
+declares:
+    declarevars
+    {
+
+
+    }
+    | declarevars COMMA declares
+    {
+
+    }
+;
+declarevars:
+    variable
+    {
+
+    }
+    | variable ASSIGN_OP expression
+    {
+
+    }
+;
+forstart:
+    declares
+    {
+
+    }
+    | expression
+    {
+
+    }
+    ;
+
+expression:
+    CONST
+    {
+
+    }
+    | identifiers
+    {
+
+    }
+    | expression ASSIGN_OP expression
+    {
+
+    }
+    | expression '+' expression
+    {
+
+    }
+    | expression '-' expression
+    {
+
+    }
+    | expression '*' expression
+    {
+
+    }
+    |expression '/' expression
+    {
+
+    }
+    | expression '%' expression
+    {
+
+    }
+    | '(' expression ')'
+    {
+
+    }
+    | '-' expression
+    {
+
+    }
+    | expression AND expression
+    {
+
+    }
+    | expression OR expression
+    {
+
+    }
+    | '!' expression
+    {
+
+    }
+    | '{' consts '}'
+    {
+
+    }
+    | expression EQ_OP expression
+    {
+
+    }
+    | expression NE_OP expression
+    {
+
+    }
+    | expression GT_OP expression
+    {
+
+    }
+    | expression LT_OP expression
+    {
+
+    }
+    | expression GE_OP expression
+    {
+
+    }
+    | expression LE_OP expression
+    {
+
+    }
+    | IDENTIFIER '(' arguments ')'
+    {
+
+    }
+    | IDENTIFIER '(' ')'{
+
+    }
+    | '*' IDENTIFIER
+     {
+
+    }
+    | IDENTIFIER '[' expression ']'
+    {
+
+    }
+    | SINGLAND IDENTIFIER 
+    {
+
+    }
+    ;
+arguments:
+    expression 
+    {
+
+    }
+    | arguments COMMA expression
+    {
+
+    }
+    ;
+identifiers:
+    IDENTIFIER{
+
+    }
+    | identifiers IDENTIFIER
+    {
+
+    }
+    ;
+
+
 %%
 
 // void AddOutput(int Row, char* type, char* text){

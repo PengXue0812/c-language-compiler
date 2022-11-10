@@ -52,6 +52,7 @@ int main()
 %type <ast> forstart
 %type <ast> expression
 %type <ast> arguments
+%typr <ast> consts
 %type <ast> identifiers 
 
 

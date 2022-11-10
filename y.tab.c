@@ -71,7 +71,7 @@
 
 #include <stdio.h>
 #include <string.h>
-
+#include "../Node/BaseNode.h"
 //在lex.yy.c里定义，会被yyparse()调用。在此声明消除编译和链接错误。
 extern int yylex(void); 
 
@@ -118,10 +118,7 @@ int main()
 #  endif
 # endif
 
-/* Use api.header.include to #include this header
-   instead of duplicating it here.  */
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -139,40 +136,34 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    WHILE = 258,                   /* WHILE  */
-    FOR = 259,                     /* FOR  */
-    BREAK = 260,                   /* BREAK  */
-    CONTINUE = 261,                /* CONTINUE  */
-    IF = 262,                      /* IF  */
-    ELSE = 263,                    /* ELSE  */
-    PRINTF = 264,                  /* PRINTF  */
-    SCANF = 265,                   /* SCANF  */
-    RETURN = 266,                  /* RETURN  */
-    VOID = 267,                    /* VOID  */
-    S_QUO = 268,                   /* S_QUO  */
-    D_QUO = 269,                   /* D_QUO  */
-    INT = 270,                     /* INT  */
-    COMMA = 271,                   /* COMMA  */
-    SEMI = 272,                    /* SEMI  */
-    ASSIGN_OP = 273,               /* ASSIGN_OP  */
-    ADD = 274,                     /* ADD  */
-    SUB = 275,                     /* SUB  */
-    MUL = 276,                     /* MUL  */
-    DIV = 277,                     /* DIV  */
-    MOD = 278,                     /* MOD  */
-    POW = 279,                     /* POW  */
-    EQ_OP = 280,                   /* EQ_OP  */
-    GT_OP = 281,                   /* GT_OP  */
-    LT_OP = 282,                   /* LT_OP  */
-    GE_OP = 283,                   /* GE_OP  */
-    LE_OP = 284,                   /* LE_OP  */
-    NE_OP = 285,                   /* NE_OP  */
-    AND = 286,                     /* AND  */
-    OR = 287,                      /* OR  */
-    NOT = 288,                     /* NOT  */
-    SINGLAND = 289,                /* SINGLAND  */
-    IDENTIFIER = 290,              /* IDENTIFIER  */
-    CONST = 291                    /* CONST  */
+    ASSIGN_OP = 258,               /* ASSIGN_OP  */
+    OR = 259,                      /* OR  */
+    AND = 260,                     /* AND  */
+    SINGLAND = 261,                /* SINGLAND  */
+    EQ_OP = 262,                   /* EQ_OP  */
+    NE_OP = 263,                   /* NE_OP  */
+    GT_OP = 264,                   /* GT_OP  */
+    LT_OP = 265,                   /* LT_OP  */
+    GE_OP = 266,                   /* GE_OP  */
+    LE_OP = 267,                   /* LE_OP  */
+    PRINTF = 268,                  /* PRINTF  */
+    SCANF = 269,                   /* SCANF  */
+    IDENTIFIER = 270,              /* IDENTIFIER  */
+    CONST = 271,                   /* CONST  */
+    LOWER_THAN_ELSE = 272,         /* LOWER_THAN_ELSE  */
+    WHILE = 273,                   /* WHILE  */
+    FOR = 274,                     /* FOR  */
+    BREAK = 275,                   /* BREAK  */
+    CONTINUE = 276,                /* CONTINUE  */
+    IF = 277,                      /* IF  */
+    ELSE = 278,                    /* ELSE  */
+    RETURN = 279,                  /* RETURN  */
+    VOID = 280,                    /* VOID  */
+    S_QUO = 281,                   /* S_QUO  */
+    D_QUO = 282,                   /* D_QUO  */
+    INT = 283,                     /* INT  */
+    COMMA = 284,                   /* COMMA  */
+    SEMI = 285                     /* SEMI  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -181,40 +172,34 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define WHILE 258
-#define FOR 259
-#define BREAK 260
-#define CONTINUE 261
-#define IF 262
-#define ELSE 263
-#define PRINTF 264
-#define SCANF 265
-#define RETURN 266
-#define VOID 267
-#define S_QUO 268
-#define D_QUO 269
-#define INT 270
-#define COMMA 271
-#define SEMI 272
-#define ASSIGN_OP 273
-#define ADD 274
-#define SUB 275
-#define MUL 276
-#define DIV 277
-#define MOD 278
-#define POW 279
-#define EQ_OP 280
-#define GT_OP 281
-#define LT_OP 282
-#define GE_OP 283
-#define LE_OP 284
-#define NE_OP 285
-#define AND 286
-#define OR 287
-#define NOT 288
-#define SINGLAND 289
-#define IDENTIFIER 290
-#define CONST 291
+#define ASSIGN_OP 258
+#define OR 259
+#define AND 260
+#define SINGLAND 261
+#define EQ_OP 262
+#define NE_OP 263
+#define GT_OP 264
+#define LT_OP 265
+#define GE_OP 266
+#define LE_OP 267
+#define PRINTF 268
+#define SCANF 269
+#define IDENTIFIER 270
+#define CONST 271
+#define LOWER_THAN_ELSE 272
+#define WHILE 273
+#define FOR 274
+#define BREAK 275
+#define CONTINUE 276
+#define IF 277
+#define ELSE 278
+#define RETURN 279
+#define VOID 280
+#define S_QUO 281
+#define D_QUO 282
+#define INT 283
+#define COMMA 284
+#define SEMI 285
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -223,9 +208,10 @@ union YYSTYPE
 #line 30 "grammer.y"
 
     int num;
-    char* str;
+    AST::BaseNode* ast;
+    char *str;
 
-#line 229 "y.tab.c"
+#line 215 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -240,7 +226,7 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -248,46 +234,46 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_WHILE = 3,                      /* WHILE  */
-  YYSYMBOL_FOR = 4,                        /* FOR  */
-  YYSYMBOL_BREAK = 5,                      /* BREAK  */
-  YYSYMBOL_CONTINUE = 6,                   /* CONTINUE  */
-  YYSYMBOL_IF = 7,                         /* IF  */
-  YYSYMBOL_ELSE = 8,                       /* ELSE  */
-  YYSYMBOL_PRINTF = 9,                     /* PRINTF  */
-  YYSYMBOL_SCANF = 10,                     /* SCANF  */
-  YYSYMBOL_RETURN = 11,                    /* RETURN  */
-  YYSYMBOL_VOID = 12,                      /* VOID  */
-  YYSYMBOL_S_QUO = 13,                     /* S_QUO  */
-  YYSYMBOL_D_QUO = 14,                     /* D_QUO  */
-  YYSYMBOL_INT = 15,                       /* INT  */
-  YYSYMBOL_COMMA = 16,                     /* COMMA  */
-  YYSYMBOL_SEMI = 17,                      /* SEMI  */
-  YYSYMBOL_ASSIGN_OP = 18,                 /* ASSIGN_OP  */
-  YYSYMBOL_ADD = 19,                       /* ADD  */
-  YYSYMBOL_SUB = 20,                       /* SUB  */
-  YYSYMBOL_MUL = 21,                       /* MUL  */
-  YYSYMBOL_DIV = 22,                       /* DIV  */
-  YYSYMBOL_MOD = 23,                       /* MOD  */
-  YYSYMBOL_POW = 24,                       /* POW  */
-  YYSYMBOL_EQ_OP = 25,                     /* EQ_OP  */
-  YYSYMBOL_GT_OP = 26,                     /* GT_OP  */
-  YYSYMBOL_LT_OP = 27,                     /* LT_OP  */
-  YYSYMBOL_GE_OP = 28,                     /* GE_OP  */
-  YYSYMBOL_LE_OP = 29,                     /* LE_OP  */
-  YYSYMBOL_NE_OP = 30,                     /* NE_OP  */
-  YYSYMBOL_AND = 31,                       /* AND  */
-  YYSYMBOL_OR = 32,                        /* OR  */
-  YYSYMBOL_NOT = 33,                       /* NOT  */
-  YYSYMBOL_SINGLAND = 34,                  /* SINGLAND  */
-  YYSYMBOL_IDENTIFIER = 35,                /* IDENTIFIER  */
-  YYSYMBOL_CONST = 36,                     /* CONST  */
-  YYSYMBOL_YYACCEPT = 37,                  /* $accept  */
-  YYSYMBOL_commands = 38,                  /* commands  */
-  YYSYMBOL_command = 39,                   /* command  */
-  YYSYMBOL_DECLEAR = 40,                   /* DECLEAR  */
-  YYSYMBOL_IDENTIFIERS = 41,               /* IDENTIFIERS  */
-  YYSYMBOL_ASSIGN = 42                     /* ASSIGN  */
+  YYSYMBOL_ASSIGN_OP = 3,                  /* ASSIGN_OP  */
+  YYSYMBOL_OR = 4,                         /* OR  */
+  YYSYMBOL_AND = 5,                        /* AND  */
+  YYSYMBOL_SINGLAND = 6,                   /* SINGLAND  */
+  YYSYMBOL_EQ_OP = 7,                      /* EQ_OP  */
+  YYSYMBOL_NE_OP = 8,                      /* NE_OP  */
+  YYSYMBOL_GT_OP = 9,                      /* GT_OP  */
+  YYSYMBOL_LT_OP = 10,                     /* LT_OP  */
+  YYSYMBOL_GE_OP = 11,                     /* GE_OP  */
+  YYSYMBOL_LE_OP = 12,                     /* LE_OP  */
+  YYSYMBOL_13_ = 13,                       /* '+'  */
+  YYSYMBOL_14_ = 14,                       /* '-'  */
+  YYSYMBOL_15_ = 15,                       /* '*'  */
+  YYSYMBOL_16_ = 16,                       /* '/'  */
+  YYSYMBOL_17_ = 17,                       /* '%'  */
+  YYSYMBOL_18_ = 18,                       /* '!'  */
+  YYSYMBOL_19_ = 19,                       /* '('  */
+  YYSYMBOL_20_ = 20,                       /* ')'  */
+  YYSYMBOL_21_ = 21,                       /* '['  */
+  YYSYMBOL_22_ = 22,                       /* ']'  */
+  YYSYMBOL_PRINTF = 23,                    /* PRINTF  */
+  YYSYMBOL_SCANF = 24,                     /* SCANF  */
+  YYSYMBOL_IDENTIFIER = 25,                /* IDENTIFIER  */
+  YYSYMBOL_CONST = 26,                     /* CONST  */
+  YYSYMBOL_LOWER_THAN_ELSE = 27,           /* LOWER_THAN_ELSE  */
+  YYSYMBOL_WHILE = 28,                     /* WHILE  */
+  YYSYMBOL_FOR = 29,                       /* FOR  */
+  YYSYMBOL_BREAK = 30,                     /* BREAK  */
+  YYSYMBOL_CONTINUE = 31,                  /* CONTINUE  */
+  YYSYMBOL_IF = 32,                        /* IF  */
+  YYSYMBOL_ELSE = 33,                      /* ELSE  */
+  YYSYMBOL_RETURN = 34,                    /* RETURN  */
+  YYSYMBOL_VOID = 35,                      /* VOID  */
+  YYSYMBOL_S_QUO = 36,                     /* S_QUO  */
+  YYSYMBOL_D_QUO = 37,                     /* D_QUO  */
+  YYSYMBOL_INT = 38,                       /* INT  */
+  YYSYMBOL_COMMA = 39,                     /* COMMA  */
+  YYSYMBOL_SEMI = 40,                      /* SEMI  */
+  YYSYMBOL_YYACCEPT = 41,                  /* $accept  */
+  YYSYMBOL_program = 42                    /* program  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -615,19 +601,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   35
+#define YYLAST   0
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  37
+#define YYNTOKENS  41
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  6
+#define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  10
+#define YYNRULES  2
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  17
+#define YYNSTATES  3
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   291
+#define YYMAXUTOK   285
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -644,13 +630,13 @@ static const yytype_int8 yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    18,     2,     2,     2,    17,     2,     2,
+      19,    20,    15,    13,     2,    14,     2,    16,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    21,     2,    22,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -667,18 +653,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+       5,     6,     7,     8,     9,    10,    11,    12,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36
+      35,    36,    37,    38,    39,    40
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    39,    39,    40,    42,    43,    45,    49,    52,    57,
-      60
+       0,    74,    74
 };
 #endif
 
@@ -694,12 +678,12 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "WHILE", "FOR",
-  "BREAK", "CONTINUE", "IF", "ELSE", "PRINTF", "SCANF", "RETURN", "VOID",
-  "S_QUO", "D_QUO", "INT", "COMMA", "SEMI", "ASSIGN_OP", "ADD", "SUB",
-  "MUL", "DIV", "MOD", "POW", "EQ_OP", "GT_OP", "LT_OP", "GE_OP", "LE_OP",
-  "NE_OP", "AND", "OR", "NOT", "SINGLAND", "IDENTIFIER", "CONST",
-  "$accept", "commands", "command", "DECLEAR", "IDENTIFIERS", "ASSIGN", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "ASSIGN_OP", "OR",
+  "AND", "SINGLAND", "EQ_OP", "NE_OP", "GT_OP", "LT_OP", "GE_OP", "LE_OP",
+  "'+'", "'-'", "'*'", "'/'", "'%'", "'!'", "'('", "')'", "'['", "']'",
+  "PRINTF", "SCANF", "IDENTIFIER", "CONST", "LOWER_THAN_ELSE", "WHILE",
+  "FOR", "BREAK", "CONTINUE", "IF", "ELSE", "RETURN", "VOID", "S_QUO",
+  "D_QUO", "INT", "COMMA", "SEMI", "$accept", "program", YY_NULLPTR
 };
 
 static const char *
@@ -709,7 +693,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-35)
+#define YYPACT_NINF (-1)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -723,8 +707,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -35,     0,   -35,   -32,   -14,   -35,   -12,   -11,   -35,    -9,
-     -34,   -35,   -35,   -27,   -35,   -35,   -35
+      -1,     0,    -1
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -732,20 +715,19 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     3,     0,     0,     8,     6,
-       0,     4,     5,     0,    10,     9,     7
+       2,     0,     1
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -35,   -35,   -35,   -35,   -35,   -35
+      -1,    -1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     5,     6,     9,     7
+       0,     1
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -753,40 +735,31 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,    14,    15,     8,    10,    11,    12,    13,    16,     0,
-       0,     0,     0,     0,     0,     3,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     4
+       2
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,    35,    36,    35,    18,    17,    17,    16,    35,    -1,
-      -1,    -1,    -1,    -1,    -1,    15,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    35
+       0
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    38,     0,    15,    35,    39,    40,    42,    35,    41,
-      18,    17,    17,    16,    35,    36,    35
+       0,    42,     0
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    37,    38,    38,    39,    39,    40,    41,    41,    42,
-      42
+       0,    41,    42
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     2,     2,     2,     3,     1,     3,
-       3
+       0,     2,     0
 };
 
 
@@ -1249,47 +1222,8 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 6: /* DECLEAR: INT IDENTIFIERS  */
-#line 46 "grammer.y"
-{
-}
-#line 1257 "y.tab.c"
-    break;
 
-  case 7: /* IDENTIFIERS: IDENTIFIERS COMMA IDENTIFIER  */
-#line 49 "grammer.y"
-                                         {
-    printf("%s\n", (yyvsp[0].str));
-}
-#line 1265 "y.tab.c"
-    break;
-
-  case 8: /* IDENTIFIERS: IDENTIFIER  */
-#line 52 "grammer.y"
-           {
-    printf("%s\n", (yyvsp[0].str));
-}
-#line 1273 "y.tab.c"
-    break;
-
-  case 9: /* ASSIGN: IDENTIFIER ASSIGN_OP CONST  */
-#line 57 "grammer.y"
-                                   {
-    printf("%s = %d\n",(yyvsp[-2].str),(yyvsp[0].num));
-}
-#line 1281 "y.tab.c"
-    break;
-
-  case 10: /* ASSIGN: IDENTIFIER ASSIGN_OP IDENTIFIER  */
-#line 61 "grammer.y"
-{
-    printf("%s = %s\n",(yyvsp[-2].str),(yyvsp[0].str));
-}
-#line 1289 "y.tab.c"
-    break;
-
-
-#line 1293 "y.tab.c"
+#line 1227 "y.tab.c"
 
       default: break;
     }
@@ -1482,4 +1416,16 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 66 "grammer.y"
+#line 76 "grammer.y"
+
+
+// void AddOutput(int Row, char* type, char* text){
+//     char str[50];
+//     sprintf(str, "line%d:(%s, %s)\n", Row, type, text);
+//     char *tmp = Ans;
+//     Ans = (char *) malloc(strlen(tmp) + strlen(str) + 1);
+//     sprintf(Ans, "%s%s", tmp, str);
+//     if(strlen(tmp) > 0)
+//         free(tmp);
+//     return ;
+// }

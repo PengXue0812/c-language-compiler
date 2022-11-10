@@ -68,9 +68,10 @@ int main()
 %token <str> IDENTIFIER
 %token <num> CONST 
 %nonassoc LOWER_THAN_ELSE
-%token<str> WHILE FOR BREAK CONTINUE IF ELSE RETURN VOID S_QUO D_QUO INT COMMA SEMI '+' '-' '*' '/' '%' '^' '(' ')' '[' ']' '{' '}' 
+%token<str> WHILE FOR BREAK CONTINUE IF ELSE RETURN VOID S_QUO D_QUO INT COMMA SEMI 
 
 %%
+program:
 
 %%
 

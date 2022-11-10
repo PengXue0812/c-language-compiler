@@ -1,6 +1,7 @@
 #include "BaseNode.h"
-
 #include <cstring>
+#include "BTNode.h"
+
 
 AST::BaseNode::BaseNode() {
   this->cNode = nullptr;
@@ -99,6 +100,16 @@ AST::BaseNode::~BaseNode() {
   }
 }
 
+std::list<BaseNode*> AST::getAllChildrenNode(){
+  std::list<BaseNode>children;
+  BaseNode*node = this->cNode;
+  children.push_back(node);
+  while(node->bNode){
+    children.push_back(node);
+    node = node->bNode;
+  }
+  return children;
+}
 int main() {
   using namespace AST;
   char* a = strdup("root");
@@ -116,5 +127,8 @@ int main() {
     childNode[j] = new BaseNode(b[j]);
     child0->addChildNode(childNode[j]);
   }
+  
+	BTTree<BaseNode> printer(head, &BaseNode::getChildren, &BaseNode::getStringContent);
+	printer.print();
   node->printTree(node);
 }

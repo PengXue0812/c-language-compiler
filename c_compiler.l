@@ -3,7 +3,7 @@ DIGIT [0-9]
 WHITE_SPACE [ \t\n] 
 %{
 # include <stdio.h>
-# include "y.tab.h"
+# include "c_compiler.hpp"
 # include <string.h>
 %}
 

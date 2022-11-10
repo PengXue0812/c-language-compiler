@@ -1,7 +1,10 @@
 %{
+extern "C"
+{
 #include <stdio.h>
 #include <string.h>
-#include "../Node/BaseNode.h"
+#include "Node/BaseNode.h"
+
 //在lex.yy.c里定义，会被yyparse()调用。在此声明消除编译和链接错误。
 extern int yylex(void); 
 
@@ -10,9 +13,9 @@ extern int yyparse(void);
 
 int yywrap()
 {
-	return 1;
+    return 1;
 }
-
+}
 // 该函数在y.tab.c里会被调用，需要在此定义
 void yyerror(const char *s)
 {
@@ -29,7 +32,7 @@ int main()
 %union
 {
     int num;
-    AST::BaseNode* ast;
+    AST::BaseNode *ast;
     char *str;
 }
 %type <ast> program 
@@ -72,7 +75,6 @@ int main()
 
 %%
 program:
-
 %%
 
 // void AddOutput(int Row, char* type, char* text){

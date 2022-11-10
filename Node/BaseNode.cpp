@@ -51,16 +51,37 @@ bool AST::BaseNode::addChildNode(AST::BaseNode* node) {
 
 void AST::BaseNode::printInfo() { printf("%s", this->content); }
 
+//void AST::BaseNode::printTree(BaseNode* node) {
+//  printf("%s ", node->content);
+//  if (node->bNode) {
+//    printTree(node->bNode);
+//  }
+//  if (node->cNode) {
+//    printf("\n");
+//    printTree(node->cNode);
+//    printf("\n");
+//  }
+//}
 void AST::BaseNode::printTree(BaseNode* node) {
-  printf("%s ", node->content);
-  if (node->bNode) {
-    printTree(node->bNode);
-  }
-  if (node->cNode) {
-    printf("\n");
-    printTree(node->cNode);
-    printf("\n");
-  }
+    if (node)
+    {
+        printf("%s ", node->content);
+        if (node->cNode)
+        {
+            
+            printf("(");
+            BaseNode* p = node->cNode;
+            printTree(p);
+            p = p->bNode;
+            while (p)
+            {
+                printf(",");
+                printTree(p);
+                p = p->bNode;
+            }
+            printf(")");
+        }
+    }
 }
 AST::BaseNode* AST::BaseNode::getFinalBrotherNode() {
   AST::BaseNode* node = this;

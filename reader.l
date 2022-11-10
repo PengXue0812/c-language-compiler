@@ -38,12 +38,11 @@ WHITE_SPACE [ \t\n]
 (([1-9]){DIGIT}*)|0  {yylval.num= atoi(strdup(yytext)); return CONST; }
 
 
-"+"    { return ADD; }
-"-"    { return SUB; }
-"*"    { return MUL; }
-"/"    { return DIV; }
-"%"    { return MOD; }
-"^"    { return POW; }
+"+"    { return '+'; }
+"-"    { return '-'; }
+"*"    { return '*'; }
+"/"    { return '/'; }
+"%"    { return '%'; }
 
 "=="   { return EQ_OP; }
 ">"    { return GT_OP; }
@@ -54,7 +53,7 @@ WHITE_SPACE [ \t\n]
 
 "&&"   { return AND;  }
 "||"   { return OR; }
-"!"    { return NOT; }
+"!"    { return '!'; }
 "&"    { return SINGLAND; }
 
 
@@ -62,15 +61,6 @@ WHITE_SPACE [ \t\n]
 "//"[^\n]*   {/* DO NOTHING */}
 {WHITE_SPACE} { /* ignore white space */ }
 .       {printf("ERROR!!"); }
+
 %%
 
-// void AddOutput(int Row, char* type, char* text){
-//     char str[50];
-//     sprintf(str, "line%d:(%s, %s)\n", Row, type, text);
-//     char *tmp = Ans;
-//     Ans = (char *) malloc(strlen(tmp) + strlen(str) + 1);
-//     sprintf(Ans, "%s%s", tmp, str);
-//     if(strlen(tmp) > 0)
-//         free(tmp);
-//     return ;
-// }

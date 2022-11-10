@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <string.h>
-
+#include "../Node/BaseNode.h"
 //在lex.yy.c里定义，会被yyparse()调用。在此声明消除编译和链接错误。
 extern int yylex(void); 
 
@@ -29,38 +29,58 @@ int main()
 %union
 {
     int num;
-    char* str;
+    AST::BaseNode* ast;
+    char *str;
 }
+%type <ast> program 
+%type <ast> blocks 
+%type <ast> block
+%type <ast> variable 
+%type <ast> descriptor 
+%type <ast> function 
+%type <ast> params  
+%type <ast> param 
+%type <ast> body 
+%type <ast> statements 
+%type <ast> statement 
+%type <ast> declares
+%type <ast> declare
+%type <ast> declarevars
+%type <ast> forstart
+%type <ast> expression
+%type <ast> arguments
+%type <ast> identifiers 
 
-%token<str> WHILE FOR BREAK CONTINUE IF ELSE PRINTF SCANF RETURN VOID S_QUO D_QUO INT COMMA SEMI ASSIGN_OP ADD SUB MUL DIV MOD POW EQ_OP GT_OP LT_OP GE_OP LE_OP NE_OP AND OR NOT SINGLAND IDENTIFIER
-%token<num> CONST
+
+%right <str> ASSIGN_OP 
+%left <ast> OR 
+%left <ast> AND 
+%left <ast> SINGLAND
+%left <str> EQ_OP NE_OP 
+%left <str> GT_OP LT_OP GE_OP LE_OP 
+%left <ast> '+' '-'
+%left <ast> '*' '/' '%'
+%right <ast> '!'
+%left  <str> '(' ')'
+%left  <str> '[' ']'
+%token <str> PRINTF 
+%token <str> SCANF
+%token <str> IDENTIFIER
+%token <num> CONST 
+%nonassoc LOWER_THAN_ELSE
+%token<str> WHILE FOR BREAK CONTINUE IF ELSE RETURN VOID S_QUO D_QUO INT COMMA SEMI '+' '-' '*' '/' '%' '^' '(' ')' '[' ']' '{' '}' 
 
 %%
-commands:
-|commands command
-
-command:DECLEAR SEMI
-|ASSIGN SEMI
-
-DECLEAR: INT IDENTIFIERS
-{
-}
-
-IDENTIFIERS: IDENTIFIERS COMMA IDENTIFIER{
-    printf("%s\n", $3);
-}
-|IDENTIFIER{
-    printf("%s\n", $1);
-}
-
-
-ASSIGN: IDENTIFIER ASSIGN_OP CONST {
-    printf("%s = %d\n",$1,$3);
-}
-| IDENTIFIER ASSIGN_OP IDENTIFIER
-{
-    printf("%s = %s\n",$1,$3);
-}
-
 
 %%
+
+// void AddOutput(int Row, char* type, char* text){
+//     char str[50];
+//     sprintf(str, "line%d:(%s, %s)\n", Row, type, text);
+//     char *tmp = Ans;
+//     Ans = (char *) malloc(strlen(tmp) + strlen(str) + 1);
+//     sprintf(Ans, "%s%s", tmp, str);
+//     if(strlen(tmp) > 0)
+//         free(tmp);
+//     return ;
+// }

@@ -101,7 +101,7 @@ block:descriptor declares SEMI
     {
         printf("block->descriptor function body")
     }
-    |descriptor function 'SEMI'
+    |descriptor function SEMI
     {
         print("block->descriptor function 'SEMI'")
     }

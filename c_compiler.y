@@ -1,6 +1,4 @@
 %{
-extern "C"
-{
 #include <stdio.h>
 #include <string.h>
 #include "Node/BaseNode.h"
@@ -14,7 +12,6 @@ extern int yyparse(void);
 int yywrap()
 {
     return 1;
-}
 }
 // 该函数在y.tab.c里会被调用，需要在此定义
 void yyerror(const char *s)
@@ -103,7 +100,7 @@ block:descriptor declares SEMI
     }
     |descriptor function SEMI
     {
-        print("block->descriptor function 'SEMI'");
+        printf("block->descriptor function 'SEMI'");
     }
 //变量
 variable:IDENTIFIER

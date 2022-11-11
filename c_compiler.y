@@ -85,80 +85,80 @@ program:
 blocks:
     block
     {
-        printf("blocks->block")
+        printf("blocks->block");
     }
     | blocks block
     {
-        printf("blocks->blocks block")
+        printf("blocks->blocks block");
     }
     ;
 //语句块(包括函数定义,全局变量的定义)
 block:descriptor declares SEMI
     {
-        printf("block->descriptor declares SEMI")
+        printf("block->descriptor declares SEMI");
     }
     |descriptor function body
     {
-        printf("block->descriptor function body")
+        printf("block->descriptor function body");
     }
     |descriptor function SEMI
     {
-        print("block->descriptor function 'SEMI'")
+        print("block->descriptor function 'SEMI'");
     }
 //变量
 variable:IDENTIFIER
     {
-        printf("variable->IDENTIFIER")
+        printf("variable->IDENTIFIER");
     }
     |IDENTIFIER '[' ']'
     {
-        printf("variable->IDENTIFIER '[' ']'")
+        printf("variable->IDENTIFIER '[' ']'");
     }
     |IDENTIFIER '[' CONST ']'
     {
-        printf("variable->IDENTIFIER '[' CONST ']'")
+        printf("variable->IDENTIFIER '[' CONST ']'");
     }
     |IDENTIFIER '[' expression ']'
     {
-        printf("variable->IDENTIFIER '[' expression ']'")
+        printf("variable->IDENTIFIER '[' expression ']'");
     }
     |'*' IDENTIFIER
     {
-        printf("variable->'*' IDENTIFIER")
+        printf("variable->'*' IDENTIFIER");
     }
     ;
 //数字的序列(1,2,3,4)    
 consts:CONST
     {
-        printf("")
+        printf("");
     }
     |consts COMMA CONST
     {
-        printf("")
+        printf("");
     }
     ;
 //标识符
 descriptor:INT
     {
-        printf("")
+        printf("");
     }
     |VOID 
     {
-        printf("")
+        printf("");
     }
     |INT '*'
     {
-        printf("")
+        printf("");
     }
     ;
 //函数的名字与参数列表
 function:IDENTIFIER '(' ')'
     {
-        printf("")
+        printf("");
     }
     |IDENTIFIER '(' params ')'
     {
-        printf("")
+        printf("");
     }
     ;
 params:params COMMA param {

@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <list>
+#include <string>
+
 #include "NodeType.h"
 namespace AST {
 class BaseNode {
@@ -43,7 +46,12 @@ class BaseNode {
   NodeType getNodeType() { return this->type; }
 
   char *getContent() { return this->content; }
+  std::string getStringContent() {
+    std::string s(this->content);
+    return s;
+  }
 
+  std::list<BaseNode *> getAllChildrenNode();
   BaseNode *getChildNode() { return this->cNode; }
 
   BaseNode *getParentNode() { return this->pNode; }

@@ -1,6 +1,9 @@
 #include "BaseNode.h"
 
 #include <cstring>
+#include <iostream>
+
+#include "BTNode.h"
 
 AST::BaseNode::BaseNode() {
   this->cNode = nullptr;
@@ -51,15 +54,32 @@ bool AST::BaseNode::addChildNode(AST::BaseNode* node) {
 
 void AST::BaseNode::printInfo() { printf("%s", this->content); }
 
+// void AST::BaseNode::printTree(BaseNode* node) {
+//   printf("%s ", node->content);
+//   if (node->bNode) {
+//     printTree(node->bNode);
+//   }
+//   if (node->cNode) {
+//     printf("\n");
+//     printTree(node->cNode);
+//     printf("\n");
+//   }
+// }
 void AST::BaseNode::printTree(BaseNode* node) {
-  printf("%s ", node->content);
-  if (node->bNode) {
-    printTree(node->bNode);
-  }
-  if (node->cNode) {
-    printf("\n");
-    printTree(node->cNode);
-    printf("\n");
+  if (node) {
+    printf("%s ", node->content);
+    if (node->cNode) {
+      printf("(");
+      BaseNode* p = node->cNode;
+      printTree(p);
+      p = p->bNode;
+      while (p) {
+        printf(",");
+        printTree(p);
+        p = p->bNode;
+      }
+      printf(")");
+    }
   }
 }
 AST::BaseNode* AST::BaseNode::getFinalBrotherNode() {
@@ -78,6 +98,15 @@ AST::BaseNode::~BaseNode() {
   }
 }
 
+std::list<AST::BaseNode*> AST::BaseNode::getAllChildrenNode() {
+  std::list<AST::BaseNode*> children;
+  AST::BaseNode* node = this->cNode;
+  while (node) {
+    children.push_back(node);
+    node = node->bNode;
+  }
+  return children;
+}
 int main() {
   using namespace AST;
   char* a = strdup("root");
@@ -95,5 +124,10 @@ int main() {
     childNode[j] = new BaseNode(b[j]);
     child0->addChildNode(childNode[j]);
   }
-  node->printTree(node);
+
+  BTTree<BaseNode> printer(node, &BaseNode::getAllChildrenNode,
+                           &BaseNode::getStringContent);
+  printer.print();
+  //   node->printTree(node);
+  return 0;
 }

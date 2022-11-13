@@ -226,6 +226,7 @@ function:IDENTIFIER '(' ')'
         $$ = node;
     }
     ;
+//参数序列    
 params:params COMMA param {
     // printf("params: params COMMA param");
     AST::BaseNode * node = new AST::BaseNode("Params",AST::NodeType::DEFINITION);
@@ -239,7 +240,7 @@ params:params COMMA param {
     node->addChildNode($1);
     $$ = node;
 };
-
+//单个参数     //int a
 param:descriptor IDENTIFIER  {
     // printf("param:descriptor identifiers");
     AST::BaseNode * node = new AST::BaseNode("Param_ID",AST::NodeType::DEFINITION);
@@ -247,7 +248,7 @@ param:descriptor IDENTIFIER  {
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
-}
+}//int a[10]
 |descriptor IDENTIFIER  '[' CONST ']' {
     // printf("param:descriptor identifiers '[' CONST ']'");
     AST::BaseNode * node = new AST::BaseNode("Param_ID[CONST]",AST::NodeType::DEFINITION);
@@ -257,7 +258,7 @@ param:descriptor IDENTIFIER  {
     node->addChildNode(IdentifierNode);
     node->addChildNode(ConstNode);
     $$ = node;
-}
+}//int a[]
 |descriptor IDENTIFIER  '[' ']' {
     // printf("param:descriptor identifiers '[' ']' ");
     AST::BaseNode * node = new AST::BaseNode("Param_ID[]",AST::NodeType::DEFINITION);
@@ -265,7 +266,7 @@ param:descriptor IDENTIFIER  {
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
-}
+}// int &a
 |descriptor SINGLAND IDENTIFIER{
     // printf("param:descriptor SINGLAND identifiers");
     AST::BaseNode * node = new AST::BaseNode("array_&id",AST::NodeType::ARRAY);
@@ -273,7 +274,7 @@ param:descriptor IDENTIFIER  {
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
-}
+}//int *a
 |descriptor '*' IDENTIFIER{
     // printf("param:descriptor SINGLAND '*' identifiers");
     AST::BaseNode * node = new AST::BaseNode("array_*id",AST::NodeType::POINTER);
@@ -281,14 +282,14 @@ param:descriptor IDENTIFIER  {
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
-}
+}//int 
 |descriptor{
     // printf("param:descriptor");
     AST::BaseNode * node = new AST::BaseNode("param_without_id",AST::NodeType::DEFINITION);
     node->addChildNode($1);
     $$ = node;
 };
-    
+//语句块    
 body:
 '{' statements '}' {
     // printf("body:'{' statements '}'");
@@ -296,7 +297,7 @@ body:
     node->addChildNode($2);
     $$ = node;
 };
-
+//句子集 
 statements:statements statement {
     // printf("statements:statements statement");
     AST::BaseNode * node = new AST::BaseNode("Statements",AST::NodeType::STATEMENT);
@@ -309,26 +310,30 @@ statements:statements statement {
     // printf("statements:statement");
     $$ = NULL;
 };
-
+// 单个句子
 statement:
+    //表达式;
     expression SEMI
     {
         AST::BaseNode * node = new AST::BaseNode("Expression",AST::NodeType::STATEMENT);
         node->addChildNode($1);
         $$ = node;
     }
+    //声明语句;
     | declares SEMI
     {
         AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::STATEMENT);
         node->addChildNode($1);
         $$ = node;
     }
+    //语句块
     | body
     {
         AST::BaseNode * node = new AST::BaseNode("Body_Statement",AST::NodeType::STATEMENT);
         node->addChildNode($1);
         $$ = node;
     }
+
     | RETURN expression SEMI
     {
         AST::BaseNode * node = new AST::BaseNode("Return_Expression",AST::NodeType::STATEMENT);
@@ -451,7 +456,9 @@ statement:
         $$ = node;
     }
 ;
+//声明语句
 declare:
+    //标识符 要声明的东西的序列
     descriptor declares
     {
         AST::BaseNode * node = new AST::BaseNode("Declare_Variable",AST::NodeType::DEFINITION);
@@ -460,8 +467,9 @@ declare:
         $$ = node;
     }
 ;
-
+//要声明的东西的序列
 declares:
+    //要声明的东西
     declarevars
     {
         AST::BaseNode * node = new AST::BaseNode("Declare_Variable",AST::NodeType::DEFINITION);
@@ -476,13 +484,16 @@ declares:
         $$ = node;
     }
 ;
+//要声明的东西
 declarevars:
+    //id
     variable
     {
         AST::BaseNode * node = new AST::BaseNode("Variable",AST::NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
+    //id与赋值语句
     | variable ASSIGN_OP expression
     {
         AST::BaseNode * node = new AST::BaseNode("Variable_Assign",AST::NodeType::DEFINITION);

@@ -253,7 +253,7 @@ void BTNode<T>::printLine(std::size_t ln, std::vector<std::unique_ptr<std::list<
 			printSpace();
 		}
 	}
-	std::cout << std::endl;
+	printf("\n");
 }
 
 /**
@@ -283,7 +283,7 @@ void BTNode<T>::printPreline(std::size_t ln, std::vector<std::unique_ptr<std::li
 			printSpace();
 		}
 	}
-	std::cout << std::endl;
+    printf("\n");
 }
 
 /**
@@ -393,7 +393,7 @@ int BTNode<T>::parentPositionRelToChildren(std::size_t c, std::unique_ptr<std::l
  */
 template <class T>
 std::size_t BTNode<T>::printNodeData() {
-	std::cout << getData();
+	printf("%s",(char*)getData().data());
 	return _wself; // Return the number of characters printed
 }
 
@@ -403,27 +403,27 @@ std::size_t BTNode<T>::printNodeData() {
 
 template <class T>
 void BTNode<T>::printSpace() {
-	std::cout << " ";
+	printf(" ");
 }
 
 template <class T>
 void BTNode<T>::printUnderscore() {
-	std::cout << "_";
+	printf("_");
 }
 
 template <class T>
 void BTNode<T>::printLeftChildren() {
-	std::cout << "/";
+	printf("/");
 }
 
 template <class T>
 void BTNode<T>::printRightChildren() {
-	std::cout << "\\";
+	printf("\\");
 }
 
 template <class T>
 void BTNode<T>::printVerticalChildren() {
-	std::cout << "|";
+	printf("|");
 }
 
 

@@ -72,18 +72,16 @@
 #include <stdio.h>
 #include <string.h>
 #include "Node/BaseNode.h"
-
-//在lex.yy.c里定义，会被yyparse()调用。在此声明消除编译和链接错误。
+#include "Node/BTNode.h"
+AST::BaseNode* root;
 extern int yylex(void); 
 
-// 在此声明，消除yacc生成代码时的告警
 extern int yyparse(void); 
 
 int yywrap()
 {
     return 1;
 }
-// 该函数在y.tab.c里会被调用，需要在此定义
 void yyerror(const char *s)
 {
 	printf("[error] %s\n", s);
@@ -95,7 +93,7 @@ int main()
 	return 0;
 }
 
-#line 99 "y.tab.c"
+#line 97 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -208,13 +206,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 30 "c_compiler.y"
+#line 28 "c_compiler.y"
 
-    int num;
+    char* num;
     AST::BaseNode *ast;
     char *str;
 
-#line 218 "y.tab.c"
+#line 216 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -684,15 +682,15 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    76,    76,    83,    87,    93,    97,   101,   106,   110,
-     114,   118,   122,   128,   132,   138,   142,   146,   152,   156,
-     161,   164,   168,   171,   174,   177,   180,   183,   188,   192,
-     195,   200,   204,   208,   212,   216,   220,   224,   227,   231,
-     235,   239,   243,   247,   251,   255,   259,   263,   267,   271,
-     275,   279,   292,   297,   303,   307,   313,   317,   324,   328,
-     332,   336,   340,   344,   348,   352,   356,   360,   364,   368,
-     372,   376,   380,   384,   388,   392,   396,   400,   404,   408,
-     411,   415,   419,   425,   429,   435,   438
+       0,    74,    74,    86,    93,   103,   111,   120,   126,   134,
+     142,   154,   162,   172,   180,   191,   197,   203,   211,   219,
+     229,   236,   243,   251,   261,   269,   277,   285,   293,   300,
+     308,   314,   320,   326,   332,   338,   343,   350,   357,   364,
+     370,   377,   384,   391,   400,   408,   416,   424,   429,   434,
+     440,   446,   465,   471,   480,   486,   495,   501,   510,   517,
+     523,   530,   537,   544,   551,   558,   565,   571,   577,   584,
+     591,   597,   603,   610,   617,   624,   631,   638,   645,   653,
+     659,   666,   674,   683,   689,   698,   703
 };
 #endif
 
@@ -740,22 +738,22 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -27,   -53,    22,    53,   -27,   -53,    -9,   -53,   -53,   -53,
-      64,   110,    85,    41,    68,    54,   -53,    89,    81,   440,
-     -53,   210,   -53,   -53,    -8,   -53,    72,    59,   -53,    79,
-     440,    90,   440,   440,   -53,   116,    94,    93,   491,   100,
-     -53,   687,   109,   131,   132,    51,   133,   134,   114,   115,
-     155,   252,   231,   -53,   181,   -53,   146,    15,   167,   -53,
-      69,   169,   -53,   -27,   -53,   130,   -53,   -53,   543,   269,
-     440,   -53,   -53,   -29,   440,   440,   440,   440,   440,   440,
-     440,   440,   440,   440,   440,   440,   440,   440,   -53,   -53,
-      46,   290,   164,    81,   440,   307,   -53,   -53,   440,   -53,
-      31,    75,   -53,   -53,   -53,   -53,   166,   -53,   -17,   -53,
-     -53,   -53,   687,    63,   511,   171,   -53,   687,   700,   460,
-     709,   709,   127,   127,   127,   127,   130,   130,   -53,   -53,
-     -53,   440,   561,   172,   527,   579,   324,   -53,   154,   687,
-     597,   -53,   -53,   -53,   176,   -53,   440,   -53,   -53,   475,
-     161,   162,    71,   210,   348,   153,   365,   210,   -53,   687,
+     -27,   -53,    -5,    75,   -27,   -53,    -9,   -53,   -53,   -53,
+      55,    92,    95,    66,    70,    78,   -53,    62,    77,   440,
+     -53,   210,   -53,   -53,    -8,   -53,    79,    17,   -53,   100,
+     440,   102,   440,   440,   -53,   103,   107,   105,   491,   109,
+     -53,   687,   110,   118,   131,    69,   132,   133,   113,   114,
+     136,   252,   231,   -53,   181,   -53,   134,    15,   165,   -53,
+     163,   164,   169,   -53,   -27,   -53,   130,   -53,   -53,   543,
+     269,   440,   -53,   -53,    45,   440,   440,   440,   440,   440,
+     440,   440,   440,   440,   440,   440,   440,   440,   440,   -53,
+     -53,    10,   290,   166,    77,   440,   307,   -53,   -53,   440,
+     -53,    31,    47,   -53,   -53,   -53,   -53,   -53,   -53,   -17,
+     -53,   -53,   -53,   687,    34,   511,   171,   -53,   687,   700,
+     460,   709,   709,   127,   127,   127,   127,   130,   130,   -53,
+     -53,   -53,   440,   561,   172,   527,   579,   324,   -53,   154,
+     687,   597,   -53,   -53,   176,   -53,   440,   -53,   -53,   475,
+     161,   162,    76,   210,   348,   153,   365,   210,   -53,   687,
      183,   -53,   -53,   -53,   210,   615,   382,   406,   168,   184,
      174,   -53,   210,   210,   633,   210,   651,   423,   210,   -53,
      -53,   -53,   210,   -53,   210,   210,   669,   -53,   -53,   -53,
@@ -773,15 +771,15 @@ static const yytype_int8 yydefact[] =
        0,     0,     0,     0,     9,    85,    58,     0,     0,    59,
       58,    55,     0,     0,     0,    85,     0,     0,     0,     0,
        0,     0,     0,    33,     0,    30,     0,     0,     8,    53,
-       0,    22,    19,     0,    82,    67,    80,    70,     0,     0,
-       0,    10,    13,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    11,    86,
-      80,     0,     0,     0,     0,     0,    47,    48,     0,    35,
-       0,    58,    28,    29,    32,    31,     0,    25,     0,    20,
-      66,    79,    83,     0,     0,     0,    71,    60,    69,    68,
-      72,    73,    74,    75,    76,    77,    61,    62,    63,    64,
-      65,     0,     0,     0,     0,     0,     0,    56,     0,    57,
-       0,    34,    26,    24,     0,    78,     0,    81,    14,     0,
+       0,     0,    22,    19,     0,    82,    67,    80,    70,     0,
+       0,     0,    10,    13,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    11,
+      86,    80,     0,     0,     0,     0,     0,    47,    48,     0,
+      35,     0,    58,    28,    29,    32,    31,    25,    26,     0,
+      20,    66,    79,    83,     0,     0,     0,    71,    60,    69,
+      68,    72,    73,    74,    75,    76,    77,    61,    62,    63,
+      64,    65,     0,     0,     0,     0,     0,     0,    56,     0,
+      57,     0,    34,    24,     0,    78,     0,    81,    14,     0,
        0,     0,    81,     0,     0,     0,     0,     0,    23,    84,
        0,    50,    51,    38,     0,     0,     0,     0,     0,    36,
        0,    39,     0,     0,     0,     0,     0,     0,     0,    49,
@@ -792,15 +790,15 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -53,   -53,   -53,   214,   -53,   -53,   -13,   -53,   -53,   156,
+     -53,   -53,   -53,   214,   -53,   -53,   -13,   -53,   -53,   155,
      207,   -53,   -52,    -3,   -53,   -53,   -18,   -53,   -53
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_uint8 yydefgoto[] =
 {
-       0,     3,     4,     5,    12,    73,     6,    13,    27,    28,
-      53,    54,    55,    56,    15,   138,    57,   113,    39
+       0,     3,     4,     5,    12,    74,     6,    13,    27,    28,
+      53,    54,    55,    56,    15,   139,    57,   114,    39
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -808,41 +806,41 @@ static const yytype_uint8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
-      38,    41,   103,    14,    26,   143,    10,    10,     1,   144,
-     115,     2,    65,   116,    67,    68,    11,    58,    74,    75,
-      76,    59,    77,    78,    79,    80,    81,    82,    83,    84,
-      85,    86,    87,   100,    74,    75,    76,     7,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,    87,   -12,
-      26,   112,   114,     8,    -8,   105,   117,   118,   119,   120,
+      38,    41,   104,    14,    26,   143,    10,    10,     1,   144,
+       7,     2,    66,   -12,    68,    69,    11,    58,    75,    76,
+      77,    59,    78,    79,    80,    81,    82,    83,    84,    85,
+      86,    87,    88,   101,    75,    76,    77,    63,    78,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    88,   -12,
+     -12,    26,   113,   115,   145,   106,    64,   118,   119,   120,
      121,   122,   123,   124,   125,   126,   127,   128,   129,   130,
-      69,   141,    93,   132,   -11,   134,   135,   139,    60,    62,
-     140,    20,    21,   145,   106,   -12,   -12,    29,    19,    16,
-      -8,    -8,   137,    24,   107,    30,    31,    61,    63,    32,
-      33,   163,   146,    34,    64,   169,    35,    36,    23,    25,
-     -11,   -11,   171,   149,   -13,    66,    71,   -13,   155,    72,
-     180,   181,    37,   183,     1,    89,   187,     2,   159,    17,
-     188,    18,   189,   190,    90,    69,   165,    70,   168,   192,
-      83,    84,    85,    86,    87,    85,    86,    87,   174,   176,
-      91,    92,    94,    95,    96,    97,    74,    75,    76,   186,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
-      87,    74,    75,    76,    98,    77,    78,    79,    80,    81,
-      82,    83,    84,    85,    86,    87,   104,    29,    18,   133,
-     108,   142,   151,   166,   156,    30,    42,   148,   158,    32,
+     131,   142,    -8,   146,   133,     8,   135,   136,   140,   -11,
+      16,   141,    25,    29,   116,    60,   -13,   117,    70,   -13,
+      94,    30,    31,   138,    61,    32,    33,     1,    19,    34,
+       2,   163,    35,    36,    62,   169,    20,    21,    -8,    -8,
+      23,    17,   171,    18,   149,   -11,   -11,    24,    37,   155,
+     180,   181,    70,   183,    71,    65,   187,    67,   159,    72,
+     188,    73,   189,   190,    90,    91,   165,    92,   168,   192,
+      84,    85,    86,    87,    88,    86,    87,    88,   174,   176,
+      93,    95,    96,    97,    98,    99,    75,    76,    77,   186,
+      78,    79,    80,    81,    82,    83,    84,    85,    86,    87,
+      88,    75,    76,    77,   105,    78,    79,    80,    81,    82,
+      83,    84,    85,    86,    87,    88,    18,    29,   107,   108,
+     109,   134,   151,   166,   156,    30,    42,   148,   158,    32,
       33,   161,   162,   170,    43,    44,    45,    40,   177,    46,
-      47,    48,    49,    50,   179,    51,    29,   178,     9,   109,
-      22,     0,    52,   102,    30,    42,     0,     0,    32,    33,
+      47,    48,    49,    50,   179,    51,    29,   178,     9,   110,
+      22,     0,    52,   103,    30,    42,     0,     0,    32,    33,
        0,     0,     0,    43,    44,    45,    40,    29,    46,    47,
       48,    49,    50,     0,    51,    30,    42,     0,     0,    32,
-      33,    52,     0,     0,    43,    44,    45,   101,    29,    46,
+      33,    52,     0,     0,    43,    44,    45,   102,    29,    46,
       47,    48,    49,    50,     0,    51,    30,    31,     0,     0,
       32,    33,    52,     0,     0,    29,     0,    35,    40,     0,
-       0,     0,     0,    30,    31,     0,     0,    32,    33,   111,
-       0,     0,    99,    37,    35,    40,    29,     0,     0,     0,
+       0,     0,     0,    30,    31,     0,     0,    32,    33,   112,
+       0,     0,   100,    37,    35,    40,    29,     0,     0,     0,
        0,     0,     0,     0,    30,    31,     0,     0,    32,    33,
       37,     0,     0,    29,     0,    35,    40,     0,     0,     0,
-       0,    30,    42,     0,     0,    32,    33,   131,     0,     0,
+       0,    30,    42,     0,     0,    32,    33,   132,     0,     0,
       29,    37,    45,    40,     0,     0,     0,     0,    30,    31,
-       0,     0,    32,    33,     0,     0,     0,   136,    37,    35,
+       0,     0,    32,    33,     0,     0,     0,   137,    37,    35,
       40,     0,     0,     0,    29,     0,     0,     0,     0,     0,
        0,     0,    30,    31,   154,    37,    32,    33,   164,     0,
        0,    29,     0,    35,    40,     0,     0,     0,     0,    30,
@@ -854,59 +852,59 @@ static const yytype_int16 yytable[] =
        0,    35,    40,     0,     0,     0,     0,    30,    31,     0,
        0,    32,    33,   185,     0,     0,    29,    37,    35,    40,
        0,     0,     0,     0,    30,    31,     0,     0,    32,    33,
-       0,     0,     0,     0,    37,    35,    40,    77,    78,    79,
-      80,    81,    82,    83,    84,    85,    86,    87,    74,    75,
-      76,    37,    77,    78,    79,    80,    81,    82,    83,    84,
-      85,    86,    87,     0,    74,    75,    76,     0,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,    87,     0,
-       0,     0,   160,    88,    74,    75,    76,     0,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,    87,     0,
-      74,    75,    76,   147,    77,    78,    79,    80,    81,    82,
-      83,    84,    85,    86,    87,     0,    74,    75,    76,   152,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
-      87,     0,     0,   110,    74,    75,    76,     0,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,    87,     0,
-       0,   150,    74,    75,    76,     0,    77,    78,    79,    80,
-      81,    82,    83,    84,    85,    86,    87,     0,     0,   153,
-      74,    75,    76,     0,    77,    78,    79,    80,    81,    82,
-      83,    84,    85,    86,    87,     0,     0,   157,    74,    75,
-      76,     0,    77,    78,    79,    80,    81,    82,    83,    84,
-      85,    86,    87,     0,     0,   172,    74,    75,    76,     0,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
-      87,     0,     0,   182,    74,    75,    76,     0,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,    87,     0,
-       0,   184,    74,    75,    76,     0,    77,    78,    79,    80,
-      81,    82,    83,    84,    85,    86,    87,     0,     0,   191,
-      74,    75,    76,     0,    77,    78,    79,    80,    81,    82,
-      83,    84,    85,    86,    87,    76,     0,    77,    78,    79,
-      80,    81,    82,    83,    84,    85,    86,    87,    79,    80,
-      81,    82,    83,    84,    85,    86,    87
+       0,     0,     0,     0,    37,    35,    40,    78,    79,    80,
+      81,    82,    83,    84,    85,    86,    87,    88,    75,    76,
+      77,    37,    78,    79,    80,    81,    82,    83,    84,    85,
+      86,    87,    88,     0,    75,    76,    77,     0,    78,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    88,     0,
+       0,     0,   160,    89,    75,    76,    77,     0,    78,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    88,     0,
+      75,    76,    77,   147,    78,    79,    80,    81,    82,    83,
+      84,    85,    86,    87,    88,     0,    75,    76,    77,   152,
+      78,    79,    80,    81,    82,    83,    84,    85,    86,    87,
+      88,     0,     0,   111,    75,    76,    77,     0,    78,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    88,     0,
+       0,   150,    75,    76,    77,     0,    78,    79,    80,    81,
+      82,    83,    84,    85,    86,    87,    88,     0,     0,   153,
+      75,    76,    77,     0,    78,    79,    80,    81,    82,    83,
+      84,    85,    86,    87,    88,     0,     0,   157,    75,    76,
+      77,     0,    78,    79,    80,    81,    82,    83,    84,    85,
+      86,    87,    88,     0,     0,   172,    75,    76,    77,     0,
+      78,    79,    80,    81,    82,    83,    84,    85,    86,    87,
+      88,     0,     0,   182,    75,    76,    77,     0,    78,    79,
+      80,    81,    82,    83,    84,    85,    86,    87,    88,     0,
+       0,   184,    75,    76,    77,     0,    78,    79,    80,    81,
+      82,    83,    84,    85,    86,    87,    88,     0,     0,   191,
+      75,    76,    77,     0,    78,    79,    80,    81,    82,    83,
+      84,    85,    86,    87,    88,    77,     0,    78,    79,    80,
+      81,    82,    83,    84,    85,    86,    87,    88,    80,    81,
+      82,    83,    84,    85,    86,    87,    88
 };
 
 static const yytype_int16 yycheck[] =
 {
       18,    19,    54,     6,    17,    22,    15,    15,    35,    26,
-      39,    38,    30,    42,    32,    33,    25,    25,     3,     4,
+      15,    38,    30,     3,    32,    33,    25,    25,     3,     4,
        5,    24,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    51,     3,     4,     5,    15,     7,     8,
-       9,    10,    11,    12,    13,    14,    15,    16,    17,     3,
-      63,    69,    70,     0,     3,    40,    74,    75,    76,    77,
+      15,    16,    17,    51,     3,     4,     5,    20,     7,     8,
+       9,    10,    11,    12,    13,    14,    15,    16,    17,    39,
+      40,    64,    70,    71,    20,    40,    39,    75,    76,    77,
       78,    79,    80,    81,    82,    83,    84,    85,    86,    87,
-      19,    40,    21,    91,     3,    93,    94,    95,     6,    20,
-      98,    40,    41,    20,    15,    39,    40,     6,     3,    25,
-      39,    40,    95,    39,    25,    14,    15,    25,    39,    18,
-      19,   153,    39,    22,    25,   157,    25,    26,    40,    20,
-      39,    40,   164,   131,    39,    25,    22,    42,   136,    26,
-     172,   173,    41,   175,    35,    25,   178,    38,   146,    19,
-     182,    21,   184,   185,    25,    19,   154,    21,   156,   191,
+      88,    40,     3,    39,    92,     0,    94,    95,    96,     3,
+      25,    99,    20,     6,    39,     6,    39,    42,    19,    42,
+      21,    14,    15,    96,    15,    18,    19,    35,     3,    22,
+      38,   153,    25,    26,    25,   157,    40,    41,    39,    40,
+      40,    19,   164,    21,   132,    39,    40,    39,    41,   137,
+     172,   173,    19,   175,    21,    25,   178,    25,   146,    22,
+     182,    26,   184,   185,    25,    25,   154,    19,   156,   191,
       13,    14,    15,    16,    17,    15,    16,    17,   166,   167,
-      19,    19,    19,    19,    40,    40,     3,     4,     5,   177,
+      19,    19,    19,    40,    40,    19,     3,     4,     5,   177,
        7,     8,     9,    10,    11,    12,    13,    14,    15,    16,
-      17,     3,     4,     5,    19,     7,     8,     9,    10,    11,
-      12,    13,    14,    15,    16,    17,    40,     6,    21,    25,
+      17,     3,     4,     5,    40,     7,     8,     9,    10,    11,
+      12,    13,    14,    15,    16,    17,    21,     6,    25,    25,
       21,    25,    20,    40,    40,    14,    15,    26,    22,    18,
       19,    40,    40,    20,    23,    24,    25,    26,    40,    28,
-      29,    30,    31,    32,    40,    34,     6,    33,     4,    63,
+      29,    30,    31,    32,    40,    34,     6,    33,     4,    64,
       13,    -1,    41,    42,    14,    15,    -1,    -1,    18,    19,
       -1,    -1,    -1,    23,    24,    25,    26,     6,    28,    29,
       30,    31,    32,    -1,    34,    14,    15,    -1,    -1,    18,
@@ -970,15 +968,15 @@ static const yytype_int8 yystos[] =
       14,    15,    18,    19,    22,    25,    26,    41,    59,    61,
       26,    59,    15,    23,    24,    25,    28,    29,    30,    31,
       32,    34,    41,    53,    54,    55,    56,    59,    25,    56,
-       6,    25,    20,    39,    25,    59,    25,    59,    59,    19,
-      21,    22,    26,    48,     3,     4,     5,     7,     8,     9,
-      10,    11,    12,    13,    14,    15,    16,    17,    22,    25,
-      25,    19,    19,    21,    19,    19,    40,    40,    19,    40,
-      59,    26,    42,    55,    40,    40,    15,    25,    21,    52,
-      20,    20,    59,    60,    59,    39,    42,    59,    59,    59,
+       6,    15,    25,    20,    39,    25,    59,    25,    59,    59,
+      19,    21,    22,    26,    48,     3,     4,     5,     7,     8,
+       9,    10,    11,    12,    13,    14,    15,    16,    17,    22,
+      25,    25,    19,    19,    21,    19,    19,    40,    40,    19,
+      40,    59,    26,    42,    55,    40,    40,    25,    25,    21,
+      52,    20,    20,    59,    60,    59,    39,    42,    59,    59,
       59,    59,    59,    59,    59,    59,    59,    59,    59,    59,
-      59,    37,    59,    25,    59,    59,    40,    56,    58,    59,
-      59,    40,    25,    22,    26,    20,    39,    22,    26,    59,
+      59,    59,    37,    59,    25,    59,    59,    40,    56,    58,
+      59,    59,    40,    22,    26,    20,    39,    22,    26,    59,
       20,    20,    22,    20,    40,    59,    40,    20,    22,    59,
       37,    40,    40,    55,    20,    59,    40,    40,    59,    55,
       20,    55,    20,    20,    59,    20,    59,    40,    33,    40,
@@ -1005,7 +1003,7 @@ static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     1,     2,     3,     3,     3,     1,     3,
        4,     4,     2,     1,     3,     1,     1,     2,     3,     4,
-       3,     1,     2,     5,     4,     3,     4,     1,     3,     2,
+       3,     1,     2,     5,     4,     3,     3,     1,     3,     2,
        1,     2,     2,     1,     3,     2,     5,     7,     5,     6,
        7,     7,     7,     9,     8,     8,     8,     2,     2,     7,
        5,     5,     1,     3,     1,     3,     1,     1,     1,     1,
@@ -1475,688 +1473,956 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: blocks  */
-#line 77 "c_compiler.y"
+#line 75 "c_compiler.y"
     {
-        printf("program->blocks");
+        root = new AST::BaseNode("program",AST::NodeType::ROOT);
+        // root->addChildNode(new AST::BaseNode("test"));
+        root->addChildNode((yyvsp[0].ast));
+        BTTree<AST::BaseNode> printer(root, &AST::BaseNode::getAllChildrenNode,
+                        &AST::BaseNode::getStringContent);
+        printer.print();
+
     }
-#line 1483 "y.tab.c"
+#line 1487 "y.tab.c"
     break;
 
   case 3: /* blocks: block  */
-#line 84 "c_compiler.y"
+#line 87 "c_compiler.y"
     {
-        printf("blocks->block");
+        // printf("blocks->block");
+        AST::BaseNode *node = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1491 "y.tab.c"
+#line 1498 "y.tab.c"
     break;
 
   case 4: /* blocks: blocks block  */
-#line 88 "c_compiler.y"
+#line 94 "c_compiler.y"
     {
-        printf("blocks->blocks block");
+        // printf("blocks->blocks block");
+        AST::BaseNode *node =new AST::BaseNode("Blocks",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-1].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1499 "y.tab.c"
+#line 1510 "y.tab.c"
     break;
 
   case 5: /* block: descriptor declares SEMI  */
-#line 94 "c_compiler.y"
+#line 104 "c_compiler.y"
     {
-        printf("block->descriptor declares SEMI");
+        // printf("block->descriptor declares SEMI");
+        AST::BaseNode *node =new AST::BaseNode("Def_Variable_Block",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
     }
-#line 1507 "y.tab.c"
+#line 1522 "y.tab.c"
     break;
 
   case 6: /* block: descriptor function body  */
-#line 98 "c_compiler.y"
+#line 112 "c_compiler.y"
     {
-        printf("block->descriptor function body");
+        // printf("block->descriptor function body");
+        AST::BaseNode * node = new AST::BaseNode("Def_Function_Block_WithBody",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[-1].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1515 "y.tab.c"
+#line 1535 "y.tab.c"
     break;
 
   case 7: /* block: descriptor function SEMI  */
-#line 102 "c_compiler.y"
+#line 121 "c_compiler.y"
     {
-        printf("block->descriptor function 'SEMI'");
+        // printf("block->descriptor function 'SEMI'");
+        AST::BaseNode * node = new AST::BaseNode("Def_Function_Block_WithoutBody",AST::NodeType::DEFINITION);
     }
-#line 1523 "y.tab.c"
+#line 1544 "y.tab.c"
     break;
 
   case 8: /* variable: IDENTIFIER  */
-#line 107 "c_compiler.y"
-    {
-        printf("variable->IDENTIFIER");
+#line 127 "c_compiler.y"
+    {   
+        // printf("variable->IDENTIFIER");
+        AST::BaseNode * node = new AST::BaseNode("Def_Identifier",AST::NodeType::DEFINITION);
+        AST::BaseNode * var_node = new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID);
+        node->addChildNode(var_node);
+        (yyval.ast) = node;
     }
-#line 1531 "y.tab.c"
+#line 1556 "y.tab.c"
     break;
 
   case 9: /* variable: IDENTIFIER '[' ']'  */
-#line 111 "c_compiler.y"
+#line 135 "c_compiler.y"
     {
-        printf("variable->IDENTIFIER '[' ']'");
+        // printf("variable->IDENTIFIER '[' ']'");
+        AST::BaseNode * node = new AST::BaseNode("Def_array[]",AST::NodeType::ARRAY);
+        AST::BaseNode * var_node = new AST::BaseNode((yyvsp[-2].str),AST::NodeType::ID);
+        node->addChildNode(var_node);
+        (yyval.ast) = node;
     }
-#line 1539 "y.tab.c"
+#line 1568 "y.tab.c"
     break;
 
   case 10: /* variable: IDENTIFIER '[' CONST ']'  */
-#line 115 "c_compiler.y"
+#line 143 "c_compiler.y"
     {
-        printf("variable->IDENTIFIER '[' CONST ']'");
+        // printf("variable->IDENTIFIER '[' CONST ']'");
+        AST::BaseNode * node = new AST::BaseNode("Def_array[Const]",AST::NodeType::ARRAY);
+        AST::BaseNode * var_node = new AST::BaseNode((yyvsp[-3].str),AST::NodeType::ID);
+        // AST::BaseNode * const_node = new AST::BaseNode($3,AST::NodeType::ID);
+
+        AST::BaseNode * const_node = new AST::BaseNode((yyvsp[-1].num), AST::NodeType::CONST_INT);
+        node->addChildNode(var_node);
+        node->addChildNode(const_node);
+        (yyval.ast) = node;
     }
-#line 1547 "y.tab.c"
+#line 1584 "y.tab.c"
     break;
 
   case 11: /* variable: IDENTIFIER '[' expression ']'  */
-#line 119 "c_compiler.y"
+#line 155 "c_compiler.y"
     {
-        printf("variable->IDENTIFIER '[' expression ']'");
+        // printf("variable->IDENTIFIER '[' expression ']'");
+        AST::BaseNode * node = new AST::BaseNode("Def_array[expression]",AST::NodeType::ARRAY);
+        AST::BaseNode * var_node = new AST::BaseNode((yyvsp[-3].str),AST::NodeType::ID);
+        node->addChildNode(var_node);
+        node->addChildNode((yyvsp[-1].ast));
     }
-#line 1555 "y.tab.c"
+#line 1596 "y.tab.c"
     break;
 
   case 12: /* variable: '*' IDENTIFIER  */
-#line 123 "c_compiler.y"
+#line 163 "c_compiler.y"
     {
-        printf("variable->'*' IDENTIFIER");
+        // printf("variable->'*' IDENTIFIER");
+        AST::BaseNode * node = new AST::BaseNode("Def_*Identifier",AST::NodeType::POINTER);
+        AST::BaseNode * var_node = new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID);
+        node->addChildNode(var_node);
+        (yyval.ast) = node;
     }
-#line 1563 "y.tab.c"
+#line 1608 "y.tab.c"
     break;
 
   case 13: /* consts: CONST  */
-#line 129 "c_compiler.y"
+#line 173 "c_compiler.y"
     {
-        printf("");
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("Const_array",AST::NodeType::EXPRESSION);
+        AST::BaseNode * const_node = new AST::BaseNode((yyvsp[0].num),AST::NodeType::CONST_INT);
+        node->addChildNode(const_node);
+        (yyval.ast) = node;
     }
-#line 1571 "y.tab.c"
+#line 1620 "y.tab.c"
     break;
 
   case 14: /* consts: consts COMMA CONST  */
-#line 133 "c_compiler.y"
+#line 181 "c_compiler.y"
     {
-        printf("");
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("Consts_array",AST::NodeType::EXPRESSION);
+        AST::BaseNode * const_node = new AST::BaseNode((yyvsp[0].num),AST::NodeType::CONST_INT);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode(const_node);
+        (yyval.ast) = node;
     }
-#line 1579 "y.tab.c"
+#line 1633 "y.tab.c"
     break;
 
   case 15: /* descriptor: INT  */
-#line 139 "c_compiler.y"
+#line 192 "c_compiler.y"
     {
-        printf("");
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("int_Type",AST::NodeType::MODIFY);
+        (yyval.ast) = node;
     }
-#line 1587 "y.tab.c"
-    break;
-
-  case 16: /* descriptor: VOID  */
-#line 143 "c_compiler.y"
-    {
-        printf("");
-    }
-#line 1595 "y.tab.c"
-    break;
-
-  case 17: /* descriptor: INT '*'  */
-#line 147 "c_compiler.y"
-    {
-        printf("");
-    }
-#line 1603 "y.tab.c"
-    break;
-
-  case 18: /* function: IDENTIFIER '(' ')'  */
-#line 153 "c_compiler.y"
-    {
-        printf("");
-    }
-#line 1611 "y.tab.c"
-    break;
-
-  case 19: /* function: IDENTIFIER '(' params ')'  */
-#line 157 "c_compiler.y"
-    {
-        printf("");
-    }
-#line 1619 "y.tab.c"
-    break;
-
-  case 20: /* params: params COMMA param  */
-#line 161 "c_compiler.y"
-                          {
-    printf("params: params COMMA param");
-}
-#line 1627 "y.tab.c"
-    break;
-
-  case 21: /* params: param  */
-#line 164 "c_compiler.y"
-        {
-    printf("params: param");
-}
-#line 1635 "y.tab.c"
-    break;
-
-  case 22: /* param: descriptor IDENTIFIER  */
-#line 168 "c_compiler.y"
-                             {
-    printf("param:descriptor identifiers");
-}
 #line 1643 "y.tab.c"
     break;
 
-  case 23: /* param: descriptor IDENTIFIER '[' CONST ']'  */
-#line 171 "c_compiler.y"
-                                      {
-    printf("param:descriptor identifiers '[' CONST ']'");
-}
-#line 1651 "y.tab.c"
+  case 16: /* descriptor: VOID  */
+#line 198 "c_compiler.y"
+    {
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("void_type",AST::NodeType::MODIFY);
+        (yyval.ast) = node;
+    }
+#line 1653 "y.tab.c"
     break;
 
-  case 24: /* param: descriptor IDENTIFIER '[' ']'  */
-#line 174 "c_compiler.y"
-                                {
-    printf("param:descriptor identifiers '[' ']' ");
-}
-#line 1659 "y.tab.c"
+  case 17: /* descriptor: INT '*'  */
+#line 204 "c_compiler.y"
+    {
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("int*_Type",AST::NodeType::MODIFY);
+        (yyval.ast) = node;
+    }
+#line 1663 "y.tab.c"
     break;
 
-  case 25: /* param: descriptor SINGLAND IDENTIFIER  */
-#line 177 "c_compiler.y"
-                               {
-    printf("param:descriptor SINGLAND identifiers");
-}
-#line 1667 "y.tab.c"
-    break;
-
-  case 26: /* param: descriptor SINGLAND '*' IDENTIFIER  */
-#line 180 "c_compiler.y"
-                                   {
-    printf("param:descriptor SINGLAND '*' identifiers");
-}
+  case 18: /* function: IDENTIFIER '(' ')'  */
+#line 212 "c_compiler.y"
+    {
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("Function_Without_Param",AST::NodeType::DEFINITION);
+        AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[-2].str),AST::NodeType::ID);
+        node->addChildNode(IdentifierNode);
+        (yyval.ast) = node;
+    }
 #line 1675 "y.tab.c"
     break;
 
-  case 27: /* param: descriptor  */
-#line 183 "c_compiler.y"
-           {
-    printf("param:descriptor");
-}
-#line 1683 "y.tab.c"
-    break;
-
-  case 28: /* body: '{' statements '}'  */
-#line 188 "c_compiler.y"
-                   {
-    printf("body:'{' statements '}'");
-}
-#line 1691 "y.tab.c"
-    break;
-
-  case 29: /* statements: statements statement  */
-#line 192 "c_compiler.y"
-                                {
-    printf("statements:statements statement");
-}
-#line 1699 "y.tab.c"
-    break;
-
-  case 30: /* statements: statement  */
-#line 195 "c_compiler.y"
-           {
-    printf("statements:statement");
-}
-#line 1707 "y.tab.c"
-    break;
-
-  case 31: /* statement: expression SEMI  */
-#line 201 "c_compiler.y"
+  case 19: /* function: IDENTIFIER '(' params ')'  */
+#line 220 "c_compiler.y"
     {
-
+        // printf("");
+        AST::BaseNode * node = new AST::BaseNode("Function_With_Param",AST::NodeType::DEFINITION);
+        AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[-3].str),AST::NodeType::ID);
+        node->addChildNode(IdentifierNode);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
     }
-#line 1715 "y.tab.c"
+#line 1688 "y.tab.c"
     break;
 
-  case 32: /* statement: declares SEMI  */
-#line 205 "c_compiler.y"
-    {
-
-    }
-#line 1723 "y.tab.c"
+  case 20: /* params: params COMMA param  */
+#line 229 "c_compiler.y"
+                          {
+    // printf("params: params COMMA param");
+    AST::BaseNode * node = new AST::BaseNode("Params",AST::NodeType::DEFINITION);
+    node->addChildNode((yyvsp[-2].ast));
+    node->addChildNode((yyvsp[0].ast));
+    (yyval.ast) = node;
+}
+#line 1700 "y.tab.c"
     break;
 
-  case 33: /* statement: body  */
-#line 209 "c_compiler.y"
-    {
-
-    }
-#line 1731 "y.tab.c"
+  case 21: /* params: param  */
+#line 236 "c_compiler.y"
+        {
+    // printf("params: param");
+    AST::BaseNode * node = new AST::BaseNode("Single_Param",AST::NodeType::DEFINITION);
+    node->addChildNode((yyvsp[0].ast));
+    (yyval.ast) = node;
+}
+#line 1711 "y.tab.c"
     break;
 
-  case 34: /* statement: RETURN expression SEMI  */
-#line 213 "c_compiler.y"
-    {
+  case 22: /* param: descriptor IDENTIFIER  */
+#line 243 "c_compiler.y"
+                             {
+    // printf("param:descriptor identifiers");
+    AST::BaseNode * node = new AST::BaseNode("Param_ID",AST::NodeType::DEFINITION);
+    AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID);
+    node->addChildNode((yyvsp[-1].ast));
+    node->addChildNode(IdentifierNode);
+    (yyval.ast) = node;
+}
+#line 1724 "y.tab.c"
+    break;
 
-    }
+  case 23: /* param: descriptor IDENTIFIER '[' CONST ']'  */
+#line 251 "c_compiler.y"
+                                      {
+    // printf("param:descriptor identifiers '[' CONST ']'");
+    AST::BaseNode * node = new AST::BaseNode("Param_ID[CONST]",AST::NodeType::DEFINITION);
+    AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[-3].str),AST::NodeType::ID);
+    AST::BaseNode * ConstNode = new AST::BaseNode((yyvsp[-1].num),AST::NodeType::CONST_INT);
+    node->addChildNode((yyvsp[-4].ast));
+    node->addChildNode(IdentifierNode);
+    node->addChildNode(ConstNode);
+    (yyval.ast) = node;
+}
 #line 1739 "y.tab.c"
     break;
 
-  case 35: /* statement: RETURN SEMI  */
-#line 217 "c_compiler.y"
-    {
+  case 24: /* param: descriptor IDENTIFIER '[' ']'  */
+#line 261 "c_compiler.y"
+                                {
+    // printf("param:descriptor identifiers '[' ']' ");
+    AST::BaseNode * node = new AST::BaseNode("Param_ID[]",AST::NodeType::DEFINITION);
+    AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[-2].str),AST::NodeType::ID);
+    node->addChildNode((yyvsp[-3].ast));
+    node->addChildNode(IdentifierNode);
+    (yyval.ast) = node;
+}
+#line 1752 "y.tab.c"
+    break;
 
+  case 25: /* param: descriptor SINGLAND IDENTIFIER  */
+#line 269 "c_compiler.y"
+                               {
+    // printf("param:descriptor SINGLAND identifiers");
+    AST::BaseNode * node = new AST::BaseNode("array_&id",AST::NodeType::ARRAY);
+    AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID);
+    node->addChildNode((yyvsp[-2].ast));
+    node->addChildNode(IdentifierNode);
+    (yyval.ast) = node;
+}
+#line 1765 "y.tab.c"
+    break;
+
+  case 26: /* param: descriptor '*' IDENTIFIER  */
+#line 277 "c_compiler.y"
+                          {
+    // printf("param:descriptor SINGLAND '*' identifiers");
+    AST::BaseNode * node = new AST::BaseNode("array_*id",AST::NodeType::POINTER);
+    AST::BaseNode * IdentifierNode = new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID);
+    node->addChildNode((yyvsp[-2].ast));
+    node->addChildNode(IdentifierNode);
+    (yyval.ast) = node;
+}
+#line 1778 "y.tab.c"
+    break;
+
+  case 27: /* param: descriptor  */
+#line 285 "c_compiler.y"
+           {
+    // printf("param:descriptor");
+    AST::BaseNode * node = new AST::BaseNode("param_without_id",AST::NodeType::DEFINITION);
+    node->addChildNode((yyvsp[0].ast));
+    (yyval.ast) = node;
+}
+#line 1789 "y.tab.c"
+    break;
+
+  case 28: /* body: '{' statements '}'  */
+#line 293 "c_compiler.y"
+                   {
+    // printf("body:'{' statements '}'");
+    AST::BaseNode *node = new AST::BaseNode("Body",AST::NodeType::BODY);
+    node->addChildNode((yyvsp[-1].ast));
+    (yyval.ast) = node;
+}
+#line 1800 "y.tab.c"
+    break;
+
+  case 29: /* statements: statements statement  */
+#line 300 "c_compiler.y"
+                                {
+    // printf("statements:statements statement");
+    AST::BaseNode * node = new AST::BaseNode("Statements",AST::NodeType::STATEMENT);
+    if((yyvsp[-1].ast) != NULL)
+        node->addChildNode((yyvsp[-1].ast));
+    node->addChildNode((yyvsp[0].ast));
+    (yyval.ast) = node;
+}
+#line 1813 "y.tab.c"
+    break;
+
+  case 30: /* statements: statement  */
+#line 308 "c_compiler.y"
+           {
+    // printf("statements:statement");
+    (yyval.ast) = NULL;
+}
+#line 1822 "y.tab.c"
+    break;
+
+  case 31: /* statement: expression SEMI  */
+#line 315 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
     }
-#line 1747 "y.tab.c"
+#line 1832 "y.tab.c"
+    break;
+
+  case 32: /* statement: declares SEMI  */
+#line 321 "c_compiler.y"
+    {
+        AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
+    }
+#line 1842 "y.tab.c"
+    break;
+
+  case 33: /* statement: body  */
+#line 327 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Body_Statement",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 1852 "y.tab.c"
+    break;
+
+  case 34: /* statement: RETURN expression SEMI  */
+#line 333 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Return_Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
+    }
+#line 1862 "y.tab.c"
+    break;
+
+  case 35: /* statement: RETURN SEMI  */
+#line 339 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Return_NULL",AST::NodeType::STATEMENT);
+        (yyval.ast) = node;
+    }
+#line 1871 "y.tab.c"
     break;
 
   case 36: /* statement: IF '(' expression ')' statement  */
-#line 221 "c_compiler.y"
+#line 344 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("If_Statement",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1755 "y.tab.c"
+#line 1882 "y.tab.c"
     break;
 
   case 37: /* statement: IF '(' expression ')' statement ELSE statement  */
-#line 224 "c_compiler.y"
+#line 350 "c_compiler.y"
                                                                           {
-
+        AST::BaseNode * node = new AST::BaseNode ("If_Else_Statement",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-4].ast));
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1763 "y.tab.c"
+#line 1894 "y.tab.c"
     break;
 
   case 38: /* statement: WHILE '(' expression ')' statement  */
-#line 228 "c_compiler.y"
-    {
-
+#line 358 "c_compiler.y"
+    {   
+        AST::BaseNode * node = new AST::BaseNode ("While_Statement",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1771 "y.tab.c"
+#line 1905 "y.tab.c"
     break;
 
   case 39: /* statement: FOR '(' SEMI SEMI ')' statement  */
-#line 232 "c_compiler.y"
+#line 365 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_SEMI",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1779 "y.tab.c"
+#line 1915 "y.tab.c"
     break;
 
   case 40: /* statement: FOR '(' forstart SEMI SEMI ')' statement  */
-#line 236 "c_compiler.y"
+#line 371 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_SEMI",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-4].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1787 "y.tab.c"
+#line 1926 "y.tab.c"
     break;
 
   case 41: /* statement: FOR '(' SEMI expression SEMI ')' statement  */
-#line 240 "c_compiler.y"
+#line 378 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_Expression_SEMI",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-3].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1795 "y.tab.c"
+#line 1937 "y.tab.c"
     break;
 
   case 42: /* statement: FOR '(' SEMI SEMI expression ')' statement  */
-#line 244 "c_compiler.y"
+#line 385 "c_compiler.y"
     {
-
-    }
-#line 1803 "y.tab.c"
-    break;
-
-  case 43: /* statement: FOR '(' forstart SEMI expression SEMI expression ')' statement  */
-#line 248 "c_compiler.y"
-    {
-
-    }
-#line 1811 "y.tab.c"
-    break;
-
-  case 44: /* statement: FOR '(' forstart SEMI expression SEMI ')' statement  */
-#line 252 "c_compiler.y"
-    {
-
-    }
-#line 1819 "y.tab.c"
-    break;
-
-  case 45: /* statement: FOR '(' forstart SEMI SEMI expression ')' statement  */
-#line 256 "c_compiler.y"
-    {
-
-    }
-#line 1827 "y.tab.c"
-    break;
-
-  case 46: /* statement: FOR '(' SEMI expression SEMI expression ')' statement  */
-#line 260 "c_compiler.y"
-    {
-
-    }
-#line 1835 "y.tab.c"
-    break;
-
-  case 47: /* statement: BREAK SEMI  */
-#line 264 "c_compiler.y"
-    {
-
-    }
-#line 1843 "y.tab.c"
-    break;
-
-  case 48: /* statement: CONTINUE SEMI  */
-#line 268 "c_compiler.y"
-    {
-
-    }
-#line 1851 "y.tab.c"
-    break;
-
-  case 49: /* statement: PRINTF '(' D_QUO expression D_QUO ')' SEMI  */
-#line 272 "c_compiler.y"
-    {
-
-    }
-#line 1859 "y.tab.c"
-    break;
-
-  case 50: /* statement: PRINTF '(' expression ')' SEMI  */
-#line 276 "c_compiler.y"
-    {
-
-    }
-#line 1867 "y.tab.c"
-    break;
-
-  case 51: /* statement: SCANF '(' IDENTIFIER ')' SEMI  */
-#line 280 "c_compiler.y"
-    {
-
-    }
-#line 1875 "y.tab.c"
-    break;
-
-  case 52: /* declares: declarevars  */
-#line 293 "c_compiler.y"
-    {
-
-
-    }
-#line 1884 "y.tab.c"
-    break;
-
-  case 53: /* declares: declarevars COMMA declares  */
-#line 298 "c_compiler.y"
-    {
-
-    }
-#line 1892 "y.tab.c"
-    break;
-
-  case 54: /* declarevars: variable  */
-#line 304 "c_compiler.y"
-    {
-
-    }
-#line 1900 "y.tab.c"
-    break;
-
-  case 55: /* declarevars: variable ASSIGN_OP expression  */
-#line 308 "c_compiler.y"
-    {
-
-    }
-#line 1908 "y.tab.c"
-    break;
-
-  case 56: /* forstart: declares  */
-#line 314 "c_compiler.y"
-    {
-
-    }
-#line 1916 "y.tab.c"
-    break;
-
-  case 57: /* forstart: expression  */
-#line 318 "c_compiler.y"
-    {
-
-    }
-#line 1924 "y.tab.c"
-    break;
-
-  case 58: /* expression: CONST  */
-#line 325 "c_compiler.y"
-    {
-
-    }
-#line 1932 "y.tab.c"
-    break;
-
-  case 59: /* expression: identifiers  */
-#line 329 "c_compiler.y"
-    {
-
-    }
-#line 1940 "y.tab.c"
-    break;
-
-  case 60: /* expression: expression ASSIGN_OP expression  */
-#line 333 "c_compiler.y"
-    {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_SEMI_Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
 #line 1948 "y.tab.c"
     break;
 
-  case 61: /* expression: expression '+' expression  */
-#line 337 "c_compiler.y"
+  case 43: /* statement: FOR '(' forstart SEMI expression SEMI expression ')' statement  */
+#line 392 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_Expression_SEMI_Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-6].ast));
+        node->addChildNode((yyvsp[-4].ast));
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 1956 "y.tab.c"
+#line 1961 "y.tab.c"
     break;
 
-  case 62: /* expression: expression '-' expression  */
-#line 341 "c_compiler.y"
-    {
-
-    }
-#line 1964 "y.tab.c"
-    break;
-
-  case 63: /* expression: expression '*' expression  */
-#line 345 "c_compiler.y"
-    {
-
-    }
-#line 1972 "y.tab.c"
-    break;
-
-  case 64: /* expression: expression '/' expression  */
-#line 349 "c_compiler.y"
-    {
-
-    }
-#line 1980 "y.tab.c"
-    break;
-
-  case 65: /* expression: expression '%' expression  */
-#line 353 "c_compiler.y"
-    {
-
-    }
-#line 1988 "y.tab.c"
-    break;
-
-  case 66: /* expression: '(' expression ')'  */
-#line 357 "c_compiler.y"
-    {
-
-    }
-#line 1996 "y.tab.c"
-    break;
-
-  case 67: /* expression: '-' expression  */
-#line 361 "c_compiler.y"
-    {
-
-    }
-#line 2004 "y.tab.c"
-    break;
-
-  case 68: /* expression: expression AND expression  */
-#line 365 "c_compiler.y"
-    {
-
-    }
-#line 2012 "y.tab.c"
-    break;
-
-  case 69: /* expression: expression OR expression  */
-#line 369 "c_compiler.y"
-    {
-
-    }
-#line 2020 "y.tab.c"
-    break;
-
-  case 70: /* expression: '!' expression  */
-#line 373 "c_compiler.y"
-    {
-
-    }
-#line 2028 "y.tab.c"
-    break;
-
-  case 71: /* expression: '{' consts '}'  */
-#line 377 "c_compiler.y"
-    {
-
-    }
-#line 2036 "y.tab.c"
-    break;
-
-  case 72: /* expression: expression EQ_OP expression  */
-#line 381 "c_compiler.y"
-    {
-
-    }
-#line 2044 "y.tab.c"
-    break;
-
-  case 73: /* expression: expression NE_OP expression  */
-#line 385 "c_compiler.y"
-    {
-
-    }
-#line 2052 "y.tab.c"
-    break;
-
-  case 74: /* expression: expression GT_OP expression  */
-#line 389 "c_compiler.y"
-    {
-
-    }
-#line 2060 "y.tab.c"
-    break;
-
-  case 75: /* expression: expression LT_OP expression  */
-#line 393 "c_compiler.y"
-    {
-
-    }
-#line 2068 "y.tab.c"
-    break;
-
-  case 76: /* expression: expression GE_OP expression  */
-#line 397 "c_compiler.y"
-    {
-
-    }
-#line 2076 "y.tab.c"
-    break;
-
-  case 77: /* expression: expression LE_OP expression  */
+  case 44: /* statement: FOR '(' forstart SEMI expression SEMI ')' statement  */
 #line 401 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_Expression_SEMI",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-5].ast));
+        node->addChildNode((yyvsp[-3].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 2084 "y.tab.c"
+#line 1973 "y.tab.c"
     break;
 
-  case 78: /* expression: IDENTIFIER '(' arguments ')'  */
-#line 405 "c_compiler.y"
+  case 45: /* statement: FOR '(' forstart SEMI SEMI expression ')' statement  */
+#line 409 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_SEMI_Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-5].ast));
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 2092 "y.tab.c"
+#line 1985 "y.tab.c"
     break;
 
-  case 79: /* expression: IDENTIFIER '(' ')'  */
-#line 408 "c_compiler.y"
-                        {
-
+  case 46: /* statement: FOR '(' SEMI expression SEMI expression ')' statement  */
+#line 417 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_Expression_SEMI_Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-4].ast));
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 2100 "y.tab.c"
+#line 1997 "y.tab.c"
     break;
 
-  case 80: /* expression: '*' IDENTIFIER  */
-#line 412 "c_compiler.y"
-     {
+  case 47: /* statement: BREAK SEMI  */
+#line 425 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode ("Break_Statement",AST::NodeType::STATEMENT);
+        (yyval.ast) = node;
+    }
+#line 2006 "y.tab.c"
+    break;
 
+  case 48: /* statement: CONTINUE SEMI  */
+#line 430 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode ("Continue_Statement",AST::NodeType::STATEMENT);
+        (yyval.ast) = node;
+    }
+#line 2015 "y.tab.c"
+    break;
+
+  case 49: /* statement: PRINTF '(' D_QUO expression D_QUO ')' SEMI  */
+#line 435 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode ("Printf_String",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-3].ast));
+        (yyval.ast) = node;
+    }
+#line 2025 "y.tab.c"
+    break;
+
+  case 50: /* statement: PRINTF '(' expression ')' SEMI  */
+#line 441 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode ("Printf_Expression",AST::NodeType::STATEMENT);
+        node->addChildNode((yyvsp[-2].ast));
+        (yyval.ast) = node;
+    }
+#line 2035 "y.tab.c"
+    break;
+
+  case 51: /* statement: SCANF '(' IDENTIFIER ')' SEMI  */
+#line 447 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode ("Scanf_Identifier",AST::NodeType::STATEMENT);
+        AST::BaseNode * Identifier_Node = new AST::BaseNode ((yyvsp[-2].str),AST::NodeType::ID);
+        node->addChildNode(Identifier_Node);
+        (yyval.ast) = node;
+    }
+#line 2046 "y.tab.c"
+    break;
+
+  case 52: /* declares: declarevars  */
+#line 466 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Declare_Variable",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2056 "y.tab.c"
+    break;
+
+  case 53: /* declares: declarevars COMMA declares  */
+#line 472 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Declare_Variables",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2067 "y.tab.c"
+    break;
+
+  case 54: /* declarevars: variable  */
+#line 481 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Variable",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2077 "y.tab.c"
+    break;
+
+  case 55: /* declarevars: variable ASSIGN_OP expression  */
+#line 487 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Variable_Assign",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2088 "y.tab.c"
+    break;
+
+  case 56: /* forstart: declares  */
+#line 496 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("For_Start",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2098 "y.tab.c"
+    break;
+
+  case 57: /* forstart: expression  */
+#line 502 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("For_Expression",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
 #line 2108 "y.tab.c"
     break;
 
-  case 81: /* expression: IDENTIFIER '[' expression ']'  */
-#line 416 "c_compiler.y"
+  case 58: /* expression: CONST  */
+#line 511 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode("Constant_Expression",AST::NodeType::EXPRESSION);
+        AST::BaseNode * Constant_Node = new AST::BaseNode ((yyvsp[0].num),AST::NodeType::CONST_INT);
+        node->addChildNode(Constant_Node);
+        (yyval.ast) = node;
     }
-#line 2116 "y.tab.c"
+#line 2119 "y.tab.c"
     break;
 
-  case 82: /* expression: SINGLAND IDENTIFIER  */
-#line 420 "c_compiler.y"
+  case 59: /* expression: identifiers  */
+#line 518 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode("Identifier_Expression",AST::NodeType::EXPRESSION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 2124 "y.tab.c"
+#line 2129 "y.tab.c"
     break;
 
-  case 83: /* arguments: expression  */
-#line 426 "c_compiler.y"
+  case 60: /* expression: expression ASSIGN_OP expression  */
+#line 524 "c_compiler.y"
     {
-
-    }
-#line 2132 "y.tab.c"
-    break;
-
-  case 84: /* arguments: arguments COMMA expression  */
-#line 430 "c_compiler.y"
-    {
-
+        AST::BaseNode * node = new AST::BaseNode("Assign",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
 #line 2140 "y.tab.c"
     break;
 
-  case 85: /* identifiers: IDENTIFIER  */
-#line 435 "c_compiler.y"
-              {
-
+  case 61: /* expression: expression '+' expression  */
+#line 531 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Add",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
     }
-#line 2148 "y.tab.c"
+#line 2151 "y.tab.c"
+    break;
+
+  case 62: /* expression: expression '-' expression  */
+#line 538 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Sub",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2162 "y.tab.c"
+    break;
+
+  case 63: /* expression: expression '*' expression  */
+#line 545 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Mul",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2173 "y.tab.c"
+    break;
+
+  case 64: /* expression: expression '/' expression  */
+#line 552 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Div",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2184 "y.tab.c"
+    break;
+
+  case 65: /* expression: expression '%' expression  */
+#line 559 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Mod",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2195 "y.tab.c"
+    break;
+
+  case 66: /* expression: '(' expression ')'  */
+#line 566 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Braces",AST::NodeType::EXPRESSION);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
+    }
+#line 2205 "y.tab.c"
+    break;
+
+  case 67: /* expression: '-' expression  */
+#line 572 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Negative",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2215 "y.tab.c"
+    break;
+
+  case 68: /* expression: expression AND expression  */
+#line 578 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("And",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2226 "y.tab.c"
+    break;
+
+  case 69: /* expression: expression OR expression  */
+#line 585 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Or",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2237 "y.tab.c"
+    break;
+
+  case 70: /* expression: '!' expression  */
+#line 592 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Not",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2247 "y.tab.c"
+    break;
+
+  case 71: /* expression: '{' consts '}'  */
+#line 598 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("{Consts}",AST::NodeType::EXPRESSION);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
+    }
+#line 2257 "y.tab.c"
+    break;
+
+  case 72: /* expression: expression EQ_OP expression  */
+#line 604 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Equal_Operation",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2268 "y.tab.c"
+    break;
+
+  case 73: /* expression: expression NE_OP expression  */
+#line 611 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Not_Equal_Operation",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2279 "y.tab.c"
+    break;
+
+  case 74: /* expression: expression GT_OP expression  */
+#line 618 "c_compiler.y"
+    {   
+        AST::BaseNode * node = new AST::BaseNode("Greater_Operation",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2290 "y.tab.c"
+    break;
+
+  case 75: /* expression: expression LT_OP expression  */
+#line 625 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Less_Operation",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2301 "y.tab.c"
+    break;
+
+  case 76: /* expression: expression GE_OP expression  */
+#line 632 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Greater_Equal_Operation",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2312 "y.tab.c"
+    break;
+
+  case 77: /* expression: expression LE_OP expression  */
+#line 639 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Less_Equal_Operation",AST::NodeType::OPERATION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2323 "y.tab.c"
+    break;
+
+  case 78: /* expression: IDENTIFIER '(' arguments ')'  */
+#line 646 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Function_Call_With_Agrs",AST::NodeType::CALL);
+        AST::BaseNode * Identifier_Node = new AST::BaseNode ((yyvsp[-3].str),AST::NodeType::ID);
+        node->addChildNode(Identifier_Node);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
+    }
+#line 2335 "y.tab.c"
+    break;
+
+  case 79: /* expression: IDENTIFIER '(' ')'  */
+#line 653 "c_compiler.y"
+                        {
+        AST::BaseNode * node = new AST::BaseNode("Function_Call_Without_Agrs",AST::NodeType::CALL);
+        AST::BaseNode * Identifier_Node = new AST::BaseNode ((yyvsp[-2].str),AST::NodeType::ID);
+        node->addChildNode(Identifier_Node);
+        (yyval.ast) = node;
+    }
+#line 2346 "y.tab.c"
+    break;
+
+  case 80: /* expression: '*' IDENTIFIER  */
+#line 660 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("*id",AST::NodeType::OPERATION);
+        AST::BaseNode * Identifier_Node = new AST::BaseNode ((yyvsp[0].str),AST::NodeType::ID);
+        node->addChildNode(Identifier_Node);
+        (yyval.ast) = node;
+    }
+#line 2357 "y.tab.c"
+    break;
+
+  case 81: /* expression: IDENTIFIER '[' expression ']'  */
+#line 667 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("id[exp]",AST::NodeType::OPERATION);
+        AST::BaseNode * Identifier_Node = new AST::BaseNode ((yyvsp[-3].str),AST::NodeType::ID);
+        node->addChildNode(Identifier_Node);
+        node->addChildNode((yyvsp[-1].ast));
+        (yyval.ast) = node;
+    }
+#line 2369 "y.tab.c"
+    break;
+
+  case 82: /* expression: SINGLAND IDENTIFIER  */
+#line 675 "c_compiler.y"
+    {   
+        AST::BaseNode * node = new AST::BaseNode("&id",AST::NodeType::OPERATION);
+        AST::BaseNode * Identifier_Node = new AST::BaseNode ((yyvsp[0].str),AST::NodeType::ID);
+        node->addChildNode(Identifier_Node);
+        (yyval.ast) = node;
+    }
+#line 2380 "y.tab.c"
+    break;
+
+  case 83: /* arguments: expression  */
+#line 684 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Func_Arg",AST::NodeType::ID);
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2390 "y.tab.c"
+    break;
+
+  case 84: /* arguments: arguments COMMA expression  */
+#line 690 "c_compiler.y"
+    {
+        AST::BaseNode * node = new AST::BaseNode("Func_Args",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[-2].ast));
+        node->addChildNode((yyvsp[0].ast));
+        (yyval.ast) = node;
+    }
+#line 2401 "y.tab.c"
+    break;
+
+  case 85: /* identifiers: IDENTIFIER  */
+#line 698 "c_compiler.y"
+              {
+        AST::BaseNode * node = new AST::BaseNode("id",AST::NodeType::DEFINITION);
+        node->addChildNode(new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID));
+        (yyval.ast) = node;
+    }
+#line 2411 "y.tab.c"
     break;
 
   case 86: /* identifiers: identifiers IDENTIFIER  */
-#line 439 "c_compiler.y"
+#line 704 "c_compiler.y"
     {
-
+        AST::BaseNode * node = new AST::BaseNode("ids",AST::NodeType::DEFINITION);
+        node->addChildNode((yyvsp[-1].ast));
+        node->addChildNode(new AST::BaseNode((yyvsp[0].str),AST::NodeType::ID));
+        (yyval.ast) = node;
     }
-#line 2156 "y.tab.c"
+#line 2422 "y.tab.c"
     break;
 
 
-#line 2160 "y.tab.c"
+#line 2426 "y.tab.c"
 
       default: break;
     }
@@ -2349,7 +2615,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 445 "c_compiler.y"
+#line 713 "c_compiler.y"
 
 
 // void AddOutput(int Row, char* type, char* text){

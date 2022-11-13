@@ -38,7 +38,8 @@ class BaseNode {
   }
   bool addChildNode(BaseNode *);
 
-  bool addBrotherNode(BaseNode *);
+  bool addFirstBrotherNode(BaseNode *);
+  bool addLastBrotherNode(BaseNode *);
 
   // getters:
   BaseNode *getFinalBrotherNode();

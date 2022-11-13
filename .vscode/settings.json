@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tpp": "cpp",
+        "basenode.h": "c",
+        "btnode.h": "c"
+    }
+}

@@ -1,3 +1,4 @@
+#include "Node/BTNode.h"
 #include "Node/BaseNode.h"
 /* A Bison parser, made by GNU Bison 3.8.2.  */
 
@@ -122,9 +123,9 @@ typedef enum yytokentype yytoken_kind_t;
 /* Value type.  */
 #if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
 union YYSTYPE {
-#line 30 "c_compiler.y"
+#line 28 "c_compiler.y"
 
-  int num;
+  char *num;
   AST::BaseNode *ast;
   char *str;
 

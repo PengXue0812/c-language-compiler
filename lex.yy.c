@@ -507,7 +507,6 @@ void yyset_lineno(int _line_number);
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
  */
-
 #define yywrap() 1
 #ifndef YY_SKIP_YYWRAP
 #ifdef __cplusplus
@@ -883,7 +882,7 @@ YY_DECL {
           YY_RULE_SETUP
 #line 38 "c_compiler.l"
           {
-            yylval.num = atoi(strdup(yytext));
+            yylval.num = strdup(yytext);
             return CONST;
           }
           YY_BREAK

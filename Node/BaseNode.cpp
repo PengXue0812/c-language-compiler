@@ -32,13 +32,15 @@ AST::BaseNode::BaseNode(const char* content, NodeType type) {
   this->type = type;
   this->content = strdup(content);
 }
-bool AST::BaseNode::addBrotherNode(AST::BaseNode* node) {
-  BaseNode* temp = this;
-  while (temp->bNode != nullptr) {
-    temp = temp->bNode;
-  }
+bool AST::BaseNode::addFirstBrotherNode(AST::BaseNode* node) {
+  BaseNode* temp = this->bNode;
+  this->bNode = node;
+  node->bNode = temp;
+  return true;
+}
+bool AST::BaseNode::addLastBrotherNode(AST::BaseNode* node) {
+  BaseNode* temp = this->getFinalBrotherNode();
   temp->bNode = node;
-  node->pNode = this->pNode;
   return true;
 }
 
@@ -47,7 +49,7 @@ bool AST::BaseNode::addChildNode(AST::BaseNode* node) {
     this->cNode = node;
     node->pNode = this;
   } else {
-    this->cNode->addBrotherNode(node);
+    this->cNode->addLastBrotherNode(node);
   }
   return true;
 }
@@ -107,27 +109,27 @@ std::list<AST::BaseNode*> AST::BaseNode::getAllChildrenNode() {
   }
   return children;
 }
-int main() {
-  using namespace AST;
-  char* a = strdup("root");
-  BaseNode* node = new BaseNode(a);
-  BaseNode* childNode[10];
-  char** b = new char*[10];
-  for (int i = 0; i < 10; i++) {
-    b[i] = new char{(char)('0' + i)};
-    childNode[i] = new BaseNode(b[i]);
-    node->addChildNode(childNode[i]);
-  }
-  BaseNode* child0 = childNode[0];
-  for (int j = 0; j < 10; j++) {
-    b[j] = new char{(char)('a' + j)};
-    childNode[j] = new BaseNode(b[j]);
-    child0->addChildNode(childNode[j]);
-  }
-
-  BTTree<BaseNode> printer(node, &BaseNode::getAllChildrenNode,
-                           &BaseNode::getStringContent);
-  printer.print();
-  //   node->printTree(node);
-  return 0;
-}
+// int main() {
+//   using namespace AST;
+//   char* a = strdup("root");
+//   BaseNode* node = new BaseNode(a);
+//   BaseNode* childNode[10];
+//   char** b = new char*[10];
+//   for (int i = 0; i < 10; i++) {
+//     b[i] = new char{(char)('0' + i)};
+//     childNode[i] = new BaseNode(b[i]);
+//     node->addChildNode(childNode[i]);
+//   }
+//   BaseNode* child0 = childNode[0];
+//   for (int j = 0; j < 10; j++) {
+//     b[j] = new char{(char)('a' + j)};
+//     childNode[j] = new BaseNode(b[j]);
+//     child0->addChildNode(childNode[j]);
+//   }
+//  child0->addFirstBrotherNode(new BaseNode("brother"));
+//   BTTree<BaseNode> printer(node, &BaseNode::getAllChildrenNode,
+//                            &BaseNode::getStringContent);
+//   printer.print();
+//   //   node->printTree(node);
+//   return 0;
+// }

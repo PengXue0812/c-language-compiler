@@ -7,6 +7,7 @@ AST::BaseNode* root;
 extern int yylex(void); 
 
 extern int yyparse(void); 
+extern FILE* yyin;
 
 int yywrap()
 {
@@ -19,7 +20,11 @@ void yyerror(const char *s)
 
 int main()
 {
-	yyparse();
+    yyin = fopen("./test.txt","r");
+    do{
+       yyparse(); 
+    }while(!feof(yyin));
+	
 	return 0;
 }
 %}
@@ -86,18 +91,21 @@ blocks:
     block
     {
         printf("blocks->block\n");
-        AST::BaseNode *node = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
-        node->addChildNode($1);
-        $$ = node;
+        
+        $$= $1;
+        // AST::BaseNode *node = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
+        // node->addChildNode($1);
+        // $$ = node;
     }
     | blocks block
     {
         printf("blocks->blocks block\n");
         AST::BaseNode *node =new AST::BaseNode("Blocks",AST::NodeType::STATEMENT);
         node->addChildNode($1);
-        AST::BaseNode * block = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
-        block->addChildNode($2);
-        node->addChildNode(block);
+        node->addChildNode($2);
+        // AST::BaseNode * block = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
+        // block->addChildNode($2);
+        // node->addChildNode(block);
         $$ = node;
     }
     ;
@@ -235,15 +243,19 @@ function:IDENTIFIER '(' ')'
 params:params COMMA param {
     printf("params: params COMMA param\n");
     AST::BaseNode * node = new AST::BaseNode("Params",AST::NodeType::DEFINITION);
+    // AST::BaseNode * param_node = new AST::BaseNode("Single_Param",AST::NodeType::DEFINITION);
+    // param_node->addChildNode($3);
     node->addChildNode($1);
+    // node->addChildNode(param_node);
     node->addChildNode($3);
     $$ = node;
 }
 | param {
     printf("params: param\n");
-    AST::BaseNode * node = new AST::BaseNode("Single_Param",AST::NodeType::DEFINITION);
-    node->addChildNode($1);
-    $$ = node;
+    // AST::BaseNode * node = new AST::BaseNode("Single_Param",AST::NodeType::DEFINITION);
+    // node->addChildNode($1);
+    // $$ = node;
+    $$ = $1;
 };
 //单个参数     //int a
 param:descriptor IDENTIFIER  {
@@ -305,17 +317,18 @@ body:'{' statements '}' {
 statements:statements statement {
     printf("statements:statements statement\n");
     AST::BaseNode * node = new AST::BaseNode("Statements",AST::NodeType::STATEMENT);
-    AST::BaseNode * Single_Statement = new AST::BaseNode("Single_Statement",AST::NodeType::STATEMENT);
-    Single_Statement->addChildNode($2);
+    // AST::BaseNode * Single_Statement = new AST::BaseNode("Single_Statement",AST::NodeType::STATEMENT);
+    // Single_Statement->addChildNode($2);
     node->addChildNode($1);
-    node->addChildNode(Single_Statement);
+    // node->addChildNode(Single_Statement);
+    node->addChildNode($2);
     $$ = node;
 }
 |statement {
     printf("statements:statement\n");
-    AST::BaseNode * node = new AST::BaseNode("Single_Statement",AST::NodeType::STATEMENT);
-    node->addChildNode($1);
-    $$ = node;
+    // AST::BaseNode * node = new AST::BaseNode("Single_Statement",AST::NodeType::STATEMENT);
+    // node->addChildNode($1);
+    $$ = $1;
 }
 ;
 // 单个句子
@@ -522,7 +535,7 @@ declarevars:
     }
 ;
 forstart:
-    declares
+    declare
     {
         printf("declares\n");
         AST::BaseNode * node = new AST::BaseNode("For_Start",AST::NodeType::DEFINITION);
@@ -736,7 +749,10 @@ identifiers:
     {
         AST::BaseNode * node = new AST::BaseNode("ids",AST::NodeType::DEFINITION);
         node->addChildNode($1);
+        AST::BaseNode * id_node = new AST::BaseNode("id",AST::NodeType::DEFINITION);
         node->addChildNode(new AST::BaseNode($2,AST::NodeType::ID));
+        node->addChildNode(id_node);
+        // node->addChildNode(new AST::BaseNode($2,AST::NodeType::ID));
         $$ = node;
     }
     ;

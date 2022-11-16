@@ -1,3 +1,5 @@
+#ifndef _NODETYPE_H_
+#define _NODETYPE_H_
 namespace AST {
 enum NodeType {
   ROOT,        // 根结点
@@ -15,3 +17,6 @@ enum NodeType {
   BODY         // 函数体
 };
 }
+
+#endif
+

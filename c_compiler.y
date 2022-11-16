@@ -3,6 +3,9 @@
 #include <string.h>
 #include "Node/BaseNode.h"
 #include "Node/BTNode.h"
+#include "Symbol/SymbolTable.h"
+#include "Symbol/Symbol.h"
+
 AST::BaseNode* root;
 extern int yylex(void); 
 
@@ -84,6 +87,7 @@ program:
         BTTree<AST::BaseNode> printer(root, &AST::BaseNode::getAllChildrenNode,
                         &AST::BaseNode::getStringContent);
         printer.print();
+        dfs(NULL,root);
 
     };
 //语句块的集合
@@ -110,13 +114,12 @@ blocks:
     }
     ;
 //语句块(包括函数定义,全局变量的定义)
-block:descriptor declares SEMI
+block: declare SEMI
     {
-        printf("block->descriptor declares SEMI\n");
-        AST::BaseNode *node =new AST::BaseNode("Def_Variable_Block",AST::NodeType::DEFINITION);
-        node->addChildNode($1);
-        node->addChildNode($2);
-        $$ = node;
+        printf("Declare_Statement\n");
+        // AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::DEFINITION);
+        // node->addChildNode($1);
+        $$ = $1;
     }
     |descriptor function body
     {
@@ -343,9 +346,9 @@ statement:
     //声明语句;
     | declare SEMI
     {
-        AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::STATEMENT);
-        node->addChildNode($1);
-        $$ = node;
+        // AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::STATEMENT);
+        // node->addChildNode($1);
+        $$ = $1;
     }
     //语句块
     | body
@@ -490,8 +493,9 @@ declare:
     //标识符 要声明的东西的序列
     descriptor declares
     {
-        printf("descriptor declares\n");
-        AST::BaseNode * node = new AST::BaseNode("Declare_stmt_w_;",AST::NodeType::DEFINITION);
+        // printf("Declare_Statement\n");
+        AST::BaseNode * node = new AST::BaseNode("Declare_Statement",AST::NodeType::DEFINITION);
+
         node->addChildNode($1);
         node->addChildNode($2);
         $$ = node;

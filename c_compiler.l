@@ -1,6 +1,6 @@
 LETTER [a-zA-Z_]
 DIGIT [0-9]
-WHITE_SPACE [ \t\n] 
+WHITE_SPACE [ \t(\r\n)]
 %{
 # include <stdio.h>
 # include "y.tab.h"

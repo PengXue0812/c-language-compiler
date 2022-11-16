@@ -48,6 +48,8 @@ void dfs(SymbolArea* sa, AST::BaseNode* node ){
         // printf("3\n");
         printf("add function %s reType: %s\n",s->name,s->type);
         // printf("4\n");
+        AST::BaseNode* params = funcName->getBrotherNode();
+        dfsParams(sa,params);
         AST::BaseNode* funBody = fun->getBrotherNode();
         dfs(sa,funBody);
 

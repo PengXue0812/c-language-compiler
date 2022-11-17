@@ -1,7 +1,7 @@
 #include"SymbolTable.h"
 
 FILE* file = fopen("./symbol.txt","w");
-
+int idIndex = 0;
 SymbolTable* createSymbolTable(){
     SymbolTable* symbolTable = (SymbolTable*)malloc(sizeof(SymbolTable));
     symbolTable->count = 0;
@@ -46,8 +46,9 @@ void dfs(SymbolArea* sa, AST::BaseNode* node ){
         strcpy(s->name,funcName->getContent());
         strcpy(s->type,funcReType->getContent());
         strcpy(s->idType,"function");
+         s->id = idIndex++;
         // printf("3\n");
-        fprintf(file ,"add function %s reType: %s\n",s->name,s->type);
+        fprintf(file ,"add function %s reType:%s  id:%d\n",s->name,s->type,s->id);
         // printf("4\n");
         AST::BaseNode* params = funcName->getBrotherNode();
         dfsParams(sa,params);
@@ -86,10 +87,11 @@ SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node){
             Symbol* s = createSymbol();
             strcpy(s->name,id->getContent());
             strcpy(s->type,v_ch->getContent());
+            s->id = idIndex++;
             addSymbol(sa,s);
-            fprintf(file,"add symbol %s\n",s->name);
+            fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
             
-        }else{//申明且赋值
+        }else{//申明且赋值  
 
             AST::BaseNode* v_ch = var->getChildNode();
 
@@ -97,15 +99,16 @@ SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node){
             Symbol* s = createSymbol();
             strcpy(s->name,id->getContent());
             strcpy(s->type,v_ch->getContent());
+            s->id = idIndex++;
             AST::BaseNode* value = v_ch->getBrotherNode();
 
             printf("------%s\n",value->getContent());
             if(strcmp(value->getContent(),"Constant_Expression")==0){
                 printf("ok");
                 strcpy(s->value,value->getChildNode()->getContent());
-                fprintf(file,"add symbol has value %s = %s \n",s->name,s->value);
+                fprintf(file,"add symbol has value %s = %s id: %d\n",s->name,s->value,s->id);
             }else{
-                fprintf(file,"add symbol %s\n",s->name);
+                 fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
             }
             addSymbol(sa,s);
              
@@ -127,8 +130,9 @@ SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node){
             Symbol* s = createSymbol();
             strcpy(s->name,id->getContent());
             strcpy(s->type,v_ch->getContent());
+            s->id = idIndex++;
             addSymbol(sa,s);
-            fprintf(file,"add symbol %s\n",s->name);
+            fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
             
         }else{//申明且赋值
 
@@ -138,18 +142,17 @@ SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node){
             Symbol* s = createSymbol();
             strcpy(s->name,id->getContent());
             strcpy(s->type,v_ch->getContent());
+            s->id = idIndex++;
             AST::BaseNode* value = v_ch->getBrotherNode();
 
             printf("------%s\n",value->getContent());
             if(strcmp(value->getContent(),"Constant_Expression")==0){
                 strcpy(s->value,value->getChildNode()->getContent());
-                fprintf(file,"add symbol has value %s = %s \n",s->name,s->value);
+                 fprintf(file,"add symbol has value %s = %s id: %d\n",s->name,s->value,s->id);
             }else{
-                fprintf(file,"add symbol %s\n",s->name);
+                 fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
             }
             addSymbol(sa,s);
-             
-            
         }
    }
    return sa;
@@ -161,7 +164,6 @@ SymbolArea* dfsParams(SymbolArea* sa,AST::BaseNode* node){
     }
     if(strcmp(node->getContent(),"Params")==0){
         std::list<AST::BaseNode*> children = node->getAllChildrenNode();
-       
         for(std::list<AST::BaseNode*>::iterator it = children.begin();it!=children.end();it++){
             dfsParams(sa,*it);
         }
@@ -171,8 +173,9 @@ SymbolArea* dfsParams(SymbolArea* sa,AST::BaseNode* node){
         Symbol* s = createSymbol();
         strcpy(s->name,paramName->getContent());
         strcpy(s->type,paramType->getContent());
+        s->id = idIndex++;
         addSymbol(sa,s);
-        fprintf(file,"add param %s\n",s->name);
+        fprintf(file,"add param %s id:%d\n",s->name,s->id);
     }
     return sa;
 

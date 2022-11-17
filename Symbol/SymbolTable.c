@@ -24,14 +24,29 @@ void dfs(SymbolArea* sa, AST::BaseNode* node ){
     // printf("dfs %s\n",node->getContent());
     std::list<AST::BaseNode*> children = node->getAllChildrenNode();
     printf("dfs----- %s\n",node->getContent());
+    if(strcmp(node->getContent(),"Declare_Statement")==0){
+        AST::BaseNode* descriptor = node->getChildNode();
+        char declareType[100];
+        strcpy(declareType,descriptor->getContent());
+        sa = dfsDeclares(sa,descriptor->getBrotherNode(),declareType);
+    }else if(strcmp(node->getContent(),"For_Start")==0){
+          for(std::list<AST::BaseNode*>::iterator it = children.begin();it!=children.end();it++){
+            // printf("dfs %s\n",(*it)->getContent());
+            dfs(sa,*it);
+        }
+
+    }
 
 
-     //申明变量   
-    if((strcmp(node->getContent(),"Declare_Variables")==0)||(strcmp(node->getContent(),"Declare_Variable")==0)){
-        // printf("dfs %s\n",node->getContent());
-        sa = dfsDeclares(sa,node);
-    //函数的声明  
-    }else if((strcmp(node->getContent(),"Def_Func_Block_Body")==0)||(strcmp(node->getContent(),"Def_Func_Block_NoBody")==0)){
+
+
+    //  //申明变量   
+    // if((strcmp(node->getContent(),"Declare_Variables")==0)||(strcmp(node->getContent(),"Declare_Variable")==0)){
+    //     // printf("dfs %s\n",node->getContent());
+    //     sa = dfsDeclares(sa,node);
+    // //函数的声明  
+    // }
+    else if((strcmp(node->getContent(),"Def_Func_Block_Body")==0)||(strcmp(node->getContent(),"Def_Func_Block_NoBody")==0)){
        
         AST::BaseNode* funcReType = node->getChildNode();
         //  printf("01\n");
@@ -65,96 +80,53 @@ void dfs(SymbolArea* sa, AST::BaseNode* node ){
     }
 }
 
-SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node){
+SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node,char *declareType){
    if(node==NULL){
     return  sa ;
    }
-//    printf("1\n");
-
-   if(strcmp(node->getContent(),"Declare_Variables")==0){
-    //  printf("2\n");
-
         AST::BaseNode* var = node->getChildNode();
 
         //没有赋值
         if(strcmp(var->getContent(),"Variable")==0){
             //  printf("3\n");
 
-            AST::BaseNode* v_ch = var->getChildNode();
+            AST::BaseNode* varType = var->getChildNode();
 
           
-            AST::BaseNode* id = v_ch->getChildNode();
+            AST::BaseNode* idName = varType->getChildNode();
             Symbol* s = createSymbol();
-            strcpy(s->name,id->getContent());
-            strcpy(s->type,v_ch->getContent());
+            strcpy(s->name,idName->getContent());
+            strcpy(s->idType,varType->getContent());
+            strcpy(s->type,declareType);
             s->id = idIndex++;
             addSymbol(sa,s);
-            fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
+            fprintf(file,"add symbol %s id: %d declareType:%s,idType:%s\n",s->name,s->id,s->type,s->idType);
             
         }else{//申明且赋值  
 
-            AST::BaseNode* v_ch = var->getChildNode();
+            AST::BaseNode* varType = var->getChildNode();
 
-            AST::BaseNode* id = v_ch->getChildNode();
+            AST::BaseNode* idName = varType->getChildNode();
             Symbol* s = createSymbol();
-            strcpy(s->name,id->getContent());
-            strcpy(s->type,v_ch->getContent());
+            strcpy(s->name,idName->getContent());
+            strcpy(s->idType,varType->getContent());
+            strcpy(s->type,declareType);
             s->id = idIndex++;
-            AST::BaseNode* value = v_ch->getBrotherNode();
+            AST::BaseNode* value = varType->getBrotherNode();
 
             printf("------%s\n",value->getContent());
             if(strcmp(value->getContent(),"Constant_Expression")==0){
-                printf("ok");
                 strcpy(s->value,value->getChildNode()->getContent());
-                fprintf(file,"add symbol has value %s = %s id: %d\n",s->name,s->value,s->id);
+                fprintf(file,"add symbol has value %s = %s id: %d declareType:%s, idType:%s\n",s->name,s->value,s->id,s->type,s->idType);
             }else{
-                 fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
+                 fprintf(file,"add symbol %s id: %d declareType:%s,idType:%s\n",s->name,s->id,s->type,s->idType);
             }
             addSymbol(sa,s);
-             
-            
+        }
+        if(strcmp(node->getContent(),"Declare_Variables")==0){
+            dfsDeclares(sa,var->getBrotherNode(),declareType);
+        }
     
-        }
-        // printf("5\n");
-        dfsDeclares(sa,var->getBrotherNode());
-   }
-   else if(strcmp(node->getContent(),"Declare_Variable")==0){
-    //  printf("6\n");
-     AST::BaseNode* var = node->getChildNode();
-    //   printf("7\n");
-         if(strcmp(var->getContent(),"Variable")==0){
-            //  printf("3\n");
-
-            AST::BaseNode* v_ch = var->getChildNode();
-            AST::BaseNode* id = v_ch->getChildNode();
-            Symbol* s = createSymbol();
-            strcpy(s->name,id->getContent());
-            strcpy(s->type,v_ch->getContent());
-            s->id = idIndex++;
-            addSymbol(sa,s);
-            fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
-            
-        }else{//申明且赋值
-
-            AST::BaseNode* v_ch = var->getChildNode();
-
-            AST::BaseNode* id = v_ch->getChildNode();
-            Symbol* s = createSymbol();
-            strcpy(s->name,id->getContent());
-            strcpy(s->type,v_ch->getContent());
-            s->id = idIndex++;
-            AST::BaseNode* value = v_ch->getBrotherNode();
-
-            printf("------%s\n",value->getContent());
-            if(strcmp(value->getContent(),"Constant_Expression")==0){
-                strcpy(s->value,value->getChildNode()->getContent());
-                 fprintf(file,"add symbol has value %s = %s id: %d\n",s->name,s->value,s->id);
-            }else{
-                 fprintf(file,"add symbol %s id: %d\n",s->name,s->id);
-            }
-            addSymbol(sa,s);
-        }
-   }
    return sa;
 }
 
@@ -172,10 +144,12 @@ SymbolArea* dfsParams(SymbolArea* sa,AST::BaseNode* node){
         AST::BaseNode* paramName = paramType->getBrotherNode();
         Symbol* s = createSymbol();
         strcpy(s->name,paramName->getContent());
+        strcpy(s->idType,node->getContent());
         strcpy(s->type,paramType->getContent());
+
         s->id = idIndex++;
         addSymbol(sa,s);
-        fprintf(file,"add param %s id:%d\n",s->name,s->id);
+      fprintf(file,"add param symbol %s id: %d declareType:%s,idType:%s\n",s->name,s->id,s->type,s->idType);
     }
     return sa;
 

@@ -14,7 +14,7 @@ struct SymbolTable
 
 SymbolTable* createSymbolTable();
 void addSymbol(SymbolTable* table, Symbol* symbol);
-SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node);
+SymbolArea* dfsDeclares(SymbolArea* sa,AST::BaseNode* node,char* declareType);
 SymbolArea* dfsParams(SymbolArea* sa,AST::BaseNode* node);
 void dfs(SymbolArea* area, AST::BaseNode* node );
 

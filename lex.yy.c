@@ -511,8 +511,18 @@ char *yytext;
 # include <stdio.h>
 # include "y.tab.h"
 # include <string.h>
-#line 515 "lex.yy.c"
-#line 516 "lex.yy.c"
+
+int cur_id = 10000;
+int cur = 0;
+struct Sym{
+    char *word;
+    char *morpheme;
+    int val;
+};
+struct Sym sym[10000];
+FILE *symfile = fopen("./oursym.txt","w");
+#line 525 "lex.yy.c"
+#line 526 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -730,10 +740,10 @@ YY_DECL
 		}
 
 	{
-#line 10 "c_compiler.l"
+#line 20 "c_compiler.l"
 
 
-#line 736 "lex.yy.c"
+#line 746 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -792,227 +802,246 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 "c_compiler.l"
-{ return WHILE; }
+#line 22 "c_compiler.l"
+{ sym[cur].word=strdup("WHILE"); sym[cur].morpheme=strdup("while"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return WHILE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 13 "c_compiler.l"
-{ return FOR; }
+#line 23 "c_compiler.l"
+{ sym[cur].word=strdup("FOR"); sym[cur].morpheme=strdup("for"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return FOR; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 14 "c_compiler.l"
-{ return BREAK; }
+#line 24 "c_compiler.l"
+{ sym[cur].word=strdup("BREAK"); sym[cur].morpheme=strdup("break"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return BREAK; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 15 "c_compiler.l"
-{ return CONTINUE; }
+#line 25 "c_compiler.l"
+{ sym[cur].word=strdup("CONTINUE"); sym[cur].morpheme=strdup("continue"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return CONTINUE; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 16 "c_compiler.l"
-{ return IF; }
+#line 26 "c_compiler.l"
+{ sym[cur].word=strdup("IF"); sym[cur].morpheme=strdup("if"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return IF; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 17 "c_compiler.l"
-{ return ELSE; }
+#line 27 "c_compiler.l"
+{ sym[cur].word=strdup("ELSE"); sym[cur].morpheme=strdup("else"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return ELSE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 18 "c_compiler.l"
-{ return PRINTF; }
+#line 28 "c_compiler.l"
+{ sym[cur].word=strdup("PRINTF"); sym[cur].morpheme=strdup("printf"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return PRINTF; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 19 "c_compiler.l"
-{ return SCANF; }
+#line 29 "c_compiler.l"
+{ sym[cur].word=strdup("SCANF"); sym[cur].morpheme=strdup("scanf"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return SCANF; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 20 "c_compiler.l"
-{ return RETURN; }
+#line 30 "c_compiler.l"
+{ sym[cur].word=strdup("RETURN"); sym[cur].morpheme=strdup("return"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return RETURN; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 21 "c_compiler.l"
-{ return VOID; }
+#line 31 "c_compiler.l"
+{ sym[cur].word=strdup("VOID"); sym[cur].morpheme=strdup("void"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return VOID; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 22 "c_compiler.l"
-{ return S_QUO; /* 单引号 */}
+#line 32 "c_compiler.l"
+{ sym[cur].word=strdup("S_QUO"); sym[cur].morpheme=strdup("\'"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return S_QUO; /* 单引号 */}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 23 "c_compiler.l"
-{ return D_QUO; /* 双引号 */}
+#line 33 "c_compiler.l"
+{ sym[cur].word=strdup("D_QUO"); sym[cur].morpheme=strdup("\""); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return D_QUO; /* 双引号 */}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 24 "c_compiler.l"
-{ return INT; }
+#line 34 "c_compiler.l"
+{ sym[cur].word=strdup("INT"); sym[cur].morpheme=strdup("int"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return INT; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 25 "c_compiler.l"
-{ return COMMA; }
+#line 35 "c_compiler.l"
+{ sym[cur].word=strdup("COMMA"); sym[cur].morpheme=strdup(","); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return COMMA; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 26 "c_compiler.l"
-{ return SEMI; }
+#line 36 "c_compiler.l"
+{ sym[cur].word=strdup("SEMI"); sym[cur].morpheme=strdup(";"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return SEMI; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 27 "c_compiler.l"
-{ return ASSIGN_OP; }
+#line 37 "c_compiler.l"
+{ sym[cur].word=strdup("ASSIGN_OP"); sym[cur].morpheme=strdup("="); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return ASSIGN_OP; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 28 "c_compiler.l"
-{ return '('; }
+#line 38 "c_compiler.l"
+{ sym[cur].word=strdup("LP"); sym[cur].morpheme=strdup("("); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return '('; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 29 "c_compiler.l"
-{ return ')'; }
+#line 39 "c_compiler.l"
+{ sym[cur].word=strdup("RP"); sym[cur].morpheme=strdup(")"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return ')'; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 30 "c_compiler.l"
-{ return '['; }
+#line 40 "c_compiler.l"
+{ sym[cur].word=strdup("LMP"); sym[cur].morpheme=strdup("["); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return '['; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 31 "c_compiler.l"
-{ return ']'; }
+#line 41 "c_compiler.l"
+{ sym[cur].word=strdup("RMP"); sym[cur].morpheme=strdup("]"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return ']'; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 32 "c_compiler.l"
-{ return '{'; }
+#line 42 "c_compiler.l"
+{ sym[cur].word=strdup("LBRACE"); sym[cur].morpheme=strdup("{"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return '{'; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 33 "c_compiler.l"
-{ return '}'; }
+#line 43 "c_compiler.l"
+{ sym[cur].word=strdup("RBRACE"); sym[cur].morpheme=strdup("}"); sym[cur].val=0; fprintf(symfile,"%s\t%s\t\n",sym[cur].word,sym[cur].morpheme ); cur++; return '}'; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 35 "c_compiler.l"
-{yylval.str = strdup(yytext); return IDENTIFIER;  }
+#line 45 "c_compiler.l"
+{ 
+    int flag = 0;
+    for(int i = 0;i<cur;i++){
+        if(strcmp(yytext, sym[i].morpheme) == 0){
+            sym[cur].word = strdup("IDENTIFIER");
+            sym[cur].morpheme = strdup(yytext);
+            sym[cur].val = sym[i].val;
+            flag = 1;
+            break;
+        }
+    }
+    if (flag == 0){
+        sym[cur].word = strdup("IDENTIFIER");
+        sym[cur].morpheme = strdup(yytext);
+        sym[cur].val = cur_id++;
+    }
+    fprintf(symfile,"%s\t%s\t%d\n",sym[cur].word,sym[cur].morpheme,sym[cur].val );
+    cur++;
+    yylval.str = strdup(yytext); return IDENTIFIER;  
+}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 38 "c_compiler.l"
-{yylval.num= strdup(yytext); return CONST; }
+#line 67 "c_compiler.l"
+{ sym[cur].word=strdup("CONST"); sym[cur].morpheme=strdup(yytext); sym[cur].val=atoi(yytext); fprintf(symfile,"%s\t%s\t%d\n",sym[cur].word,sym[cur].morpheme,sym[cur].val ); cur++; yylval.num= strdup(yytext); return CONST; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 41 "c_compiler.l"
+#line 70 "c_compiler.l"
 { return '+'; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 42 "c_compiler.l"
+#line 71 "c_compiler.l"
 { return '-'; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 43 "c_compiler.l"
+#line 72 "c_compiler.l"
 { return '*'; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 44 "c_compiler.l"
+#line 73 "c_compiler.l"
 { return '/'; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 45 "c_compiler.l"
+#line 74 "c_compiler.l"
 { return '%'; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 47 "c_compiler.l"
+#line 76 "c_compiler.l"
 { return EQ_OP; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 48 "c_compiler.l"
+#line 77 "c_compiler.l"
 { return GT_OP; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 49 "c_compiler.l"
+#line 78 "c_compiler.l"
 { return LT_OP; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 50 "c_compiler.l"
+#line 79 "c_compiler.l"
 { return GE_OP; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 51 "c_compiler.l"
+#line 80 "c_compiler.l"
 { return LE_OP; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 52 "c_compiler.l"
+#line 81 "c_compiler.l"
 { return NE_OP; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 54 "c_compiler.l"
+#line 83 "c_compiler.l"
 { return AND;  }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 55 "c_compiler.l"
+#line 84 "c_compiler.l"
 { return OR; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 56 "c_compiler.l"
+#line 85 "c_compiler.l"
 { return '!'; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 57 "c_compiler.l"
+#line 86 "c_compiler.l"
 { return SINGLAND; }
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 60 "c_compiler.l"
+#line 89 "c_compiler.l"
 { /* DO NOTHING */ }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 61 "c_compiler.l"
+#line 90 "c_compiler.l"
 {/* DO NOTHING */}
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 62 "c_compiler.l"
+#line 91 "c_compiler.l"
 { /* ignore white space */ }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 63 "c_compiler.l"
+#line 92 "c_compiler.l"
 {printf("ERROR!!"); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 65 "c_compiler.l"
+#line 94 "c_compiler.l"
 ECHO;
 	YY_BREAK
-#line 1015 "lex.yy.c"
+#line 1044 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2017,7 +2046,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 65 "c_compiler.l"
+#line 94 "c_compiler.l"
 
 
 

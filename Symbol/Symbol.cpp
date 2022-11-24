@@ -1,41 +1,102 @@
-#include"Symbol.h"
+#include "Symbol.h"
 
-Symbol* createSymbol(char* name,char* type,int id){
-    Symbol* s = (Symbol*)malloc(sizeof(Symbol));
-    strcpy(s->name,name);
-    strcpy(s->type,type);
-    s->id = id;
-    return s;
-}
-Symbol* createSymbol(){
-    Symbol* s = (Symbol*)malloc(sizeof(Symbol));
-    s->id = 0;
-    return s;
+#include "../Node/BaseNode.h"
+
+Symbol::Symbol() {
+  this->idName = "";
+  this->idType = SymbolType::integer;
+  this->width = 4;
+  this->value = "0";
+  this->isUsed = false;
 }
 
-SymbolArea* createSymbolArea(){
-    SymbolArea* sa= (SymbolArea*)malloc(sizeof(SymbolArea));
-    // sa->symbols = (Symbol*)malloc(sizeof(Symbol*));
-    
-    sa->count = 0;
-    return sa;
+Symbol::Symbol(std::string name, SymbolType type, int width,
+               std::string init_value) {
+  this->idName = name;
+  this->idType = type;
+  this->width = width;
+  this->value = init_value;
+  this->isUsed = false;
 }
-void addSymbol(SymbolArea* sa,Symbol* s){
- 
-    sa->symbols[sa->count] = *s;
-
-    sa->count+=1;
-
+void Symbol::showSymbolInfor() {
+  std::cout << "Symbol Name: " << this->idName << "\tSymbol Addr: " << this
+            << "\tSymbol Value: " << this->value
+            << "\tpointer Addr: " << this->pointerAddr
+            << "\twitdth: " << this->width
+            << "\tSymbol Type: " << static_cast<int>(this->idType)
+            << "\tisUsed: " << this->isUsed << std::endl;
 }
-// int main(){
-//     SymbolArea* sa = createSymbolArea();
-//     char name[] = "kjh";
-    
 
-//     Symbol* s = createSymbol(name,AST::ROOT,1);
-  
-//     addSymbol(sa,s);
-   
-//     printf("%d",sa->symbols[sa->count-1].type);
-//     return 0;
-// }
+SymbolArea::SymbolArea() {
+  this->parentArea = nullptr;
+  this->firstChildArea = nullptr;
+  this->firstBrotherArea = nullptr;
+  this->total_offset = 0;
+  this->symbolNumber = 0;
+  this->baseArea = nullptr;
+}
+
+Symbol *SymbolArea::findSymbolLocally(std::string name) {
+  if (this->SymbolMap.find(name) != this->SymbolMap.end()) {
+    return this->SymbolMap[name];
+  } else {
+    return nullptr;
+  }
+}
+
+bool SymbolArea::addSymbol(Symbol *symbol) {
+  if (this->findSymbolLocally(symbol->getIdName()) != nullptr) {
+    return false;
+  }
+  this->SymbolMap[symbol->getIdName()] = symbol;
+  this->symbolNumber++;
+  return true;
+}
+
+SymbolArea *SymbolArea::getParentArea() { return this->parentArea; }
+
+SymbolArea *SymbolArea::getFirstChildArea() { return this->firstChildArea; }
+
+SymbolArea *SymbolArea::getFirstBrotherArea() { return this->firstBrotherArea; }
+
+SymbolArea *SymbolArea::getBaseArea() { return this->baseArea; }
+
+int SymbolArea::getSymbolNumber() { return this->symbolNumber; }
+
+int SymbolArea::getOffset() { return this->total_offset; }
+
+int SymbolArea::setOffset(int offset) {
+  this->total_offset = offset;
+  return this->total_offset;
+}
+
+void SymbolArea::setParentArea(SymbolArea *parentArea) {
+  this->parentArea = parentArea;
+}
+
+void SymbolArea::setFirstBrotherArea(SymbolArea *brotherArea) {
+  this->firstBrotherArea = brotherArea;
+}
+
+SymbolArea *SymbolArea::addNewChildArea() {
+  SymbolArea *newArea = new SymbolArea();
+  newArea->setParentArea(this);
+  if (this->firstChildArea == nullptr) {
+    this->firstChildArea = newArea;
+  } else {
+    SymbolArea *temp = this->firstChildArea;
+    while (temp->getFirstBrotherArea() != nullptr) {
+      temp = temp->getFirstBrotherArea();
+    }
+    temp->setFirstBrotherArea(newArea);
+  }
+  return newArea;
+}
+
+void SymbolArea::showSymbolArea() {
+  std::cout << "Symbol Area: " << this << std::endl;
+  for (auto it = this->SymbolMap.begin(); it != this->SymbolMap.end(); it++) {
+    it->second->showSymbolInfor();
+  }
+  std::cout << std::endl;
+}

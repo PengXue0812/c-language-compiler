@@ -6,7 +6,7 @@
 #include "Symbol/SymbolTable.h"
 #include "Symbol/Symbol.h"
 
-AST::BaseNode* root;
+BaseNode* root;
 extern int yylex(void); 
 
 extern int yyparse(void); 
@@ -35,7 +35,7 @@ int main()
 %union
 {
     char* num;
-    AST::BaseNode *ast;
+    BaseNode *ast;
     char *str;
 }
 %type <ast> program 
@@ -81,11 +81,11 @@ int main()
 program:
     blocks
     {
-        root = new AST::BaseNode("program",AST::NodeType::ROOT);
-        // root->addChildNode(new AST::BaseNode("test"));
+        root = new BaseNode("program",NodeType::ROOT);
+        // root->addChildNode(new BaseNode("test"));
         root->addChildNode($1);
-        BTTree<AST::BaseNode> printer(root, &AST::BaseNode::getAllChildrenNode,
-                        &AST::BaseNode::getStringContent);
+        BTTree<BaseNode> printer(root, &BaseNode::getAllChildrenNode,
+                        &BaseNode::getStringContent);
         printer.print();
         dfs(NULL,root);
 
@@ -97,17 +97,17 @@ blocks:
         printf("blocks->block\n");
         
         $$= $1;
-        // AST::BaseNode *node = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
+        // BaseNode *node = new BaseNode("a_Block",NodeType::STATEMENT);
         // node->addChildNode($1);
         // $$ = node;
     }
     | blocks block
     {
         printf("blocks->blocks block\n");
-        AST::BaseNode *node =new AST::BaseNode("Blocks",AST::NodeType::STATEMENT);
+        BaseNode *node =new BaseNode("Blocks",NodeType::STATEMENT);
         node->addChildNode($1);
         node->addChildNode($2);
-        // AST::BaseNode * block = new AST::BaseNode("a_Block",AST::NodeType::STATEMENT);
+        // BaseNode * block = new BaseNode("a_Block",NodeType::STATEMENT);
         // block->addChildNode($2);
         // node->addChildNode(block);
         $$ = node;
@@ -117,14 +117,14 @@ blocks:
 block: declare SEMI
     {
         printf("Declare_Statement\n");
-        // AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::DEFINITION);
+        // BaseNode *node = new BaseNode("Declare_Statement",NodeType::DEFINITION);
         // node->addChildNode($1);
         $$ = $1;
     }
     |descriptor function body
     {
         printf("blockcdescriptor function body\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_Func_Block_Body",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Def_Func_Block_Body",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($2);
         node->addChildNode($3);
@@ -133,7 +133,7 @@ block: declare SEMI
     |descriptor function SEMI
     {
         printf("block->descriptor function 'SEMI'\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_Func_Block_NoBody",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Def_Func_Block_NoBody",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($2);
         $$ = node;
@@ -142,27 +142,27 @@ block: declare SEMI
 variable:IDENTIFIER
     {   
         printf("variable->IDENTIFIER\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_Identifier",AST::NodeType::DEFINITION);
-        AST::BaseNode * var_node = new AST::BaseNode($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Def_Identifier",NodeType::DEFINITION);
+        BaseNode * var_node = new BaseNode($1,NodeType::ID);
         node->addChildNode(var_node);
         $$ = node;
     }
     |IDENTIFIER '[' ']'
     {
         printf("variable->IDENTIFIER '[' ']'\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_array[]",AST::NodeType::ARRAY);
-        AST::BaseNode * var_node = new AST::BaseNode($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Def_array[]",NodeType::ARRAY);
+        BaseNode * var_node = new BaseNode($1,NodeType::ID);
         node->addChildNode(var_node);
         $$ = node;
     }
     |IDENTIFIER '[' CONST ']'
     {
         printf("variable->IDENTIFIER '[' CONST ']'\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_array[Const]",AST::NodeType::ARRAY);
-        AST::BaseNode * var_node = new AST::BaseNode($1,AST::NodeType::ID);
-        // AST::BaseNode * const_node = new AST::BaseNode($3,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Def_array[Const]",NodeType::ARRAY);
+        BaseNode * var_node = new BaseNode($1,NodeType::ID);
+        // BaseNode * const_node = new BaseNode($3,NodeType::ID);
 
-        AST::BaseNode * const_node = new AST::BaseNode($3, AST::NodeType::CONST_INT);
+        BaseNode * const_node = new BaseNode($3, NodeType::CONST_INT);
         node->addChildNode(var_node);
         node->addChildNode(const_node);
         $$ = node;
@@ -170,16 +170,16 @@ variable:IDENTIFIER
     |IDENTIFIER '[' expression ']'
     {
         printf("variable->IDENTIFIER '[' expression ']'\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_array[expression]",AST::NodeType::ARRAY);
-        AST::BaseNode * var_node = new AST::BaseNode($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Def_array[expression]",NodeType::ARRAY);
+        BaseNode * var_node = new BaseNode($1,NodeType::ID);
         node->addChildNode(var_node);
         node->addChildNode($3);
     }
     |'*' IDENTIFIER
     {
         printf("variable->'*' IDENTIFIER\n");
-        AST::BaseNode * node = new AST::BaseNode("Def_*Identifier",AST::NodeType::POINTER);
-        AST::BaseNode * var_node = new AST::BaseNode($2,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Def_*Identifier",NodeType::POINTER);
+        BaseNode * var_node = new BaseNode($2,NodeType::ID);
         node->addChildNode(var_node);
         $$ = node;
     }
@@ -188,16 +188,16 @@ variable:IDENTIFIER
 consts:CONST
     {
         // printf("");
-        AST::BaseNode * node = new AST::BaseNode("Const_array",AST::NodeType::EXPRESSION);
-        AST::BaseNode * const_node = new AST::BaseNode($1,AST::NodeType::CONST_INT);
+        BaseNode * node = new BaseNode("Const_array",NodeType::EXPRESSION);
+        BaseNode * const_node = new BaseNode($1,NodeType::CONST_INT);
         node->addChildNode(const_node);
         $$ = node;
     }
     |consts COMMA CONST
     {
         // printf("");
-        AST::BaseNode * node = new AST::BaseNode("Consts_array",AST::NodeType::EXPRESSION);
-        AST::BaseNode * const_node = new AST::BaseNode($3,AST::NodeType::CONST_INT);
+        BaseNode * node = new BaseNode("Consts_array",NodeType::EXPRESSION);
+        BaseNode * const_node = new BaseNode($3,NodeType::CONST_INT);
         node->addChildNode($1);
         node->addChildNode(const_node);
         $$ = node;
@@ -207,19 +207,19 @@ consts:CONST
 descriptor:INT
     {
         printf("INTTTTTTT\n");
-        AST::BaseNode * node = new AST::BaseNode("int_Type",AST::NodeType::MODIFY);
+        BaseNode * node = new BaseNode("int_Type",NodeType::MODIFY);
         $$ = node;
     }
     |VOID 
     {
         printf("VOID\n");
-        AST::BaseNode * node = new AST::BaseNode("void_type",AST::NodeType::MODIFY);
+        BaseNode * node = new BaseNode("void_type",NodeType::MODIFY);
         $$ = node;
     }
     |INT '*'
     {
         printf("INT* \n");
-        AST::BaseNode * node = new AST::BaseNode("int*_Type",AST::NodeType::MODIFY);
+        BaseNode * node = new BaseNode("int*_Type",NodeType::MODIFY);
         $$ = node;
     }
     ;
@@ -227,16 +227,16 @@ descriptor:INT
 function:IDENTIFIER '(' ')'
     {
         printf("Function_Without_Param\n");
-        AST::BaseNode * node = new AST::BaseNode("Function_Without_Param",AST::NodeType::DEFINITION);
-        AST::BaseNode * IdentifierNode = new AST::BaseNode($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Function_Without_Param",NodeType::DEFINITION);
+        BaseNode * IdentifierNode = new BaseNode($1,NodeType::ID);
         node->addChildNode(IdentifierNode);
         $$ = node;
     }
     |IDENTIFIER '(' params ')'
     {
         printf("Function_With_Param\n");
-        AST::BaseNode * node = new AST::BaseNode("Function_With_Param",AST::NodeType::DEFINITION);
-        AST::BaseNode * IdentifierNode = new AST::BaseNode($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Function_With_Param",NodeType::DEFINITION);
+        BaseNode * IdentifierNode = new BaseNode($1,NodeType::ID);
         node->addChildNode(IdentifierNode);
         node->addChildNode($3);
         $$ = node;
@@ -245,8 +245,8 @@ function:IDENTIFIER '(' ')'
 //参数序列    
 params:params COMMA param {
     printf("params: params COMMA param\n");
-    AST::BaseNode * node = new AST::BaseNode("Params",AST::NodeType::DEFINITION);
-    // AST::BaseNode * param_node = new AST::BaseNode("Single_Param",AST::NodeType::DEFINITION);
+    BaseNode * node = new BaseNode("Params",NodeType::DEFINITION);
+    // BaseNode * param_node = new BaseNode("Single_Param",NodeType::DEFINITION);
     // param_node->addChildNode($3);
     node->addChildNode($1);
     // node->addChildNode(param_node);
@@ -255,7 +255,7 @@ params:params COMMA param {
 }
 | param {
     printf("params: param\n");
-    // AST::BaseNode * node = new AST::BaseNode("Single_Param",AST::NodeType::DEFINITION);
+    // BaseNode * node = new BaseNode("Single_Param",NodeType::DEFINITION);
     // node->addChildNode($1);
     // $$ = node;
     $$ = $1;
@@ -263,17 +263,17 @@ params:params COMMA param {
 //单个参数     //int a
 param:descriptor IDENTIFIER  {
     printf("param:descriptor identifiers\n");
-    AST::BaseNode * node = new AST::BaseNode("Param_ID",AST::NodeType::DEFINITION);
-    AST::BaseNode * IdentifierNode = new AST::BaseNode($2,AST::NodeType::ID);
+    BaseNode * node = new BaseNode("Param_ID",NodeType::DEFINITION);
+    BaseNode * IdentifierNode = new BaseNode($2,NodeType::ID);
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
 }//int a[10]
 |descriptor IDENTIFIER  '[' CONST ']' {
     printf("param:descriptor identifiers '[' CONST ']'\n");
-    AST::BaseNode * node = new AST::BaseNode("Param_ID[CONST]",AST::NodeType::DEFINITION);
-    AST::BaseNode * IdentifierNode = new AST::BaseNode($2,AST::NodeType::ID);
-    AST::BaseNode * ConstNode = new AST::BaseNode($4,AST::NodeType::CONST_INT);
+    BaseNode * node = new BaseNode("Param_ID[CONST]",NodeType::DEFINITION);
+    BaseNode * IdentifierNode = new BaseNode($2,NodeType::ID);
+    BaseNode * ConstNode = new BaseNode($4,NodeType::CONST_INT);
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     node->addChildNode(ConstNode);
@@ -281,46 +281,46 @@ param:descriptor IDENTIFIER  {
 }//int a[]
 |descriptor IDENTIFIER  '[' ']' {
     printf("param:descriptor identifiers '[' ']'\n");
-    AST::BaseNode * node = new AST::BaseNode("Param_ID[]",AST::NodeType::DEFINITION);
-    AST::BaseNode * IdentifierNode = new AST::BaseNode($2,AST::NodeType::ID);
+    BaseNode * node = new BaseNode("Param_ID[]",NodeType::DEFINITION);
+    BaseNode * IdentifierNode = new BaseNode($2,NodeType::ID);
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
 }// int &a
 |descriptor SINGLAND IDENTIFIER{
     printf("param:descriptor SINGLAND identifiers\n");
-    AST::BaseNode * node = new AST::BaseNode("array_&id",AST::NodeType::ARRAY);
-    AST::BaseNode * IdentifierNode = new AST::BaseNode($3,AST::NodeType::ID);
+    BaseNode * node = new BaseNode("array_&id",NodeType::ARRAY);
+    BaseNode * IdentifierNode = new BaseNode($3,NodeType::ID);
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
 }//int *a
 |descriptor '*' IDENTIFIER{
     printf("param:descriptor SINGLAND '*' identifiers\n");
-    AST::BaseNode * node = new AST::BaseNode("array_*id",AST::NodeType::POINTER);
-    AST::BaseNode * IdentifierNode = new AST::BaseNode($3,AST::NodeType::ID);
+    BaseNode * node = new BaseNode("array_*id",NodeType::POINTER);
+    BaseNode * IdentifierNode = new BaseNode($3,NodeType::ID);
     node->addChildNode($1);
     node->addChildNode(IdentifierNode);
     $$ = node;
 }//int 
 |descriptor{
     printf("param:descriptor\n");
-    AST::BaseNode * node = new AST::BaseNode("param_without_id",AST::NodeType::DEFINITION);
+    BaseNode * node = new BaseNode("param_without_id",NodeType::DEFINITION);
     node->addChildNode($1);
     $$ = node;
 };
 //语句块    
 body:'{' statements '}' {
     printf("body:'{' statements '}'\n");
-    AST::BaseNode *node = new AST::BaseNode("Body",AST::NodeType::BODY);
+    BaseNode *node = new BaseNode("Body",NodeType::BODY);
     node->addChildNode($2);
     $$ = node;
 };
 //句子集 
 statements:statements statement {
     printf("statements:statements statement\n");
-    AST::BaseNode * node = new AST::BaseNode("Statements",AST::NodeType::STATEMENT);
-    // AST::BaseNode * Single_Statement = new AST::BaseNode("Single_Statement",AST::NodeType::STATEMENT);
+    BaseNode * node = new BaseNode("Statements",NodeType::STATEMENT);
+    // BaseNode * Single_Statement = new BaseNode("Single_Statement",NodeType::STATEMENT);
     // Single_Statement->addChildNode($2);
     node->addChildNode($1);
     // node->addChildNode(Single_Statement);
@@ -329,7 +329,7 @@ statements:statements statement {
 }
 |statement {
     printf("statements:statement\n");
-    // AST::BaseNode * node = new AST::BaseNode("Single_Statement",AST::NodeType::STATEMENT);
+    // BaseNode * node = new BaseNode("Single_Statement",NodeType::STATEMENT);
     // node->addChildNode($1);
     $$ = $1;
 }
@@ -339,45 +339,45 @@ statement:
     //表达式;
     expression SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode("Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode("Expression",NodeType::STATEMENT);
         node->addChildNode($1);
         $$ = node;
     }
     //声明语句;
     | declare SEMI
     {
-        // AST::BaseNode *node = new AST::BaseNode("Declare_Statement",AST::NodeType::STATEMENT);
+        // BaseNode *node = new BaseNode("Declare_Statement",NodeType::STATEMENT);
         // node->addChildNode($1);
         $$ = $1;
     }
     //语句块
     | body
     {
-        AST::BaseNode * node = new AST::BaseNode("Body_Statement",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode("Body_Statement",NodeType::STATEMENT);
         node->addChildNode($1);
         $$ = node;
     }
 
     | RETURN expression SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode("Return_Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode("Return_Expression",NodeType::STATEMENT);
         node->addChildNode($2);
         $$ = node;
     }
     | RETURN SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode("Return_NULL",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode("Return_NULL",NodeType::STATEMENT);
         $$ = node;
     }
     | IF '(' expression ')' statement
     {
-        AST::BaseNode * node = new AST::BaseNode ("If_Statement",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("If_Statement",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
         $$ = node;
     }
     | IF '(' expression ')' statement ELSE statement %prec LOWER_THAN_ELSE{
-        AST::BaseNode * node = new AST::BaseNode ("If_Else_Statement",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("If_Else_Statement",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
         node->addChildNode($7);
@@ -385,7 +385,7 @@ statement:
     }
     | WHILE '(' expression ')' statement
     {   
-        AST::BaseNode * node = new AST::BaseNode ("While_Statement",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("While_Statement",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
         $$ = node;
@@ -393,14 +393,14 @@ statement:
     | FOR '(' SEMI SEMI ')' statement
     {
         printf("FOR '(' SEMI SEMI ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_SEMI",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_SEMI_SEMI",NodeType::STATEMENT);
         node->addChildNode($6);
         $$ = node;
     }
     | FOR '(' forstart SEMI SEMI ')' statement
     {
         printf("FOR '(' forstart SEMI SEMI ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_SEMI",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_Def_SEMI_SEMI",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($7);
         $$ = node;
@@ -408,7 +408,7 @@ statement:
     | FOR '(' SEMI expression SEMI ')' statement
     {
         printf("FOR '(' SEMI expression SEMI ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_Expression_SEMI",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_SEMI_Expression_SEMI",NodeType::STATEMENT);
         node->addChildNode($4);
         node->addChildNode($7);
         $$ = node;
@@ -416,7 +416,7 @@ statement:
     | FOR '(' SEMI SEMI expression ')' statement
     {
         printf("FOR '(' SEMI SEMI expression ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_SEMI_Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_SEMI_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($5);
         node->addChildNode($7);
         $$ = node;
@@ -424,7 +424,7 @@ statement:
     | FOR '(' forstart SEMI expression SEMI expression ')' statement
     {
         printf("FOR '(' forstart SEMI expression SEMI expression ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_Expression_SEMI_Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_Def_SEMI_Expression_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
         node->addChildNode($7);
@@ -434,7 +434,7 @@ statement:
     | FOR '(' forstart SEMI expression SEMI ')' statement
     {
         printf("FOR '(' forstart SEMI expression SEMI ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_Expression_SEMI",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_Def_SEMI_Expression_SEMI",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
         node->addChildNode($8);
@@ -443,7 +443,7 @@ statement:
     | FOR '(' forstart SEMI SEMI expression ')' statement
     {
         printf("FOR '(' forstart SEMI SEMI expression ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_Def_SEMI_SEMI_Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_Def_SEMI_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($6);
         node->addChildNode($8);
@@ -452,7 +452,7 @@ statement:
     | FOR '(' SEMI expression SEMI expression ')' statement
     {
         printf("FOR '(' SEMI expression SEMI expression ')' statement\n");
-        AST::BaseNode * node = new AST::BaseNode ("For_SEMI_Expression_SEMI_Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("For_SEMI_Expression_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($4);
         node->addChildNode($6);
         node->addChildNode($8);
@@ -460,30 +460,30 @@ statement:
     }
     | BREAK SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode ("Break_Statement",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("Break_Statement",NodeType::STATEMENT);
         $$ = node;
     }
     | CONTINUE SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode ("Continue_Statement",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("Continue_Statement",NodeType::STATEMENT);
         $$ = node;
     }
     | PRINTF '(' D_QUO expression D_QUO ')' SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode ("Printf_String",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("Printf_String",NodeType::STATEMENT);
         node->addChildNode($4);
         $$ = node;
     }
     | PRINTF '(' expression ')' SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode ("Printf_Expression",AST::NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("Printf_Expression",NodeType::STATEMENT);
         node->addChildNode($3);
         $$ = node;
     }
     | SCANF '(' IDENTIFIER ')' SEMI
     {
-        AST::BaseNode * node = new AST::BaseNode ("Scanf_Identifier",AST::NodeType::STATEMENT);
-        AST::BaseNode * Identifier_Node = new AST::BaseNode ($3,AST::NodeType::ID);
+        BaseNode * node = new BaseNode ("Scanf_Identifier",NodeType::STATEMENT);
+        BaseNode * Identifier_Node = new BaseNode ($3,NodeType::ID);
         node->addChildNode(Identifier_Node);
         $$ = node;
     }
@@ -494,7 +494,7 @@ declare:
     descriptor declares
     {
         // printf("Declare_Statement\n");
-        AST::BaseNode * node = new AST::BaseNode("Declare_Statement",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Declare_Statement",NodeType::DEFINITION);
 
         node->addChildNode($1);
         node->addChildNode($2);
@@ -507,14 +507,14 @@ declares:
     declarevars
     {
          printf("declarevars\n");
-        AST::BaseNode * node = new AST::BaseNode("Declare_Variable",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Declare_Variable",NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
     | declarevars COMMA declares
     {
          printf("declarevars COMMA declares\n");
-        AST::BaseNode * node = new AST::BaseNode("Declare_Variables",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Declare_Variables",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
@@ -525,14 +525,14 @@ declarevars:
     //id
     variable
     {
-        AST::BaseNode * node = new AST::BaseNode("Variable",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Variable",NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
     //id与赋值语句
     | variable ASSIGN_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Variable_Assign",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Variable_Assign",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
@@ -542,14 +542,14 @@ forstart:
     declare
     {
         printf("declares\n");
-        AST::BaseNode * node = new AST::BaseNode("For_Start",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("For_Start",NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
     | expression
     {
         printf("expression\n");
-        AST::BaseNode * node = new AST::BaseNode("For_Expression",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("For_Expression",NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
@@ -558,172 +558,172 @@ forstart:
 expression:
     CONST
     {
-        AST::BaseNode * node = new AST::BaseNode("Constant_Expression",AST::NodeType::EXPRESSION);
-        AST::BaseNode * Constant_Node = new AST::BaseNode ($1,AST::NodeType::CONST_INT);
+        BaseNode * node = new BaseNode("Constant_Expression",NodeType::EXPRESSION);
+        BaseNode * Constant_Node = new BaseNode ($1,NodeType::CONST_INT);
         node->addChildNode(Constant_Node);
         $$ = node;
     }
     | identifiers
     {
-        AST::BaseNode * node = new AST::BaseNode("Identifier_Expression",AST::NodeType::EXPRESSION);
+        BaseNode * node = new BaseNode("Identifier_Expression",NodeType::EXPRESSION);
         node->addChildNode($1);
         $$ = node;
     }
     | expression ASSIGN_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Assign",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Assign",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression '+' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Add",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Add",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression '-' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Sub",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Sub",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression '*' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Mul",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Mul",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     |expression '/' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Div",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Div",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression '%' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Mod",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Mod",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | '(' expression ')'
     {
-        AST::BaseNode * node = new AST::BaseNode("Braces",AST::NodeType::EXPRESSION);
+        BaseNode * node = new BaseNode("Braces",NodeType::EXPRESSION);
         node->addChildNode($2);
         $$ = node;
     }
     | '-' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Negative",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Negative",NodeType::OPERATION);
         node->addChildNode($2);
         $$ = node;
     }
     | expression AND expression
     {
-        AST::BaseNode * node = new AST::BaseNode("And",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("And",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression OR expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Or",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Or",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | '!' expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Not",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Not",NodeType::OPERATION);
         node->addChildNode($2);
         $$ = node;
     }
     | '{' consts '}'
     {
-        AST::BaseNode * node = new AST::BaseNode("{Consts}",AST::NodeType::EXPRESSION);
+        BaseNode * node = new BaseNode("{Consts}",NodeType::EXPRESSION);
         node->addChildNode($2);
         $$ = node;
     }
     | expression EQ_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Equal_Operation",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Equal_Operation",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression NE_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Not_Equal_Operation",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Not_Equal_Operation",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression GT_OP expression
     {   
-        AST::BaseNode * node = new AST::BaseNode("Greater_Operation",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Greater_Operation",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression LT_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Less_Operation",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Less_Operation",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression GE_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Greater_Equal_Operation",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Greater_Equal_Operation",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | expression LE_OP expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Less_Equal_Operation",AST::NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Less_Equal_Operation",NodeType::OPERATION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
     }
     | IDENTIFIER '(' arguments ')'
     {
-        AST::BaseNode * node = new AST::BaseNode("Function_Call_With_Agrs",AST::NodeType::CALL);
-        AST::BaseNode * Identifier_Node = new AST::BaseNode ($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Function_Call_With_Agrs",NodeType::CALL);
+        BaseNode * Identifier_Node = new BaseNode ($1,NodeType::ID);
         node->addChildNode(Identifier_Node);
         node->addChildNode($3);
         $$ = node;
     }
     | IDENTIFIER '(' ')'{
-        AST::BaseNode * node = new AST::BaseNode("Function_Call_Without_Agrs",AST::NodeType::CALL);
-        AST::BaseNode * Identifier_Node = new AST::BaseNode ($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Function_Call_Without_Agrs",NodeType::CALL);
+        BaseNode * Identifier_Node = new BaseNode ($1,NodeType::ID);
         node->addChildNode(Identifier_Node);
         $$ = node;
     }
     | '*' IDENTIFIER
     {
-        AST::BaseNode * node = new AST::BaseNode("*id",AST::NodeType::OPERATION);
-        AST::BaseNode * Identifier_Node = new AST::BaseNode ($2,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("*id",NodeType::OPERATION);
+        BaseNode * Identifier_Node = new BaseNode ($2,NodeType::ID);
         node->addChildNode(Identifier_Node);
         $$ = node;
     }
     | IDENTIFIER '[' expression ']'
     {
-        AST::BaseNode * node = new AST::BaseNode("id[exp]",AST::NodeType::OPERATION);
-        AST::BaseNode * Identifier_Node = new AST::BaseNode ($1,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("id[exp]",NodeType::OPERATION);
+        BaseNode * Identifier_Node = new BaseNode ($1,NodeType::ID);
         node->addChildNode(Identifier_Node);
         node->addChildNode($3);
         $$ = node;
     }
     | SINGLAND IDENTIFIER 
     {   
-        AST::BaseNode * node = new AST::BaseNode("&id",AST::NodeType::OPERATION);
-        AST::BaseNode * Identifier_Node = new AST::BaseNode ($2,AST::NodeType::ID);
+        BaseNode * node = new BaseNode("&id",NodeType::OPERATION);
+        BaseNode * Identifier_Node = new BaseNode ($2,NodeType::ID);
         node->addChildNode(Identifier_Node);
         $$ = node;
     }
@@ -731,13 +731,13 @@ expression:
 arguments:
     expression 
     {
-        AST::BaseNode * node = new AST::BaseNode("Func_Arg",AST::NodeType::ID);
+        BaseNode * node = new BaseNode("Func_Arg",NodeType::ID);
         node->addChildNode($1);
         $$ = node;
     }
     | arguments COMMA expression
     {
-        AST::BaseNode * node = new AST::BaseNode("Func_Args",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("Func_Args",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($3);
         $$ = node;
@@ -745,18 +745,18 @@ arguments:
     ;
 identifiers:
     IDENTIFIER{
-        AST::BaseNode * node = new AST::BaseNode("id",AST::NodeType::DEFINITION);
-        node->addChildNode(new AST::BaseNode($1,AST::NodeType::ID));
+        BaseNode * node = new BaseNode("id",NodeType::DEFINITION);
+        node->addChildNode(new BaseNode($1,NodeType::ID));
         $$ = node;
     }
     | identifiers IDENTIFIER
     {
-        AST::BaseNode * node = new AST::BaseNode("ids",AST::NodeType::DEFINITION);
+        BaseNode * node = new BaseNode("ids",NodeType::DEFINITION);
         node->addChildNode($1);
-        AST::BaseNode * id_node = new AST::BaseNode("id",AST::NodeType::DEFINITION);
-        node->addChildNode(new AST::BaseNode($2,AST::NodeType::ID));
+        BaseNode * id_node = new BaseNode("id",NodeType::DEFINITION);
+        node->addChildNode(new BaseNode($2,NodeType::ID));
         node->addChildNode(id_node);
-        // node->addChildNode(new AST::BaseNode($2,AST::NodeType::ID));
+        // node->addChildNode(new BaseNode($2,NodeType::ID));
         $$ = node;
     }
     ;

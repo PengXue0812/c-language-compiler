@@ -28,7 +28,7 @@ class Symbol {
   bool isUsed;
 
  public:
-  Symbol();
+  Symbol();  //默认为int类型
   Symbol(std::string name, SymbolType type = SymbolType::var, int width = 4,
          std::string init_value = "0");
   std::string getIdName() { return this->idName; }
@@ -51,22 +51,22 @@ class SymbolArea {
   SymbolArea* firstBrotherArea;
   int total_offset;
   int symbolNumber;
-  SymbolArea* baseTable;
+  SymbolArea* baseArea;
 
  public:
   Symbol* findSymbolLocally(std::string name);
   bool addSymbol(Symbol* symbol);
-  SymbolArea* getParentTable() { return this->parentArea; }
-  SymbolArea* getFirstChildTable() { return this->firstChildArea; }
-  SymbolArea* getFirstBrotherTable() { return this->firstBrotherArea; }
-  SymbolArea* getBaseTable() { return this->baseTable; }
-  int getSymbolNumber() { return this->symbolNumber; }
-  int setOffset(int offset) { this->total_offset = offset; }
-  int getOffset() { return this->total_offset; }
-  void setParentTable(SymbolArea* parent) { this->parentArea = parent; }
-  void setFirstChildTable(SymbolArea* child) { this->firstChildArea = child; }
-  void setFirstBrotherTable(SymbolArea* brother) {
-    this->firstBrotherArea = brother;
-  }
+  SymbolArea* getParentArea();
+  SymbolArea* getFirstChildArea();
+  SymbolArea* getFirstBrotherArea();
+  SymbolArea* getBaseArea();
+  
+  int getSymbolNumber();
+  int setOffset(int offset);
+  int getOffset();
+  void setParentArea(SymbolArea* parent);
+  void setFirstBrotherArea(SymbolArea* brother);
+  SymbolArea* addNewChildArea();
+  void showSymbolArea();
 };
 #endif

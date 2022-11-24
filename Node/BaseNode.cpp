@@ -5,46 +5,46 @@
 
 #include "BTNode.h"
 
-AST::BaseNode::BaseNode() {
+BaseNode::BaseNode() {
   this->cNode = nullptr;
   this->pNode = nullptr;
   this->bNode = nullptr;
   this->content = strdup("code start");
 }
 
-AST::BaseNode::BaseNode(const char* content) {
+BaseNode::BaseNode(const char* content) {
   this->cNode = nullptr;
   this->pNode = nullptr;
   this->bNode = nullptr;
   this->content = strdup(content);
 }
-AST::BaseNode::BaseNode(NodeType type) {
+BaseNode::BaseNode(NodeType type) {
   this->cNode = nullptr;
   this->pNode = nullptr;
   this->bNode = nullptr;
   this->type = type;
   this->content = strdup("");
 }
-AST::BaseNode::BaseNode(const char* content, NodeType type) {
+BaseNode::BaseNode(const char* content, NodeType type) {
   this->cNode = nullptr;
   this->pNode = nullptr;
   this->bNode = nullptr;
   this->type = type;
   this->content = strdup(content);
 }
-bool AST::BaseNode::addFirstBrotherNode(AST::BaseNode* node) {
+bool BaseNode::addFirstBrotherNode(BaseNode* node) {
   BaseNode* temp = this->bNode;
   this->bNode = node;
   node->bNode = temp;
   return true;
 }
-bool AST::BaseNode::addLastBrotherNode(AST::BaseNode* node) {
+bool BaseNode::addLastBrotherNode(BaseNode* node) {
   BaseNode* temp = this->getFinalBrotherNode();
   temp->bNode = node;
   return true;
 }
 
-bool AST::BaseNode::addChildNode(AST::BaseNode* node) {
+bool BaseNode::addChildNode(BaseNode* node) {
   if (this->cNode == nullptr) {
     this->cNode = node;
     node->pNode = this;
@@ -54,9 +54,9 @@ bool AST::BaseNode::addChildNode(AST::BaseNode* node) {
   return true;
 }
 
-void AST::BaseNode::printInfo() { printf("%s", this->content); }
+void BaseNode::printInfo() { printf("%s", this->content); }
 
-// void AST::BaseNode::printTree(BaseNode* node) {
+// void BaseNode::printTree(BaseNode* node) {
 //   printf("%s ", node->content);
 //   if (node->bNode) {
 //     printTree(node->bNode);
@@ -67,7 +67,7 @@ void AST::BaseNode::printInfo() { printf("%s", this->content); }
 //     printf("\n");
 //   }
 // }
-void AST::BaseNode::printTree(BaseNode* node) {
+void BaseNode::printTree(BaseNode* node) {
   if (node) {
     printf("%s ", node->content);
     if (node->cNode) {
@@ -84,14 +84,14 @@ void AST::BaseNode::printTree(BaseNode* node) {
     }
   }
 }
-AST::BaseNode* AST::BaseNode::getFinalBrotherNode() {
-  AST::BaseNode* node = this;
+BaseNode* BaseNode::getFinalBrotherNode() {
+  BaseNode* node = this;
   while (node->bNode) {
     node = node->bNode;
   }
   return node;
 }
-AST::BaseNode::~BaseNode() {
+BaseNode::~BaseNode() {
   while (this->bNode) {
     free(this->bNode);
   }
@@ -100,9 +100,9 @@ AST::BaseNode::~BaseNode() {
   }
 }
 
-std::list<AST::BaseNode*> AST::BaseNode::getAllChildrenNode() {
-  std::list<AST::BaseNode*> children;
-  AST::BaseNode* node = this->cNode;
+std::list<BaseNode*> BaseNode::getAllChildrenNode() {
+  std::list<BaseNode*> children;
+  BaseNode* node = this->cNode;
   while (node) {
     children.push_back(node);
     node = node->bNode;

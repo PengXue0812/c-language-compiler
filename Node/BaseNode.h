@@ -7,7 +7,7 @@
 #include <string>
 
 #include "NodeType.h"
-namespace AST {
+
 class BaseNode {
  private:
   int depth;
@@ -67,5 +67,4 @@ class BaseNode {
   // deconstructor:
   ~BaseNode();
 };
-}  // namespace AST
 #endif

@@ -1,0 +1,5 @@
+add function main reType:int_Type  id:0
+add symbol has value a = 50 id: 1 declareType:int_Type, idType:Def_Identifier
+add symbol sum id: 2 declareType:int_Type,idType:Def_Identifier
+add symbol has value i = 0 id: 3 declareType:int_Type, idType:Def_Identifier
+add symbol has value j = 0 id: 4 declareType:int_Type, idType:Def_Identifier

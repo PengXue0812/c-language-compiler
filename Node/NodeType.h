@@ -1,6 +1,5 @@
 #ifndef _NODETYPE_H_
 #define _NODETYPE_H_
-namespace AST {
 enum NodeType {
   ROOT,        // 根结点
   ID,          // 标识符
@@ -16,7 +15,6 @@ enum NodeType {
   ADDRESS,     // 地址
   BODY         // 函数体
 };
-}
 
 #endif
 

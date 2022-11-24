@@ -1,31 +1,71 @@
 #ifndef _SYMBOL_H_
 #define _SYMBOL_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <cstring>
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+
 #include "../Node/NodeType.h"
 
-struct Symbol
-{
-    char name[200];
-    char value[200];
-    char addr[200];
-    char type[200];
-    char idType[200];
-    int id;
+enum class SymbolType {
+  integer = 1,
+  var = 2,
+  temp_var = 3,
+  pointer = 4,
+  array = 5,
+  boolean,
+  Void,
+  function_name,
 };
 
-Symbol* createSymbol(std::string name,char* type,int id);
-Symbol* createSymbol();
+class Symbol {
+ private:
+  std::string idName;
+  SymbolType idType;
+  int width;
+  int pointerAddr;
+  std::string value;
+  bool isUsed;
 
-struct SymbolArea{
-    int count;
-    Symbol symbols[100];
-    SymbolArea* p;
+ public:
+  Symbol();
+  Symbol(std::string name, SymbolType type = SymbolType::var, int width = 4,
+         std::string init_value = "0");
+  std::string getIdName() { return this->idName; }
+  SymbolType& getSymbolType() { return this->idType; }
+  int getWidth() { return this->width; }
+  void setWidth(int width) { this->width = width; }
+  int getPointerAddr() { return this->pointerAddr; }
+  void setPointerAddr(int addr) { this->pointerAddr = addr; }
+  void showSymbolInfor();
+  void setIsUsed() { this->isUsed = true; }
+  bool getIsUsed() { return this->isUsed; }
 };
-SymbolArea* createSymbolArea();
+class SymbolArea {
+ private:
+  std::unordered_map<std::string, Symbol*> SymbolMap;
+  // std::vector<Symbol*> *symbolArray;
+  // std::vector<Symbol*> *argArray;
+  SymbolArea* parentArea;
+  SymbolArea* firstChildArea;
+  SymbolArea* firstBrotherArea;
+  int total_offset;
+  int symbolNumber;
+  SymbolArea* baseTable;
 
-void addSymbol(SymbolArea* sa,Symbol* s);
-#endif
+ public:
+  Symbol* findSymbolLocally(std::string name);
+  bool addSymbol(Symbol* symbol);
+  SymbolArea* getParentTable() { return this->parentArea; }
+  SymbolArea* getFirstChildTable() { return this->firstChildArea; }
+  SymbolArea* getFirstBrotherTable() { return this->firstBrotherArea; }
+  SymbolArea* getBaseTable() { return this->baseTable; }
+  int getSymbolNumber() { return this->symbolNumber; }
+  int setOffset(int offset) { this->total_offset = offset; }
+  int getOffset() { return this->total_offset; }
+  void setParentTable(SymbolArea* parent) { this->parentArea = parent; }
+  void setFirstChildTable(SymbolArea* child) { this->firstChildArea = child; }
+  void setFirstBrotherTable(SymbolArea* brother) {
+    this->firstBrotherArea = brother;
+  }
+};

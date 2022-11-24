@@ -69,3 +69,4 @@ class SymbolArea {
     this->firstBrotherArea = brother;
   }
 };
+#endif

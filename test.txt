@@ -1,11 +1,5 @@
 int main(){
-    if(a==b){
+    if(a==b||a<b){
         int a;
-    }else{
-        if(b<3){
-            int a;
-        }else{
-            int block;
-        }
     }
 }

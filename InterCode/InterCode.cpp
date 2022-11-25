@@ -247,7 +247,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             //创建一个新的符号表,是if为真的符号表
             SymbolArea *ifSymbelArea = area->addNewChildArea();
             //生成if的body
-            BaseNode *ifContent = condition->getFirstBrotherArea();
+            BaseNode *ifContent = condition->getBrotherNode();
             Body_Generate(ifContent, ifSymbelArea);
             
             //执行完if的body后,需要跳转else后面的三地址码
@@ -261,7 +261,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
            
            //生成else的body
             SymbolArea *elseSymbelArea = area->addNewChildArea();
-            BaseNode* elseContent->getFirstBrotherArea();
+            BaseNode *elseContent->getBrotherNode();
             Body_Generate(elseContent, elseSymbelArea);
            //回填执行完if的body后,需要跳转else后面的三地址码
             int end = quad_list.size();

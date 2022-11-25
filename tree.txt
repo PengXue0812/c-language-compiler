@@ -5,46 +5,28 @@ variable->IDENTIFIER
 declarevars
 statements:statement
 body:'{' statements '}'
-INTTTTTTT
-variable->IDENTIFIER
-declarevars
-statements:statement
-body:'{' statements '}'
-INTTTTTTT
-variable->IDENTIFIER
-declarevars
-statements:statement
-body:'{' statements '}'
-statements:statement
-body:'{' statements '}'
 statements:statement
 body:'{' statements '}'
 blockcdescriptor function body
 blocks->block
-                                                 program                                                                                                                                           
-                                                    |                                                                                                                                              
-    _______________________________________Def_Func_Block_Body_______________________________________                                                                                              
-   /               /                                                                                 \                                                                                             
-int_Type Function_Without_Param                                                                     Body                                                                                           
-                   |                                                                                 |                                                                                             
-                  main                                _______________________________________If_Else_Statement________________________________________                                             
-                                                     /                               /                                                                \                                            
-                                           ___Equal_Operation___               Body_Statement                                                   Body_Statement                                     
-                                          /                     \                    |                                                                |                                            
-                                Identifier_Expression Identifier_Expression         Body                                                             Body                                          
-                                         /                     /                     |                                                                |                                            
-                                         id                    id            Declare_Statement                             ___________________If_Else_Statement____________________                
-                                         |                     |               /            \                             /                              \                         \               
-                                         a                     b            int_Type Declare_Variable            ___Less_Operation___              Body_Statement            Body_Statement        
-                                                                                            |                   /                    \                   |                         |               
-                                                                                         Variable     Identifier_Expression Constant_Expression         Body                      Body             
-                                                                                            |                  /                     |                   |                         |               
-                                                                                      Def_Identifier           id                    3           Declare_Statement         Declare_Statement       
-                                                                                            |                  |                                   /            \            /            \        
-                                                                                            a                  b                                int_Type Declare_Variable int_Type Declare_Variable
-                                                                                                                                                                |                         |        
-                                                                                                                                                             Variable                  Variable    
-                                                                                                                                                                |                         |        
-                                                                                                                                                          Def_Identifier            Def_Identifier 
-                                                                                                                                                                |                         |        
-                                                                                                                                                                a                       block      
+                                                 program                                                                                         
+                                                    |                                                                                            
+    _______________________________________Def_Func_Block_Body________________________________________                                           
+   /               /                                                                                  \                                          
+int_Type Function_Without_Param                                                                      Body                                        
+                   |                                                                                  |                                          
+                  main                                                      _____________________If_Statement____________________                
+                                                                           /                                                     \               
+                                                      _____________________Or____________________                          Body_Statement        
+                                                     /                                           \                               |               
+                                           ___Equal_Operation___                       ____Less_Operation___                    Body             
+                                          /                     \                     /                     \                    |               
+                                Identifier_Expression Identifier_Expression Identifier_Expression Identifier_Expression  Declare_Statement       
+                                         /                     /                     /                     /               /            \        
+                                         id                    id                    id                    id           int_Type Declare_Variable
+                                         |                     |                     |                     |                            |        
+                                         a                     b                     a                     b                         Variable    
+                                                                                                                                        |        
+                                                                                                                                  Def_Identifier 
+                                                                                                                                        |        
+                                                                                                                                        a        

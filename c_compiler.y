@@ -3,7 +3,6 @@
 #include <string.h>
 #include "Node/BaseNode.h"
 #include "Node/BTNode.h"
-#include "Symbol/SymbolTable.h"
 #include "Symbol/Symbol.h"
 
 BaseNode* root;
@@ -87,7 +86,6 @@ program:
         BTTree<BaseNode> printer(root, &BaseNode::getAllChildrenNode,
                         &BaseNode::getStringContent);
         printer.print();
-        dfs(NULL,root);
 
     };
 //语句块的集合

@@ -1,6 +1,5 @@
 #include "Node/BaseNode.h"
 #include "Node/BTNode.h"
-#include "Symbol/SymbolTable.h"
 #include "Symbol/Symbol.h"
 /* A Bison parser, made by GNU Bison 3.8.2.  */
 
@@ -127,10 +126,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 36 "c_compiler.y"
+#line 35 "c_compiler.y"
 
     char* num;
-    AST::BaseNode *ast;
+    BaseNode *ast;
     char *str;
 
 #line 133 "y.tab.h"

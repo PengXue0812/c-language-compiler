@@ -1,0 +1,130 @@
+INTTTTTTT
+Function_Without_Param
+INTTTTTTT
+variable->IDENTIFIER
+variable->IDENTIFIER
+declarevars
+declarevars COMMA declares
+statements:statement
+INTTTTTTT
+variable->IDENTIFIER
+declarevars
+statements:statements statement
+INTTTTTTT
+variable->IDENTIFIER
+declarevars
+declares
+statements:statement
+statements:statements statement
+statements:statements statement
+body:'{' statements '}'
+FOR '(' forstart SEMI expression SEMI expression ')' statement
+statements:statements statement
+statements:statements statement
+statements:statements statement
+body:'{' statements '}'
+blockcdescriptor function body
+blocks->block
+                                                                                                                                                                                                  program                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                     |                                                                                                                                                                                                                                                                                            
+    ________________________________________________________________________________________________________________________________________________________________________________________Def_Func_Block_Body_________________________________________________________________________________________________________________________________________________________________________________________                                                                                          
+   /               /                                                                                                                                                                                                                                                                                                                                                                                    \                                                                                         
+int_Type Function_Without_Param                                                                                                                                                                                                                                                                                                                                                                        Body                                                                                       
+                   |                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                         
+                  main                                                                                                                                                                                                                                                                                                   ___________________________________________________________________________Statements__________________________________________________________________________          
+                                                                                                                                                                                                                                                                                                                        /                                                                                                                                                               \         
+                                                                                                                                                                               _____________________________________________________________________________________________________________________________________Statements_____________________________________________________________________________________________________________________________________             Return_Expression 
+                                                                                                                                                                              /                                                                                                                                                                                                                                                                                    \                    |         
+                                                                                        __________________________________________________________________________________Statements__________________________________________________________________________________                                                                                                                                                                                     Printf_Expression   Constant_Expression
+                                                                                       /                                                                                                                                                                              \                                                                                                                                                                                            |                    |         
+                                                       ____________________________Statements___________________________                               ____________________________________________________________________________________________For_Def_SEMI_Expression_SEMI_Expression_____________________________________________________________________________________________                                                                  Identifier_Expression          0         
+                                                      /                                                                 \                             /                                                  /                                               /                                                                                                                             \                                                                          /                               
+                                    __________Declare_Statement__________                                       Declare_Statement                 For_Start                                     ___Less_Operation___                      _____________Assign____________                                                                                                        Body_Statement                                                                   id                              
+                                   /                                     \                                        /            \                      |                                        /                    \                    /                               \                                                                                                             |                                                                          |                               
+                                int_Type                 ________Declare_Variables_________                    int_Type Declare_Variable     _Declare_Statement__                    Identifier_Expression Constant_Expression Identifier_Expression            ________Add_________                                                                                                  Body                                                                        a                               
+                                                        /                                  \                                   |            /                    \                            /                    /                    /                      /                    \                                                                                                  |                                                                                                          
+                                                _Variable_Assign_                   Declare_Variable                        Variable     int_Type         Declare_Variable                    id                   20                   id           Identifier_Expression Constant_Expression                                               ______________________________________Statements_____________________________________                                                                
+                                               /                 \                         |                                   |                                 |                            |                                         |                     /                     |                                                       /                                                                                     \                                                               
+                                         Def_Identifier Constant_Expression        _Variable_Assign_                     Def_Identifier                  _Variable_Assign_                    i                                         i                     id                    1                                ___________________Statements___________________                                                         Expression                                                          
+                                               |                 |                /                 \                          |                        /                 \                                                                                   |                                                     /                                                \                                                            |                                                               
+                                               a                 1          Def_Identifier Constant_Expression                 c                  Def_Identifier Constant_Expression                                                                          i                                                 Expression                                       Expression                                             ________Assign_______                                                     
+                                                                                  |                 |                                                   |                 |                                                                                                                                         |                                                |                                                 /                     \                                                    
+                                                                                  b                 1                                                   i                 2                                                                                                                               ________Assign_______                       _____________Assign_____________                       Identifier_Expression Identifier_Expression                                          
+                                                                                                                                                                                                                                                                                                         /                     \                     /                                \                               /                     /                                                     
+                                                                                                                                                                                                                                                                                               Identifier_Expression Identifier_Expression Identifier_Expression            _________Add_________                     id                    id                                                    
+                                                                                                                                                                                                                                                                                                        /                     /                     /                      /                     \                    |                     |                                                     
+                                                                                                                                                                                                                                                                                                        id                    id                    id           Identifier_Expression Identifier_Expression          b                     c                                                     
+                                                                                                                                                                                                                                                                                                        |                     |                     |                     /                     /                                                                                                 
+                                                                                                                                                                                                                                                                                                        c                     a                     a                     id                    id                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                          |                     |                                                                                                 
+                                                                                                                                                                                                                                                                                                                                                                          a                     b                                                                                                 
+dfs----- program
+dfs----- Def_Func_Block_Body
+dfs----- Body
+dfs----- Statements
+dfs----- Statements
+dfs----- Statements
+dfs----- Statements
+dfs----- Declare_Statement
+------Constant_Expression
+------Constant_Expression
+dfs----- Declare_Statement
+dfs----- For_Def_SEMI_Expression_SEMI_Expression
+dfs----- For_Start
+dfs----- Declare_Statement
+------Constant_Expression
+dfs----- Less_Operation
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- i
+dfs----- Constant_Expression
+dfs----- 20
+dfs----- Assign
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- i
+dfs----- Add
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- i
+dfs----- Constant_Expression
+dfs----- 1
+dfs----- Body_Statement
+dfs----- Body
+dfs----- Statements
+dfs----- Statements
+dfs----- Expression
+dfs----- Assign
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- c
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- a
+dfs----- Expression
+dfs----- Assign
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- a
+dfs----- Add
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- a
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- b
+dfs----- Expression
+dfs----- Assign
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- b
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- c
+dfs----- Printf_Expression
+dfs----- Identifier_Expression
+dfs----- id
+dfs----- a
+dfs----- Return_Expression
+dfs----- Constant_Expression
+dfs----- 0

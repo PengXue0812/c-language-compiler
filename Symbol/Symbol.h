@@ -54,6 +54,7 @@ class SymbolArea {
   SymbolArea* baseArea;
 
  public:
+  SymbolArea();
   Symbol* findSymbolLocally(std::string name);
   bool addSymbol(Symbol* symbol);
   SymbolArea* getParentArea();

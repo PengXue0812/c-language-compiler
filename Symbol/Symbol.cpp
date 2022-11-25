@@ -27,7 +27,7 @@ void Symbol::showSymbolInfor() {
             << "\tisUsed: " << this->isUsed << std::endl;
 }
 
-SymbolArea::SymbolArea() {
+SymbolArea::SymbolArea(){
   this->parentArea = nullptr;
   this->firstChildArea = nullptr;
   this->firstBrotherArea = nullptr;

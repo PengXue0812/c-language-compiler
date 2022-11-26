@@ -4,8 +4,7 @@
 #include <list>
 #include <vector>
 #include <stack>
-#include <Symbol/Symbol.h>
-#include <Symbol/SymbolTable.h>
+#include "Symbol/Symbol.h"
 #include "../Node/BaseNode.h"
 #include "../Node/NodeType.h"
 

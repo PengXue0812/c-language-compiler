@@ -267,6 +267,35 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             int end = quad_list.size();
             temp->backpatch(end);
         }
+        else if(node_content=="While_Statement"){
+            BaseNode *condition = node->getChildNode();
+            //去生成While的条件的三地址码
+            Exp_Stmt_Generate(condition, area);
+            int start = quad_list.size();
+            //存着While的条件为真该跳转的位置的trueList
+            std::list<int> whileTrue = trueList.top();
+            //存着While的条件为假该跳转的位置的falseList
+            std::list<int> whileFalse = falseList.top();
+            trueList.pop();
+            falseList.pop();
+            //回填While的条件为真该跳转的位置的trueList
+            backpatch(&ifTrue, whileTrue.back()+2);
+            //创建一个新的符号表,是while的body的符号表
+            SymbolArea *whileSymbelArea = area->addNewChildArea();
+            //生成while的body
+            BaseNode *while_content = node->getBrotherNode();
+            while (while_content != NULL)
+            {
+                Body_Generate(while_content, whileSymbelArea);
+                while_content = while_content->getBrotherNode();
+                SymbolArea *whileSymbelArea = area->addNewChildArea();
+            }
+            //回填执行完while的body后,条件为假需要跳出循环后面的三地址码
+            int end = quad_list.size();
+            QuadItem *temp = new QuadItem(start, OpType::JUMP);
+            this->quad_list.push_back(temp);
+            backpatch(&whileFalse，end+1);
+        }
         else
         {
             BaseNode *child = node->getChildNode();

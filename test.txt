@@ -1,5 +1,6 @@
 int main(){
-    if(a==b||a<b){
+    while(a==b||a<b){
         int a;
+        int b;
     }
 }

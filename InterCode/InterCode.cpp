@@ -313,6 +313,29 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             QuadItem *temp = new QuadItem(start, OpType::JUMP);
             this->quad_list.push_back(temp);
             backpatch(&whileFalse, end + 1);
+        }else if(node_content == "For_Def_SEMI_Expression_SEMI_Expression" ){
+            //生成for的初始化声明
+            BaseNode *forDeclear = node->getChildNode();
+            SymbolArea *forDeclearArea = area->addNewChildArea();
+            Body_Generate(forDeclear, forDeclearArea);
+            //下一句是for循环的开始
+            int forStart = quad_list.size();
+            BaseNode *forCondition = forDeclear->getBrotherNode();
+            Exp_Stmt_Generate(forCondition, area);
+            std::list<int> forTrue = trueList.top();
+            std::list<int> forFalse = falseList.top();
+            trueList.pop();
+            falseList.pop();
+            //???
+            backpatch(&forTrue, forTrue.back() + 2);
+            SymbolArea *forBodyArea = area->addNewChildArea();
+            BaseNode *forBody = forCondition->getBrotherNode()->getBrotherNode();
+            Body_Generate(forBody, forBodyArea);
+            BaseNode *forUpdate = forCondition->getBrotherNode();
+            Exp_Stmt_Generate(forUpdate, area);
+            QuadItem *temp = new QuadItem(forStart, OpType::JUMP);
+            this->quad_list.push_back(temp);
+            backpatch(&forFalse, quad_list.size());
         }
         else
         {

@@ -87,31 +87,31 @@ public:
 
 class InterCode {
 private: 
-    BaseNode* root;
-    std::vector<QuadItem* > quad_list;
-    SymbolArea* rootTable;
-    std::vector<Symbol* >temp_list;
-    std::stack<int>logic;
-    std::stack<std::list<int> > trueList;
-    std::stack<std::list<int> > falseList;
+    BaseNode* root;//语法树根节点
+    std::vector<QuadItem* > quad_list;//四元式列表
+    SymbolArea* rootTable;//符号表根节点
+    std::vector<Symbol* >temp_list;//临时变量列表
+    std::stack<int>logic;//逻辑运算栈
+    std::stack<std::list<int> > trueList;//真值列表
+    std::stack<std::list<int> > falseList;//假值列表
 
 public:
     InterCode();
     // 从ast生成中间代码；
     InterCode(BaseNode* root);
-    Symbol* Exp_Stmt_Generate(BaseNode* node, SymbolArea* symbol_table);
-    SymbolArea* Body_Generate(BaseNode* node, SymbolArea* symbol_table);
-    void Generate(BaseNode* node, SymbolArea* symbol_table);
-    void Root_Generate();
-    int getFalseJump(int i);
-    void addItem(QuadItem* item);
-    void showList();
+    Symbol* Exp_Stmt_Generate(BaseNode* node, SymbolArea* symbol_table);//表达式语句生成
+    SymbolArea* Body_Generate(BaseNode* node, SymbolArea* symbol_table);//函数体生成
+    void Generate(BaseNode* node, SymbolArea* symbol_table);//生成中间代码
+    void Root_Generate();//总的入口
+    int getFalseJump(int i);//获取假值跳转
+    void addItem(QuadItem* item);//添加四元式
+    void showList();//显示四元式列表
     // 3 func for patch
-    std::list<int> *makelist(int index);
-    std::list<int> *merge(std::list<int> *list1, std::list<int> *list2);
-    void backpatch(std::list<int> *backList, int target);
-    std::vector<QuadItem* > getQuadlist(){return quad_list;}
-    SymbolArea* getTable(){return rootTable;}
+    std::list<int> *makelist(int index);//生成列表
+    std::list<int> *merge(std::list<int> *list1, std::list<int> *list2);//合并列表
+    void backpatch(std::list<int> *backList, int target);//回填
+    std::vector<QuadItem* > getQuadlist(){return quad_list;}//获取四元式列表
+    SymbolArea* getTable(){return rootTable;}//获取符号表
 
 };
 

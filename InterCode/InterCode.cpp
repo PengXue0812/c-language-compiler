@@ -231,7 +231,6 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         if (node_content == "If_Statement")
         {
             BaseNode *condition = node->getChildNode();
-            BaseNode *ifContent = condition->getBrotherNode();
             Exp_Stmt_Generate(condition, area);
             int start = this->quad_list.size();
             std::list<int> ifTrue = trueList.top();

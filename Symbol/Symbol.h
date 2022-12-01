@@ -56,6 +56,7 @@ class SymbolArea {
  public:
   SymbolArea();
   Symbol* findSymbolLocally(std::string name);
+  Symbol* findSymbolGlobally(std::string name);
   bool addSymbol(Symbol* symbol);
   SymbolArea* getParentArea();
   SymbolArea* getFirstChildArea();

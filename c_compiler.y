@@ -4,6 +4,7 @@
 #include "Node/BaseNode.h"
 #include "Node/BTNode.h"
 #include "Symbol/Symbol.h"
+#include "InterCode/InterCode.h"
 
 BaseNode* root;
 extern int yylex(void); 
@@ -85,14 +86,17 @@ program:
         root->addChildNode($1);
         BTTree<BaseNode> printer(root, &BaseNode::getAllChildrenNode,
                         &BaseNode::getStringContent);
+        InterCode interCode = InterCode(root);
         printer.print();
+        interCode.Root_Generate();
+        
 
     };
 //语句块的集合
 blocks:
     block
     {
-        printf("blocks->block\n");
+        // printf("blocks->block\n");
         
         $$= $1;
         // BaseNode *node = new BaseNode("a_Block",NodeType::STATEMENT);
@@ -101,7 +105,7 @@ blocks:
     }
     | blocks block
     {
-        printf("blocks->blocks block\n");
+        // printf("blocks->blocks block\n");
         BaseNode *node =new BaseNode("Blocks",NodeType::STATEMENT);
         node->addChildNode($1);
         node->addChildNode($2);
@@ -114,14 +118,14 @@ blocks:
 //语句块(包括函数定义,全局变量的定义)
 block: declare SEMI
     {
-        printf("Declare_Statement\n");
+        // printf("Declare_Statement\n");
         // BaseNode *node = new BaseNode("Declare_Statement",NodeType::DEFINITION);
         // node->addChildNode($1);
         $$ = $1;
     }
     |descriptor function body
     {
-        printf("blockcdescriptor function body\n");
+        // printf("blockcdescriptor function body\n");
         BaseNode * node = new BaseNode("Def_Func_Block_Body",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($2);
@@ -130,7 +134,7 @@ block: declare SEMI
     }
     |descriptor function SEMI
     {
-        printf("block->descriptor function 'SEMI'\n");
+        // printf("block->descriptor function 'SEMI'\n");
         BaseNode * node = new BaseNode("Def_Func_Block_NoBody",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($2);
@@ -139,7 +143,7 @@ block: declare SEMI
 //变量
 variable:IDENTIFIER
     {   
-        printf("variable->IDENTIFIER\n");
+        // printf("variable->IDENTIFIER\n");
         BaseNode * node = new BaseNode("Def_Identifier",NodeType::DEFINITION);
         BaseNode * var_node = new BaseNode($1,NodeType::ID);
         node->addChildNode(var_node);
@@ -147,7 +151,7 @@ variable:IDENTIFIER
     }
     |IDENTIFIER '[' ']'
     {
-        printf("variable->IDENTIFIER '[' ']'\n");
+        // printf("variable->IDENTIFIER '[' ']'\n");
         BaseNode * node = new BaseNode("Def_array[]",NodeType::ARRAY);
         BaseNode * var_node = new BaseNode($1,NodeType::ID);
         node->addChildNode(var_node);
@@ -155,7 +159,7 @@ variable:IDENTIFIER
     }
     |IDENTIFIER '[' CONST ']'
     {
-        printf("variable->IDENTIFIER '[' CONST ']'\n");
+        // printf("variable->IDENTIFIER '[' CONST ']'\n");
         BaseNode * node = new BaseNode("Def_array[Const]",NodeType::ARRAY);
         BaseNode * var_node = new BaseNode($1,NodeType::ID);
         // BaseNode * const_node = new BaseNode($3,NodeType::ID);
@@ -167,7 +171,7 @@ variable:IDENTIFIER
     }
     |IDENTIFIER '[' expression ']'
     {
-        printf("variable->IDENTIFIER '[' expression ']'\n");
+        // printf("variable->IDENTIFIER '[' expression ']'\n");
         BaseNode * node = new BaseNode("Def_array[expression]",NodeType::ARRAY);
         BaseNode * var_node = new BaseNode($1,NodeType::ID);
         node->addChildNode(var_node);
@@ -175,7 +179,7 @@ variable:IDENTIFIER
     }
     |'*' IDENTIFIER
     {
-        printf("variable->'*' IDENTIFIER\n");
+        // printf("variable->'*' IDENTIFIER\n");
         BaseNode * node = new BaseNode("Def_*Identifier",NodeType::POINTER);
         BaseNode * var_node = new BaseNode($2,NodeType::ID);
         node->addChildNode(var_node);
@@ -185,7 +189,7 @@ variable:IDENTIFIER
 //数字的序列(1,2,3,4)    
 consts:CONST
     {
-        // printf("");
+        // // printf("");
         BaseNode * node = new BaseNode("Const_array",NodeType::EXPRESSION);
         BaseNode * const_node = new BaseNode($1,NodeType::CONST_INT);
         node->addChildNode(const_node);
@@ -193,7 +197,7 @@ consts:CONST
     }
     |consts COMMA CONST
     {
-        // printf("");
+        // // printf("");
         BaseNode * node = new BaseNode("Consts_array",NodeType::EXPRESSION);
         BaseNode * const_node = new BaseNode($3,NodeType::CONST_INT);
         node->addChildNode($1);
@@ -204,19 +208,19 @@ consts:CONST
 //标识符
 descriptor:INT
     {
-        printf("INTTTTTTT\n");
+        // printf("INTTTTTTT\n");
         BaseNode * node = new BaseNode("int_Type",NodeType::MODIFY);
         $$ = node;
     }
     |VOID 
     {
-        printf("VOID\n");
+        // printf("VOID\n");
         BaseNode * node = new BaseNode("void_type",NodeType::MODIFY);
         $$ = node;
     }
     |INT '*'
     {
-        printf("INT* \n");
+        // printf("INT* \n");
         BaseNode * node = new BaseNode("int*_Type",NodeType::MODIFY);
         $$ = node;
     }
@@ -224,7 +228,7 @@ descriptor:INT
 //函数的名字与参数列表
 function:IDENTIFIER '(' ')'
     {
-        printf("Function_Without_Param\n");
+        // printf("Function_Without_Param\n");
         BaseNode * node = new BaseNode("Function_Without_Param",NodeType::DEFINITION);
         BaseNode * IdentifierNode = new BaseNode($1,NodeType::ID);
         node->addChildNode(IdentifierNode);
@@ -232,7 +236,7 @@ function:IDENTIFIER '(' ')'
     }
     |IDENTIFIER '(' params ')'
     {
-        printf("Function_With_Param\n");
+        // printf("Function_With_Param\n");
         BaseNode * node = new BaseNode("Function_With_Param",NodeType::DEFINITION);
         BaseNode * IdentifierNode = new BaseNode($1,NodeType::ID);
         node->addChildNode(IdentifierNode);
@@ -242,7 +246,7 @@ function:IDENTIFIER '(' ')'
     ;
 //参数序列    
 params:params COMMA param {
-    printf("params: params COMMA param\n");
+    // printf("params: params COMMA param\n");
     BaseNode * node = new BaseNode("Params",NodeType::DEFINITION);
     // BaseNode * param_node = new BaseNode("Single_Param",NodeType::DEFINITION);
     // param_node->addChildNode($3);
@@ -252,7 +256,7 @@ params:params COMMA param {
     $$ = node;
 }
 | param {
-    printf("params: param\n");
+    // printf("params: param\n");
     // BaseNode * node = new BaseNode("Single_Param",NodeType::DEFINITION);
     // node->addChildNode($1);
     // $$ = node;
@@ -260,7 +264,7 @@ params:params COMMA param {
 };
 //单个参数     //int a
 param:descriptor IDENTIFIER  {
-    printf("param:descriptor identifiers\n");
+    // printf("param:descriptor identifiers\n");
     BaseNode * node = new BaseNode("Param_ID",NodeType::DEFINITION);
     BaseNode * IdentifierNode = new BaseNode($2,NodeType::ID);
     node->addChildNode($1);
@@ -268,7 +272,7 @@ param:descriptor IDENTIFIER  {
     $$ = node;
 }//int a[10]
 |descriptor IDENTIFIER  '[' CONST ']' {
-    printf("param:descriptor identifiers '[' CONST ']'\n");
+    // printf("param:descriptor identifiers '[' CONST ']'\n");
     BaseNode * node = new BaseNode("Param_ID[CONST]",NodeType::DEFINITION);
     BaseNode * IdentifierNode = new BaseNode($2,NodeType::ID);
     BaseNode * ConstNode = new BaseNode($4,NodeType::CONST_INT);
@@ -278,7 +282,7 @@ param:descriptor IDENTIFIER  {
     $$ = node;
 }//int a[]
 |descriptor IDENTIFIER  '[' ']' {
-    printf("param:descriptor identifiers '[' ']'\n");
+    // printf("param:descriptor identifiers '[' ']'\n");
     BaseNode * node = new BaseNode("Param_ID[]",NodeType::DEFINITION);
     BaseNode * IdentifierNode = new BaseNode($2,NodeType::ID);
     node->addChildNode($1);
@@ -286,7 +290,7 @@ param:descriptor IDENTIFIER  {
     $$ = node;
 }// int &a
 |descriptor SINGLAND IDENTIFIER{
-    printf("param:descriptor SINGLAND identifiers\n");
+    // printf("param:descriptor SINGLAND identifiers\n");
     BaseNode * node = new BaseNode("array_&id",NodeType::ARRAY);
     BaseNode * IdentifierNode = new BaseNode($3,NodeType::ID);
     node->addChildNode($1);
@@ -294,7 +298,7 @@ param:descriptor IDENTIFIER  {
     $$ = node;
 }//int *a
 |descriptor '*' IDENTIFIER{
-    printf("param:descriptor SINGLAND '*' identifiers\n");
+    // printf("param:descriptor SINGLAND '*' identifiers\n");
     BaseNode * node = new BaseNode("array_*id",NodeType::POINTER);
     BaseNode * IdentifierNode = new BaseNode($3,NodeType::ID);
     node->addChildNode($1);
@@ -302,21 +306,21 @@ param:descriptor IDENTIFIER  {
     $$ = node;
 }//int 
 |descriptor{
-    printf("param:descriptor\n");
+    // printf("param:descriptor\n");
     BaseNode * node = new BaseNode("param_without_id",NodeType::DEFINITION);
     node->addChildNode($1);
     $$ = node;
 };
 //语句块    
 body:'{' statements '}' {
-    printf("body:'{' statements '}'\n");
+    // printf("body:'{' statements '}'\n");
     BaseNode *node = new BaseNode("Body",NodeType::BODY);
     node->addChildNode($2);
     $$ = node;
 };
 //句子集 
 statements:statements statement {
-    printf("statements:statements statement\n");
+    // printf("statements:statements statement\n");
     BaseNode * node = new BaseNode("Statements",NodeType::STATEMENT);
     // BaseNode * Single_Statement = new BaseNode("Single_Statement",NodeType::STATEMENT);
     // Single_Statement->addChildNode($2);
@@ -326,7 +330,7 @@ statements:statements statement {
     $$ = node;
 }
 |statement {
-    printf("statements:statement\n");
+    // printf("statements:statement\n");
     // BaseNode * node = new BaseNode("Single_Statement",NodeType::STATEMENT);
     // node->addChildNode($1);
     $$ = $1;
@@ -390,14 +394,14 @@ statement:
     }
     | FOR '(' SEMI SEMI ')' statement
     {
-        printf("FOR '(' SEMI SEMI ')' statement\n");
+        // printf("FOR '(' SEMI SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_SEMI",NodeType::STATEMENT);
         node->addChildNode($6);
         $$ = node;
     }
     | FOR '(' forstart SEMI SEMI ')' statement
     {
-        printf("FOR '(' forstart SEMI SEMI ')' statement\n");
+        // printf("FOR '(' forstart SEMI SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_SEMI",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($7);
@@ -405,7 +409,7 @@ statement:
     } 
     | FOR '(' SEMI expression SEMI ')' statement
     {
-        printf("FOR '(' SEMI expression SEMI ')' statement\n");
+        // printf("FOR '(' SEMI expression SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_Expression_SEMI",NodeType::STATEMENT);
         node->addChildNode($4);
         node->addChildNode($7);
@@ -413,7 +417,7 @@ statement:
     }
     | FOR '(' SEMI SEMI expression ')' statement
     {
-        printf("FOR '(' SEMI SEMI expression ')' statement\n");
+        // printf("FOR '(' SEMI SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($5);
         node->addChildNode($7);
@@ -421,7 +425,7 @@ statement:
     }
     | FOR '(' forstart SEMI expression SEMI expression ')' statement
     {
-        printf("FOR '(' forstart SEMI expression SEMI expression ')' statement\n");
+        // printf("FOR '(' forstart SEMI expression SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_Expression_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
@@ -431,7 +435,7 @@ statement:
     }
     | FOR '(' forstart SEMI expression SEMI ')' statement
     {
-        printf("FOR '(' forstart SEMI expression SEMI ')' statement\n");
+        // printf("FOR '(' forstart SEMI expression SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_Expression_SEMI",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($5);
@@ -440,7 +444,7 @@ statement:
     }
     | FOR '(' forstart SEMI SEMI expression ')' statement
     {
-        printf("FOR '(' forstart SEMI SEMI expression ')' statement\n");
+        // printf("FOR '(' forstart SEMI SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($3);
         node->addChildNode($6);
@@ -449,7 +453,7 @@ statement:
     }
     | FOR '(' SEMI expression SEMI expression ')' statement
     {
-        printf("FOR '(' SEMI expression SEMI expression ')' statement\n");
+        // printf("FOR '(' SEMI expression SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_Expression_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode($4);
         node->addChildNode($6);
@@ -491,7 +495,7 @@ declare:
     //标识符 要声明的东西的序列
     descriptor declares
     {
-        // printf("Declare_Statement\n");
+        // // printf("Declare_Statement\n");
         BaseNode * node = new BaseNode("Declare_Statement",NodeType::DEFINITION);
 
         node->addChildNode($1);
@@ -504,14 +508,14 @@ declares:
     //id或者id赋值
     declarevars
     {
-         printf("declarevars\n");
+         // printf("declarevars\n");
         BaseNode * node = new BaseNode("Declare_Variable",NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
     | declarevars COMMA declares
     {
-         printf("declarevars COMMA declares\n");
+         // printf("declarevars COMMA declares\n");
         BaseNode * node = new BaseNode("Declare_Variables",NodeType::DEFINITION);
         node->addChildNode($1);
         node->addChildNode($3);
@@ -539,15 +543,15 @@ declarevars:
 forstart:
     declare
     {
-        printf("declares\n");
-        BaseNode * node = new BaseNode("For_Start",NodeType::DEFINITION);
+        // printf("declares\n");
+        BaseNode * node = new BaseNode("For_Declare",NodeType::DEFINITION);
         node->addChildNode($1);
         $$ = node;
     }
     | expression
     {
-        printf("expression\n");
-        BaseNode * node = new BaseNode("For_Expression",NodeType::DEFINITION);
+        // printf("expression\n");
+        BaseNode * node = new BaseNode("For_Expression",NodeType::EXPRESSION);
         node->addChildNode($1);
         $$ = node;
     }

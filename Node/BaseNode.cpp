@@ -5,53 +5,64 @@
 
 #include "BTNode.h"
 
-BaseNode::BaseNode() {
-  this->cNode = nullptr;
-  this->pNode = nullptr;
-  this->bNode = nullptr;
-  this->content = strdup("code start");
+BaseNode::BaseNode()
+{
+    this->cNode = nullptr;
+    this->pNode = nullptr;
+    this->bNode = nullptr;
+    this->content = strdup("code start");
 }
 
-BaseNode::BaseNode(const char* content) {
-  this->cNode = nullptr;
-  this->pNode = nullptr;
-  this->bNode = nullptr;
-  this->content = strdup(content);
+BaseNode::BaseNode(const std::string content)
+{
+    this->cNode = nullptr;
+    this->pNode = nullptr;
+    this->bNode = nullptr;
+    this->content = content;
 }
-BaseNode::BaseNode(NodeType type) {
-  this->cNode = nullptr;
-  this->pNode = nullptr;
-  this->bNode = nullptr;
-  this->type = type;
-  this->content = strdup("");
+BaseNode::BaseNode(NodeType type)
+{
+    this->cNode = nullptr;
+    this->pNode = nullptr;
+    this->bNode = nullptr;
+    this->type = type;
+    this->content = strdup("");
 }
-BaseNode::BaseNode(const char* content, NodeType type) {
-  this->cNode = nullptr;
-  this->pNode = nullptr;
-  this->bNode = nullptr;
-  this->type = type;
-  this->content = strdup(content);
+BaseNode::BaseNode(std::string content, NodeType type)
+{
+    this->cNode = nullptr;
+    this->pNode = nullptr;
+    this->bNode = nullptr;
+    this->type = type;
+    this->content = content;
 }
-bool BaseNode::addFirstBrotherNode(BaseNode* node) {
-  BaseNode* temp = this->bNode;
-  this->bNode = node;
-  node->bNode = temp;
-  return true;
+bool BaseNode::addFirstBrotherNode(BaseNode *node)
+{
+    BaseNode *temp = this->bNode;
+    this->bNode = node;
+    node->bNode = temp;
+    return true;
 }
-bool BaseNode::addLastBrotherNode(BaseNode* node) {
-  BaseNode* temp = this->getFinalBrotherNode();
-  temp->bNode = node;
-  return true;
+bool BaseNode::addLastBrotherNode(BaseNode *node)
+{
+    BaseNode *temp = this->getFinalBrotherNode();
+    temp->bNode = node;
+    return true;
 }
 
-bool BaseNode::addChildNode(BaseNode* node) {
-  if (this->cNode == nullptr) {
-    this->cNode = node;
-    node->pNode = this;
-  } else {
-    this->cNode->addLastBrotherNode(node);
-  }
-  return true;
+bool BaseNode::addChildNode(BaseNode *node)
+{
+    if (this->cNode == nullptr)
+    {
+        this->cNode = node;
+        node->pNode = this;
+    }
+    else
+    {
+        node->pNode = this;
+        this->cNode->addLastBrotherNode(node);
+    }
+    return true;
 }
 
 void BaseNode::printInfo() { printf("%s", this->content); }
@@ -67,47 +78,58 @@ void BaseNode::printInfo() { printf("%s", this->content); }
 //     printf("\n");
 //   }
 // }
-void BaseNode::printTree(BaseNode* node) {
-  if (node) {
-    printf("%s ", node->content);
-    if (node->cNode) {
-      printf("(");
-      BaseNode* p = node->cNode;
-      printTree(p);
-      p = p->bNode;
-      while (p) {
-        printf(",");
-        printTree(p);
-        p = p->bNode;
-      }
-      printf(")");
+void BaseNode::printTree(BaseNode *node)
+{
+    if (node)
+    {
+        printf("%s ", node->content);
+        if (node->cNode)
+        {
+            printf("(");
+            BaseNode *p = node->cNode;
+            printTree(p);
+            p = p->bNode;
+            while (p)
+            {
+                printf(",");
+                printTree(p);
+                p = p->bNode;
+            }
+            printf(")");
+        }
     }
-  }
 }
-BaseNode* BaseNode::getFinalBrotherNode() {
-  BaseNode* node = this;
-  while (node->bNode) {
-    node = node->bNode;
-  }
-  return node;
+BaseNode *BaseNode::getFinalBrotherNode()
+{
+    BaseNode *node = this;
+    while (node->bNode)
+    {
+        node = node->bNode;
+    }
+    return node;
 }
-BaseNode::~BaseNode() {
-  while (this->bNode) {
-    free(this->bNode);
-  }
-  while (this->cNode) {
-    free(this->cNode);
-  }
+BaseNode::~BaseNode()
+{
+    while (this->bNode)
+    {
+        free(this->bNode);
+    }
+    while (this->cNode)
+    {
+        free(this->cNode);
+    }
 }
 
-std::list<BaseNode*> BaseNode::getAllChildrenNode() {
-  std::list<BaseNode*> children;
-  BaseNode* node = this->cNode;
-  while (node) {
-    children.push_back(node);
-    node = node->bNode;
-  }
-  return children;
+std::list<BaseNode *> BaseNode::getAllChildrenNode()
+{
+    std::list<BaseNode *> children;
+    BaseNode *node = this->cNode;
+    while (node)
+    {
+        children.push_back(node);
+        node = node->bNode;
+    }
+    return children;
 }
 // int main() {
 //   using namespace AST;

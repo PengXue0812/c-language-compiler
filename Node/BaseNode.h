@@ -16,7 +16,7 @@ class BaseNode {
   BaseNode *cNode;
 
  protected:
-  char *content;
+  std::string content;
 
   static void tree(BaseNode *, int, bool, bool *, char *);
 
@@ -26,9 +26,9 @@ class BaseNode {
 
   BaseNode(NodeType);
 
-  BaseNode(const char *, NodeType);
+  BaseNode(const std::string, NodeType);
 
-  BaseNode(const char *);
+  BaseNode(const std::string);
 
   // setters:
   bool setParentNode(BaseNode *parent) {
@@ -45,7 +45,7 @@ class BaseNode {
 
   NodeType getNodeType() { return this->type; }
 
-  char *getContent() { return this->content; }
+  std::string getContent() { return this->content; }
   std::string getStringContent() {
     std::string s(this->content);
     return s;

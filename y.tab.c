@@ -74,6 +74,7 @@
 #include "Node/BaseNode.h"
 #include "Node/BTNode.h"
 #include "Symbol/Symbol.h"
+#include "InterCode/InterCode.h"
 
 BaseNode* root;
 extern int yylex(void); 
@@ -100,7 +101,7 @@ int main()
 	return 0;
 }
 
-#line 104 "y.tab.c"
+#line 105 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -213,13 +214,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 35 "c_compiler.y"
+#line 36 "c_compiler.y"
 
     char* num;
     BaseNode *ast;
     char *str;
 
-#line 223 "y.tab.c"
+#line 224 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -690,15 +691,15 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    81,    81,    93,   102,   115,   122,   131,   140,   148,
-     156,   168,   176,   186,   194,   205,   211,   217,   225,   233,
-     244,   254,   262,   270,   280,   288,   296,   304,   311,   318,
-     328,   338,   345,   352,   359,   365,   370,   377,   384,   391,
-     398,   406,   414,   422,   432,   441,   450,   459,   464,   469,
-     475,   481,   492,   505,   512,   524,   531,   540,   547,   557,
-     564,   570,   577,   584,   591,   598,   605,   612,   618,   624,
-     631,   638,   644,   650,   657,   664,   671,   678,   685,   692,
-     700,   706,   713,   721,   730,   736,   745,   750
+       0,    82,    82,    97,   106,   119,   126,   135,   144,   152,
+     160,   172,   180,   190,   198,   209,   215,   221,   229,   237,
+     248,   258,   266,   274,   284,   292,   300,   308,   315,   322,
+     332,   342,   349,   356,   363,   369,   374,   381,   388,   395,
+     402,   410,   418,   426,   436,   445,   454,   463,   468,   473,
+     479,   485,   496,   509,   516,   528,   535,   544,   551,   561,
+     568,   574,   581,   588,   595,   602,   609,   616,   622,   628,
+     635,   642,   648,   654,   661,   668,   675,   682,   689,   696,
+     704,   710,   717,   725,   734,   740,   749,   754
 };
 #endif
 
@@ -1481,36 +1482,39 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: blocks  */
-#line 82 "c_compiler.y"
+#line 83 "c_compiler.y"
     {
         root = new BaseNode("program",NodeType::ROOT);
         // root->addChildNode(new BaseNode("test"));
         root->addChildNode((yyvsp[0].ast));
         BTTree<BaseNode> printer(root, &BaseNode::getAllChildrenNode,
                         &BaseNode::getStringContent);
+        InterCode interCode = InterCode(root);
         printer.print();
+        interCode.Root_Generate();
+        
 
     }
-#line 1495 "y.tab.c"
+#line 1499 "y.tab.c"
     break;
 
   case 3: /* blocks: block  */
-#line 94 "c_compiler.y"
+#line 98 "c_compiler.y"
     {
-        printf("blocks->block\n");
+        // printf("blocks->block\n");
         
         (yyval.ast)= (yyvsp[0].ast);
         // BaseNode *node = new BaseNode("a_Block",NodeType::STATEMENT);
         // node->addChildNode($1);
         // $$ = node;
     }
-#line 1508 "y.tab.c"
+#line 1512 "y.tab.c"
     break;
 
   case 4: /* blocks: blocks block  */
-#line 103 "c_compiler.y"
+#line 107 "c_compiler.y"
     {
-        printf("blocks->blocks block\n");
+        // printf("blocks->blocks block\n");
         BaseNode *node =new BaseNode("Blocks",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-1].ast));
         node->addChildNode((yyvsp[0].ast));
@@ -1519,73 +1523,73 @@ yyreduce:
         // node->addChildNode(block);
         (yyval.ast) = node;
     }
-#line 1523 "y.tab.c"
+#line 1527 "y.tab.c"
     break;
 
   case 5: /* block: declare SEMI  */
-#line 116 "c_compiler.y"
+#line 120 "c_compiler.y"
     {
-        printf("Declare_Statement\n");
+        // printf("Declare_Statement\n");
         // BaseNode *node = new BaseNode("Declare_Statement",NodeType::DEFINITION);
         // node->addChildNode($1);
         (yyval.ast) = (yyvsp[-1].ast);
     }
-#line 1534 "y.tab.c"
+#line 1538 "y.tab.c"
     break;
 
   case 6: /* block: descriptor function body  */
-#line 123 "c_compiler.y"
+#line 127 "c_compiler.y"
     {
-        printf("blockcdescriptor function body\n");
+        // printf("blockcdescriptor function body\n");
         BaseNode * node = new BaseNode("Def_Func_Block_Body",NodeType::DEFINITION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[-1].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1547 "y.tab.c"
+#line 1551 "y.tab.c"
     break;
 
   case 7: /* block: descriptor function SEMI  */
-#line 132 "c_compiler.y"
+#line 136 "c_compiler.y"
     {
-        printf("block->descriptor function 'SEMI'\n");
+        // printf("block->descriptor function 'SEMI'\n");
         BaseNode * node = new BaseNode("Def_Func_Block_NoBody",NodeType::DEFINITION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 1559 "y.tab.c"
+#line 1563 "y.tab.c"
     break;
 
   case 8: /* variable: IDENTIFIER  */
-#line 141 "c_compiler.y"
+#line 145 "c_compiler.y"
     {   
-        printf("variable->IDENTIFIER\n");
+        // printf("variable->IDENTIFIER\n");
         BaseNode * node = new BaseNode("Def_Identifier",NodeType::DEFINITION);
         BaseNode * var_node = new BaseNode((yyvsp[0].str),NodeType::ID);
         node->addChildNode(var_node);
         (yyval.ast) = node;
     }
-#line 1571 "y.tab.c"
+#line 1575 "y.tab.c"
     break;
 
   case 9: /* variable: IDENTIFIER '[' ']'  */
-#line 149 "c_compiler.y"
+#line 153 "c_compiler.y"
     {
-        printf("variable->IDENTIFIER '[' ']'\n");
+        // printf("variable->IDENTIFIER '[' ']'\n");
         BaseNode * node = new BaseNode("Def_array[]",NodeType::ARRAY);
         BaseNode * var_node = new BaseNode((yyvsp[-2].str),NodeType::ID);
         node->addChildNode(var_node);
         (yyval.ast) = node;
     }
-#line 1583 "y.tab.c"
+#line 1587 "y.tab.c"
     break;
 
   case 10: /* variable: IDENTIFIER '[' CONST ']'  */
-#line 157 "c_compiler.y"
+#line 161 "c_compiler.y"
     {
-        printf("variable->IDENTIFIER '[' CONST ']'\n");
+        // printf("variable->IDENTIFIER '[' CONST ']'\n");
         BaseNode * node = new BaseNode("Def_array[Const]",NodeType::ARRAY);
         BaseNode * var_node = new BaseNode((yyvsp[-3].str),NodeType::ID);
         // BaseNode * const_node = new BaseNode($3,NodeType::ID);
@@ -1595,117 +1599,117 @@ yyreduce:
         node->addChildNode(const_node);
         (yyval.ast) = node;
     }
-#line 1599 "y.tab.c"
+#line 1603 "y.tab.c"
     break;
 
   case 11: /* variable: IDENTIFIER '[' expression ']'  */
-#line 169 "c_compiler.y"
+#line 173 "c_compiler.y"
     {
-        printf("variable->IDENTIFIER '[' expression ']'\n");
+        // printf("variable->IDENTIFIER '[' expression ']'\n");
         BaseNode * node = new BaseNode("Def_array[expression]",NodeType::ARRAY);
         BaseNode * var_node = new BaseNode((yyvsp[-3].str),NodeType::ID);
         node->addChildNode(var_node);
         node->addChildNode((yyvsp[-1].ast));
     }
-#line 1611 "y.tab.c"
+#line 1615 "y.tab.c"
     break;
 
   case 12: /* variable: '*' IDENTIFIER  */
-#line 177 "c_compiler.y"
+#line 181 "c_compiler.y"
     {
-        printf("variable->'*' IDENTIFIER\n");
+        // printf("variable->'*' IDENTIFIER\n");
         BaseNode * node = new BaseNode("Def_*Identifier",NodeType::POINTER);
         BaseNode * var_node = new BaseNode((yyvsp[0].str),NodeType::ID);
         node->addChildNode(var_node);
         (yyval.ast) = node;
     }
-#line 1623 "y.tab.c"
+#line 1627 "y.tab.c"
     break;
 
   case 13: /* consts: CONST  */
-#line 187 "c_compiler.y"
+#line 191 "c_compiler.y"
     {
-        // printf("");
+        // // printf("");
         BaseNode * node = new BaseNode("Const_array",NodeType::EXPRESSION);
         BaseNode * const_node = new BaseNode((yyvsp[0].num),NodeType::CONST_INT);
         node->addChildNode(const_node);
         (yyval.ast) = node;
     }
-#line 1635 "y.tab.c"
+#line 1639 "y.tab.c"
     break;
 
   case 14: /* consts: consts COMMA CONST  */
-#line 195 "c_compiler.y"
+#line 199 "c_compiler.y"
     {
-        // printf("");
+        // // printf("");
         BaseNode * node = new BaseNode("Consts_array",NodeType::EXPRESSION);
         BaseNode * const_node = new BaseNode((yyvsp[0].num),NodeType::CONST_INT);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode(const_node);
         (yyval.ast) = node;
     }
-#line 1648 "y.tab.c"
+#line 1652 "y.tab.c"
     break;
 
   case 15: /* descriptor: INT  */
-#line 206 "c_compiler.y"
+#line 210 "c_compiler.y"
     {
-        printf("INTTTTTTT\n");
+        // printf("INTTTTTTT\n");
         BaseNode * node = new BaseNode("int_Type",NodeType::MODIFY);
         (yyval.ast) = node;
     }
-#line 1658 "y.tab.c"
+#line 1662 "y.tab.c"
     break;
 
   case 16: /* descriptor: VOID  */
-#line 212 "c_compiler.y"
+#line 216 "c_compiler.y"
     {
-        printf("VOID\n");
+        // printf("VOID\n");
         BaseNode * node = new BaseNode("void_type",NodeType::MODIFY);
         (yyval.ast) = node;
     }
-#line 1668 "y.tab.c"
+#line 1672 "y.tab.c"
     break;
 
   case 17: /* descriptor: INT '*'  */
-#line 218 "c_compiler.y"
+#line 222 "c_compiler.y"
     {
-        printf("INT* \n");
+        // printf("INT* \n");
         BaseNode * node = new BaseNode("int*_Type",NodeType::MODIFY);
         (yyval.ast) = node;
     }
-#line 1678 "y.tab.c"
+#line 1682 "y.tab.c"
     break;
 
   case 18: /* function: IDENTIFIER '(' ')'  */
-#line 226 "c_compiler.y"
+#line 230 "c_compiler.y"
     {
-        printf("Function_Without_Param\n");
+        // printf("Function_Without_Param\n");
         BaseNode * node = new BaseNode("Function_Without_Param",NodeType::DEFINITION);
         BaseNode * IdentifierNode = new BaseNode((yyvsp[-2].str),NodeType::ID);
         node->addChildNode(IdentifierNode);
         (yyval.ast) = node;
     }
-#line 1690 "y.tab.c"
+#line 1694 "y.tab.c"
     break;
 
   case 19: /* function: IDENTIFIER '(' params ')'  */
-#line 234 "c_compiler.y"
+#line 238 "c_compiler.y"
     {
-        printf("Function_With_Param\n");
+        // printf("Function_With_Param\n");
         BaseNode * node = new BaseNode("Function_With_Param",NodeType::DEFINITION);
         BaseNode * IdentifierNode = new BaseNode((yyvsp[-3].str),NodeType::ID);
         node->addChildNode(IdentifierNode);
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 1703 "y.tab.c"
+#line 1707 "y.tab.c"
     break;
 
   case 20: /* params: params COMMA param  */
-#line 244 "c_compiler.y"
+#line 248 "c_compiler.y"
                           {
-    printf("params: params COMMA param\n");
+    // printf("params: params COMMA param\n");
     BaseNode * node = new BaseNode("Params",NodeType::DEFINITION);
     // BaseNode * param_node = new BaseNode("Single_Param",NodeType::DEFINITION);
     // param_node->addChildNode($3);
@@ -1714,38 +1718,38 @@ yyreduce:
     node->addChildNode((yyvsp[0].ast));
     (yyval.ast) = node;
 }
-#line 1718 "y.tab.c"
+#line 1722 "y.tab.c"
     break;
 
   case 21: /* params: param  */
-#line 254 "c_compiler.y"
+#line 258 "c_compiler.y"
         {
-    printf("params: param\n");
+    // printf("params: param\n");
     // BaseNode * node = new BaseNode("Single_Param",NodeType::DEFINITION);
     // node->addChildNode($1);
     // $$ = node;
     (yyval.ast) = (yyvsp[0].ast);
 }
-#line 1730 "y.tab.c"
+#line 1734 "y.tab.c"
     break;
 
   case 22: /* param: descriptor IDENTIFIER  */
-#line 262 "c_compiler.y"
+#line 266 "c_compiler.y"
                              {
-    printf("param:descriptor identifiers\n");
+    // printf("param:descriptor identifiers\n");
     BaseNode * node = new BaseNode("Param_ID",NodeType::DEFINITION);
     BaseNode * IdentifierNode = new BaseNode((yyvsp[0].str),NodeType::ID);
     node->addChildNode((yyvsp[-1].ast));
     node->addChildNode(IdentifierNode);
     (yyval.ast) = node;
 }
-#line 1743 "y.tab.c"
+#line 1747 "y.tab.c"
     break;
 
   case 23: /* param: descriptor IDENTIFIER '[' CONST ']'  */
-#line 270 "c_compiler.y"
+#line 274 "c_compiler.y"
                                       {
-    printf("param:descriptor identifiers '[' CONST ']'\n");
+    // printf("param:descriptor identifiers '[' CONST ']'\n");
     BaseNode * node = new BaseNode("Param_ID[CONST]",NodeType::DEFINITION);
     BaseNode * IdentifierNode = new BaseNode((yyvsp[-3].str),NodeType::ID);
     BaseNode * ConstNode = new BaseNode((yyvsp[-1].num),NodeType::CONST_INT);
@@ -1754,74 +1758,74 @@ yyreduce:
     node->addChildNode(ConstNode);
     (yyval.ast) = node;
 }
-#line 1758 "y.tab.c"
+#line 1762 "y.tab.c"
     break;
 
   case 24: /* param: descriptor IDENTIFIER '[' ']'  */
-#line 280 "c_compiler.y"
+#line 284 "c_compiler.y"
                                 {
-    printf("param:descriptor identifiers '[' ']'\n");
+    // printf("param:descriptor identifiers '[' ']'\n");
     BaseNode * node = new BaseNode("Param_ID[]",NodeType::DEFINITION);
     BaseNode * IdentifierNode = new BaseNode((yyvsp[-2].str),NodeType::ID);
     node->addChildNode((yyvsp[-3].ast));
     node->addChildNode(IdentifierNode);
     (yyval.ast) = node;
 }
-#line 1771 "y.tab.c"
+#line 1775 "y.tab.c"
     break;
 
   case 25: /* param: descriptor SINGLAND IDENTIFIER  */
-#line 288 "c_compiler.y"
+#line 292 "c_compiler.y"
                                {
-    printf("param:descriptor SINGLAND identifiers\n");
+    // printf("param:descriptor SINGLAND identifiers\n");
     BaseNode * node = new BaseNode("array_&id",NodeType::ARRAY);
     BaseNode * IdentifierNode = new BaseNode((yyvsp[0].str),NodeType::ID);
     node->addChildNode((yyvsp[-2].ast));
     node->addChildNode(IdentifierNode);
     (yyval.ast) = node;
 }
-#line 1784 "y.tab.c"
+#line 1788 "y.tab.c"
     break;
 
   case 26: /* param: descriptor '*' IDENTIFIER  */
-#line 296 "c_compiler.y"
+#line 300 "c_compiler.y"
                           {
-    printf("param:descriptor SINGLAND '*' identifiers\n");
+    // printf("param:descriptor SINGLAND '*' identifiers\n");
     BaseNode * node = new BaseNode("array_*id",NodeType::POINTER);
     BaseNode * IdentifierNode = new BaseNode((yyvsp[0].str),NodeType::ID);
     node->addChildNode((yyvsp[-2].ast));
     node->addChildNode(IdentifierNode);
     (yyval.ast) = node;
 }
-#line 1797 "y.tab.c"
+#line 1801 "y.tab.c"
     break;
 
   case 27: /* param: descriptor  */
-#line 304 "c_compiler.y"
+#line 308 "c_compiler.y"
            {
-    printf("param:descriptor\n");
+    // printf("param:descriptor\n");
     BaseNode * node = new BaseNode("param_without_id",NodeType::DEFINITION);
     node->addChildNode((yyvsp[0].ast));
     (yyval.ast) = node;
 }
-#line 1808 "y.tab.c"
+#line 1812 "y.tab.c"
     break;
 
   case 28: /* body: '{' statements '}'  */
-#line 311 "c_compiler.y"
+#line 315 "c_compiler.y"
                         {
-    printf("body:'{' statements '}'\n");
+    // printf("body:'{' statements '}'\n");
     BaseNode *node = new BaseNode("Body",NodeType::BODY);
     node->addChildNode((yyvsp[-1].ast));
     (yyval.ast) = node;
 }
-#line 1819 "y.tab.c"
+#line 1823 "y.tab.c"
     break;
 
   case 29: /* statements: statements statement  */
-#line 318 "c_compiler.y"
+#line 322 "c_compiler.y"
                                 {
-    printf("statements:statements statement\n");
+    // printf("statements:statements statement\n");
     BaseNode * node = new BaseNode("Statements",NodeType::STATEMENT);
     // BaseNode * Single_Statement = new BaseNode("Single_Statement",NodeType::STATEMENT);
     // Single_Statement->addChildNode($2);
@@ -1830,82 +1834,82 @@ yyreduce:
     node->addChildNode((yyvsp[0].ast));
     (yyval.ast) = node;
 }
-#line 1834 "y.tab.c"
+#line 1838 "y.tab.c"
     break;
 
   case 30: /* statements: statement  */
-#line 328 "c_compiler.y"
+#line 332 "c_compiler.y"
            {
-    printf("statements:statement\n");
+    // printf("statements:statement\n");
     // BaseNode * node = new BaseNode("Single_Statement",NodeType::STATEMENT);
     // node->addChildNode($1);
     (yyval.ast) = (yyvsp[0].ast);
 }
-#line 1845 "y.tab.c"
+#line 1849 "y.tab.c"
     break;
 
   case 31: /* statement: expression SEMI  */
-#line 339 "c_compiler.y"
+#line 343 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 1855 "y.tab.c"
+#line 1859 "y.tab.c"
     break;
 
   case 32: /* statement: declare SEMI  */
-#line 346 "c_compiler.y"
+#line 350 "c_compiler.y"
     {
         // BaseNode *node = new BaseNode("Declare_Statement",NodeType::STATEMENT);
         // node->addChildNode($1);
         (yyval.ast) = (yyvsp[-1].ast);
     }
-#line 1865 "y.tab.c"
+#line 1869 "y.tab.c"
     break;
 
   case 33: /* statement: body  */
-#line 353 "c_compiler.y"
+#line 357 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Body_Statement",NodeType::STATEMENT);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1875 "y.tab.c"
+#line 1879 "y.tab.c"
     break;
 
   case 34: /* statement: RETURN expression SEMI  */
-#line 360 "c_compiler.y"
+#line 364 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Return_Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 1885 "y.tab.c"
+#line 1889 "y.tab.c"
     break;
 
   case 35: /* statement: RETURN SEMI  */
-#line 366 "c_compiler.y"
+#line 370 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Return_NULL",NodeType::STATEMENT);
         (yyval.ast) = node;
     }
-#line 1894 "y.tab.c"
+#line 1898 "y.tab.c"
     break;
 
   case 36: /* statement: IF '(' expression ')' statement  */
-#line 371 "c_compiler.y"
+#line 375 "c_compiler.y"
     {
         BaseNode * node = new BaseNode ("If_Statement",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1905 "y.tab.c"
+#line 1909 "y.tab.c"
     break;
 
   case 37: /* statement: IF '(' expression ')' statement ELSE statement  */
-#line 377 "c_compiler.y"
+#line 381 "c_compiler.y"
                                                                           {
         BaseNode * node = new BaseNode ("If_Else_Statement",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-4].ast));
@@ -1913,71 +1917,71 @@ yyreduce:
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1917 "y.tab.c"
+#line 1921 "y.tab.c"
     break;
 
   case 38: /* statement: WHILE '(' expression ')' statement  */
-#line 385 "c_compiler.y"
+#line 389 "c_compiler.y"
     {   
         BaseNode * node = new BaseNode ("While_Statement",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1928 "y.tab.c"
+#line 1932 "y.tab.c"
     break;
 
   case 39: /* statement: FOR '(' SEMI SEMI ')' statement  */
-#line 392 "c_compiler.y"
+#line 396 "c_compiler.y"
     {
-        printf("FOR '(' SEMI SEMI ')' statement\n");
+        // printf("FOR '(' SEMI SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_SEMI",NodeType::STATEMENT);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1939 "y.tab.c"
+#line 1943 "y.tab.c"
     break;
 
   case 40: /* statement: FOR '(' forstart SEMI SEMI ')' statement  */
-#line 399 "c_compiler.y"
+#line 403 "c_compiler.y"
     {
-        printf("FOR '(' forstart SEMI SEMI ')' statement\n");
+        // printf("FOR '(' forstart SEMI SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_SEMI",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-4].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1951 "y.tab.c"
+#line 1955 "y.tab.c"
     break;
 
   case 41: /* statement: FOR '(' SEMI expression SEMI ')' statement  */
-#line 407 "c_compiler.y"
+#line 411 "c_compiler.y"
     {
-        printf("FOR '(' SEMI expression SEMI ')' statement\n");
+        // printf("FOR '(' SEMI expression SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_Expression_SEMI",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-3].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1963 "y.tab.c"
+#line 1967 "y.tab.c"
     break;
 
   case 42: /* statement: FOR '(' SEMI SEMI expression ')' statement  */
-#line 415 "c_compiler.y"
+#line 419 "c_compiler.y"
     {
-        printf("FOR '(' SEMI SEMI expression ')' statement\n");
+        // printf("FOR '(' SEMI SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1975 "y.tab.c"
+#line 1979 "y.tab.c"
     break;
 
   case 43: /* statement: FOR '(' forstart SEMI expression SEMI expression ')' statement  */
-#line 423 "c_compiler.y"
+#line 427 "c_compiler.y"
     {
-        printf("FOR '(' forstart SEMI expression SEMI expression ')' statement\n");
+        // printf("FOR '(' forstart SEMI expression SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_Expression_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-6].ast));
         node->addChildNode((yyvsp[-4].ast));
@@ -1985,393 +1989,393 @@ yyreduce:
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 1989 "y.tab.c"
+#line 1993 "y.tab.c"
     break;
 
   case 44: /* statement: FOR '(' forstart SEMI expression SEMI ')' statement  */
-#line 433 "c_compiler.y"
+#line 437 "c_compiler.y"
     {
-        printf("FOR '(' forstart SEMI expression SEMI ')' statement\n");
+        // printf("FOR '(' forstart SEMI expression SEMI ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_Expression_SEMI",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-5].ast));
         node->addChildNode((yyvsp[-3].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2002 "y.tab.c"
+#line 2006 "y.tab.c"
     break;
 
   case 45: /* statement: FOR '(' forstart SEMI SEMI expression ')' statement  */
-#line 442 "c_compiler.y"
+#line 446 "c_compiler.y"
     {
-        printf("FOR '(' forstart SEMI SEMI expression ')' statement\n");
+        // printf("FOR '(' forstart SEMI SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_Def_SEMI_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-5].ast));
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2015 "y.tab.c"
+#line 2019 "y.tab.c"
     break;
 
   case 46: /* statement: FOR '(' SEMI expression SEMI expression ')' statement  */
-#line 451 "c_compiler.y"
+#line 455 "c_compiler.y"
     {
-        printf("FOR '(' SEMI expression SEMI expression ')' statement\n");
+        // printf("FOR '(' SEMI expression SEMI expression ')' statement\n");
         BaseNode * node = new BaseNode ("For_SEMI_Expression_SEMI_Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-4].ast));
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2028 "y.tab.c"
+#line 2032 "y.tab.c"
     break;
 
   case 47: /* statement: BREAK SEMI  */
-#line 460 "c_compiler.y"
+#line 464 "c_compiler.y"
     {
         BaseNode * node = new BaseNode ("Break_Statement",NodeType::STATEMENT);
         (yyval.ast) = node;
     }
-#line 2037 "y.tab.c"
+#line 2041 "y.tab.c"
     break;
 
   case 48: /* statement: CONTINUE SEMI  */
-#line 465 "c_compiler.y"
+#line 469 "c_compiler.y"
     {
         BaseNode * node = new BaseNode ("Continue_Statement",NodeType::STATEMENT);
         (yyval.ast) = node;
     }
-#line 2046 "y.tab.c"
+#line 2050 "y.tab.c"
     break;
 
   case 49: /* statement: PRINTF '(' D_QUO expression D_QUO ')' SEMI  */
-#line 470 "c_compiler.y"
+#line 474 "c_compiler.y"
     {
         BaseNode * node = new BaseNode ("Printf_String",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-3].ast));
         (yyval.ast) = node;
     }
-#line 2056 "y.tab.c"
+#line 2060 "y.tab.c"
     break;
 
   case 50: /* statement: PRINTF '(' expression ')' SEMI  */
-#line 476 "c_compiler.y"
+#line 480 "c_compiler.y"
     {
         BaseNode * node = new BaseNode ("Printf_Expression",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-2].ast));
         (yyval.ast) = node;
     }
-#line 2066 "y.tab.c"
+#line 2070 "y.tab.c"
     break;
 
   case 51: /* statement: SCANF '(' IDENTIFIER ')' SEMI  */
-#line 482 "c_compiler.y"
+#line 486 "c_compiler.y"
     {
         BaseNode * node = new BaseNode ("Scanf_Identifier",NodeType::STATEMENT);
         BaseNode * Identifier_Node = new BaseNode ((yyvsp[-2].str),NodeType::ID);
         node->addChildNode(Identifier_Node);
         (yyval.ast) = node;
     }
-#line 2077 "y.tab.c"
+#line 2081 "y.tab.c"
     break;
 
   case 52: /* declare: descriptor declares  */
-#line 493 "c_compiler.y"
+#line 497 "c_compiler.y"
     {
-        // printf("Declare_Statement\n");
+        // // printf("Declare_Statement\n");
         BaseNode * node = new BaseNode("Declare_Statement",NodeType::DEFINITION);
 
         node->addChildNode((yyvsp[-1].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2090 "y.tab.c"
+#line 2094 "y.tab.c"
     break;
 
   case 53: /* declares: declarevars  */
-#line 506 "c_compiler.y"
+#line 510 "c_compiler.y"
     {
-         printf("declarevars\n");
+         // printf("declarevars\n");
         BaseNode * node = new BaseNode("Declare_Variable",NodeType::DEFINITION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2101 "y.tab.c"
+#line 2105 "y.tab.c"
     break;
 
   case 54: /* declares: declarevars COMMA declares  */
-#line 513 "c_compiler.y"
+#line 517 "c_compiler.y"
     {
-         printf("declarevars COMMA declares\n");
+         // printf("declarevars COMMA declares\n");
         BaseNode * node = new BaseNode("Declare_Variables",NodeType::DEFINITION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2113 "y.tab.c"
+#line 2117 "y.tab.c"
     break;
 
   case 55: /* declarevars: variable  */
-#line 525 "c_compiler.y"
+#line 529 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Variable",NodeType::DEFINITION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2123 "y.tab.c"
+#line 2127 "y.tab.c"
     break;
 
   case 56: /* declarevars: variable ASSIGN_OP expression  */
-#line 532 "c_compiler.y"
+#line 536 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Variable_Assign",NodeType::DEFINITION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2134 "y.tab.c"
+#line 2138 "y.tab.c"
     break;
 
   case 57: /* forstart: declare  */
-#line 541 "c_compiler.y"
+#line 545 "c_compiler.y"
     {
-        printf("declares\n");
-        BaseNode * node = new BaseNode("For_Start",NodeType::DEFINITION);
+        // printf("declares\n");
+        BaseNode * node = new BaseNode("For_Declare",NodeType::DEFINITION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2145 "y.tab.c"
+#line 2149 "y.tab.c"
     break;
 
   case 58: /* forstart: expression  */
-#line 548 "c_compiler.y"
+#line 552 "c_compiler.y"
     {
-        printf("expression\n");
-        BaseNode * node = new BaseNode("For_Expression",NodeType::DEFINITION);
+        // printf("expression\n");
+        BaseNode * node = new BaseNode("For_Expression",NodeType::EXPRESSION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2156 "y.tab.c"
+#line 2160 "y.tab.c"
     break;
 
   case 59: /* expression: CONST  */
-#line 558 "c_compiler.y"
+#line 562 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Constant_Expression",NodeType::EXPRESSION);
         BaseNode * Constant_Node = new BaseNode ((yyvsp[0].num),NodeType::CONST_INT);
         node->addChildNode(Constant_Node);
         (yyval.ast) = node;
     }
-#line 2167 "y.tab.c"
+#line 2171 "y.tab.c"
     break;
 
   case 60: /* expression: identifiers  */
-#line 565 "c_compiler.y"
+#line 569 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Identifier_Expression",NodeType::EXPRESSION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2177 "y.tab.c"
+#line 2181 "y.tab.c"
     break;
 
   case 61: /* expression: expression ASSIGN_OP expression  */
-#line 571 "c_compiler.y"
+#line 575 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Assign",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2188 "y.tab.c"
+#line 2192 "y.tab.c"
     break;
 
   case 62: /* expression: expression '+' expression  */
-#line 578 "c_compiler.y"
+#line 582 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Add",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2199 "y.tab.c"
+#line 2203 "y.tab.c"
     break;
 
   case 63: /* expression: expression '-' expression  */
-#line 585 "c_compiler.y"
+#line 589 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Sub",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2210 "y.tab.c"
+#line 2214 "y.tab.c"
     break;
 
   case 64: /* expression: expression '*' expression  */
-#line 592 "c_compiler.y"
+#line 596 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Mul",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2221 "y.tab.c"
+#line 2225 "y.tab.c"
     break;
 
   case 65: /* expression: expression '/' expression  */
-#line 599 "c_compiler.y"
+#line 603 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Div",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2232 "y.tab.c"
+#line 2236 "y.tab.c"
     break;
 
   case 66: /* expression: expression '%' expression  */
-#line 606 "c_compiler.y"
+#line 610 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Mod",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2243 "y.tab.c"
+#line 2247 "y.tab.c"
     break;
 
   case 67: /* expression: '(' expression ')'  */
-#line 613 "c_compiler.y"
+#line 617 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Braces",NodeType::EXPRESSION);
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 2253 "y.tab.c"
+#line 2257 "y.tab.c"
     break;
 
   case 68: /* expression: '-' expression  */
-#line 619 "c_compiler.y"
+#line 623 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Negative",NodeType::OPERATION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2263 "y.tab.c"
+#line 2267 "y.tab.c"
     break;
 
   case 69: /* expression: expression AND expression  */
-#line 625 "c_compiler.y"
+#line 629 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("And",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2274 "y.tab.c"
+#line 2278 "y.tab.c"
     break;
 
   case 70: /* expression: expression OR expression  */
-#line 632 "c_compiler.y"
+#line 636 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Or",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2285 "y.tab.c"
+#line 2289 "y.tab.c"
     break;
 
   case 71: /* expression: '!' expression  */
-#line 639 "c_compiler.y"
+#line 643 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Not",NodeType::OPERATION);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2295 "y.tab.c"
+#line 2299 "y.tab.c"
     break;
 
   case 72: /* expression: '{' consts '}'  */
-#line 645 "c_compiler.y"
+#line 649 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("{Consts}",NodeType::EXPRESSION);
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 2305 "y.tab.c"
+#line 2309 "y.tab.c"
     break;
 
   case 73: /* expression: expression EQ_OP expression  */
-#line 651 "c_compiler.y"
+#line 655 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Equal_Operation",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2316 "y.tab.c"
+#line 2320 "y.tab.c"
     break;
 
   case 74: /* expression: expression NE_OP expression  */
-#line 658 "c_compiler.y"
+#line 662 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Not_Equal_Operation",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2327 "y.tab.c"
+#line 2331 "y.tab.c"
     break;
 
   case 75: /* expression: expression GT_OP expression  */
-#line 665 "c_compiler.y"
+#line 669 "c_compiler.y"
     {   
         BaseNode * node = new BaseNode("Greater_Operation",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2338 "y.tab.c"
+#line 2342 "y.tab.c"
     break;
 
   case 76: /* expression: expression LT_OP expression  */
-#line 672 "c_compiler.y"
+#line 676 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Less_Operation",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2349 "y.tab.c"
+#line 2353 "y.tab.c"
     break;
 
   case 77: /* expression: expression GE_OP expression  */
-#line 679 "c_compiler.y"
+#line 683 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Greater_Equal_Operation",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2360 "y.tab.c"
+#line 2364 "y.tab.c"
     break;
 
   case 78: /* expression: expression LE_OP expression  */
-#line 686 "c_compiler.y"
+#line 690 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Less_Equal_Operation",NodeType::OPERATION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2371 "y.tab.c"
+#line 2375 "y.tab.c"
     break;
 
   case 79: /* expression: IDENTIFIER '(' arguments ')'  */
-#line 693 "c_compiler.y"
+#line 697 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Function_Call_With_Agrs",NodeType::CALL);
         BaseNode * Identifier_Node = new BaseNode ((yyvsp[-3].str),NodeType::ID);
@@ -2379,33 +2383,33 @@ yyreduce:
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 2383 "y.tab.c"
+#line 2387 "y.tab.c"
     break;
 
   case 80: /* expression: IDENTIFIER '(' ')'  */
-#line 700 "c_compiler.y"
+#line 704 "c_compiler.y"
                         {
         BaseNode * node = new BaseNode("Function_Call_Without_Agrs",NodeType::CALL);
         BaseNode * Identifier_Node = new BaseNode ((yyvsp[-2].str),NodeType::ID);
         node->addChildNode(Identifier_Node);
         (yyval.ast) = node;
     }
-#line 2394 "y.tab.c"
+#line 2398 "y.tab.c"
     break;
 
   case 81: /* expression: '*' IDENTIFIER  */
-#line 707 "c_compiler.y"
+#line 711 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("*id",NodeType::OPERATION);
         BaseNode * Identifier_Node = new BaseNode ((yyvsp[0].str),NodeType::ID);
         node->addChildNode(Identifier_Node);
         (yyval.ast) = node;
     }
-#line 2405 "y.tab.c"
+#line 2409 "y.tab.c"
     break;
 
   case 82: /* expression: IDENTIFIER '[' expression ']'  */
-#line 714 "c_compiler.y"
+#line 718 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("id[exp]",NodeType::OPERATION);
         BaseNode * Identifier_Node = new BaseNode ((yyvsp[-3].str),NodeType::ID);
@@ -2413,53 +2417,53 @@ yyreduce:
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }
-#line 2417 "y.tab.c"
+#line 2421 "y.tab.c"
     break;
 
   case 83: /* expression: SINGLAND IDENTIFIER  */
-#line 722 "c_compiler.y"
+#line 726 "c_compiler.y"
     {   
         BaseNode * node = new BaseNode("&id",NodeType::OPERATION);
         BaseNode * Identifier_Node = new BaseNode ((yyvsp[0].str),NodeType::ID);
         node->addChildNode(Identifier_Node);
         (yyval.ast) = node;
     }
-#line 2428 "y.tab.c"
+#line 2432 "y.tab.c"
     break;
 
   case 84: /* arguments: expression  */
-#line 731 "c_compiler.y"
+#line 735 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Func_Arg",NodeType::ID);
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2438 "y.tab.c"
+#line 2442 "y.tab.c"
     break;
 
   case 85: /* arguments: arguments COMMA expression  */
-#line 737 "c_compiler.y"
+#line 741 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("Func_Args",NodeType::DEFINITION);
         node->addChildNode((yyvsp[-2].ast));
         node->addChildNode((yyvsp[0].ast));
         (yyval.ast) = node;
     }
-#line 2449 "y.tab.c"
+#line 2453 "y.tab.c"
     break;
 
   case 86: /* identifiers: IDENTIFIER  */
-#line 745 "c_compiler.y"
+#line 749 "c_compiler.y"
               {
         BaseNode * node = new BaseNode("id",NodeType::DEFINITION);
         node->addChildNode(new BaseNode((yyvsp[0].str),NodeType::ID));
         (yyval.ast) = node;
     }
-#line 2459 "y.tab.c"
+#line 2463 "y.tab.c"
     break;
 
   case 87: /* identifiers: identifiers IDENTIFIER  */
-#line 751 "c_compiler.y"
+#line 755 "c_compiler.y"
     {
         BaseNode * node = new BaseNode("ids",NodeType::DEFINITION);
         node->addChildNode((yyvsp[-1].ast));
@@ -2469,11 +2473,11 @@ yyreduce:
         // node->addChildNode(new BaseNode($2,NodeType::ID));
         (yyval.ast) = node;
     }
-#line 2473 "y.tab.c"
+#line 2477 "y.tab.c"
     break;
 
 
-#line 2477 "y.tab.c"
+#line 2481 "y.tab.c"
 
       default: break;
     }
@@ -2666,7 +2670,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 763 "c_compiler.y"
+#line 767 "c_compiler.y"
 
 
 // void AddOutput(int Row, char* type, char* text){

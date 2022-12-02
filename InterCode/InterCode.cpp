@@ -26,6 +26,7 @@ QuadItem::QuadItem(int result, OpType op, int arg1, int arg2)
     this->arg1.target = arg1;
     this->arg2.target = arg2;
     this->result.target = result;
+    this->quad_item_type = 0;
 }
 
 QuadItem::QuadItem(int result, OpType op, Symbol *arg1, int arg2)
@@ -34,6 +35,7 @@ QuadItem::QuadItem(int result, OpType op, Symbol *arg1, int arg2)
     this->arg1.symbol = arg1;
     this->arg2.target = arg2;
     this->result.target = result;
+    this->quad_item_type = 1;
 }
 
 QuadItem::QuadItem(int result, OpType op, int arg1, Symbol *arg2)
@@ -42,6 +44,7 @@ QuadItem::QuadItem(int result, OpType op, int arg1, Symbol *arg2)
     this->arg1.target = arg1;
     this->arg2.symbol = arg2;
     this->result.target = result;
+    this->quad_item_type = 2;
 }
 
 QuadItem::QuadItem(int result, OpType op, Symbol *arg1, Symbol *arg2)
@@ -50,6 +53,7 @@ QuadItem::QuadItem(int result, OpType op, Symbol *arg1, Symbol *arg2)
     this->arg1.symbol = arg1;
     this->arg2.symbol = arg2;
     this->result.target = result;
+    this->quad_item_type = 3;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op, int arg1, int arg2)
@@ -58,6 +62,7 @@ QuadItem::QuadItem(Symbol *result, OpType op, int arg1, int arg2)
     this->op = op;
     this->arg1.target = arg1;
     this->arg2.target = arg2;
+    this->quad_item_type = 4;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op, Symbol *arg1, int arg2)
@@ -66,6 +71,7 @@ QuadItem::QuadItem(Symbol *result, OpType op, Symbol *arg1, int arg2)
     this->op = op;
     this->arg1.symbol = arg1;
     this->arg2.target = arg2;
+    this->quad_item_type = 5;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op, int arg1, Symbol *arg2)
@@ -74,6 +80,7 @@ QuadItem::QuadItem(Symbol *result, OpType op, int arg1, Symbol *arg2)
     this->op = op;
     this->arg1.target = arg1;
     this->arg2.symbol = arg2;
+    this->quad_item_type = 6;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op, Symbol *arg1, Symbol *arg2)
@@ -82,6 +89,7 @@ QuadItem::QuadItem(Symbol *result, OpType op, Symbol *arg1, Symbol *arg2)
     this->op = op;
     this->arg1.symbol = arg1;
     this->arg2.symbol = arg2;
+    this->quad_item_type = 7;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op, Symbol *arg1)
@@ -89,6 +97,7 @@ QuadItem::QuadItem(Symbol *result, OpType op, Symbol *arg1)
     this->result.symbol = result;
     this->op = op;
     this->arg1.symbol = arg1;
+    this->quad_item_type = 7;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op, int arg1)
@@ -96,6 +105,7 @@ QuadItem::QuadItem(Symbol *result, OpType op, int arg1)
     this->result.symbol = result;
     this->op = op;
     this->arg1.target = arg1;
+    this->quad_item_type = 6;
 }
 
 QuadItem::QuadItem(int result, OpType op)
@@ -104,6 +114,7 @@ QuadItem::QuadItem(int result, OpType op)
     this->arg1.symbol = NULL;
     this->arg2.symbol = NULL;
     this->result.target = result;
+    this->quad_item_type = 3;
 }
 
 QuadItem::QuadItem(Symbol *result, OpType op)
@@ -112,6 +123,7 @@ QuadItem::QuadItem(Symbol *result, OpType op)
     this->arg1.symbol = NULL;
     this->arg2.symbol = NULL;
     this->result.symbol = result;
+    this->quad_item_type = 10;
 }
 
 InterCode::InterCode(BaseNode *root)
@@ -212,7 +224,612 @@ void InterCode::Generate(BaseNode *node, SymbolArea *symbolArea)
     }
 }
 
-void QuadItem::printItemInfo(int i) {}
+// void QuadItem::printItemInfo(int i) {}
+void QuadItem::printItemInfo(int i)
+{
+    OpType op_type = this->op;
+    int type = this->quad_item_type;
+    // std::cout<<"Quad-Type: "<<type<<"  ";
+    // std::cout<<"Op_Type: "<<static_cast<int>(op_type)<<std::endl;
+    switch (op)
+    {
+    case OpType::ADDTION:
+        if (type == 7)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " ADD "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 6)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " ADD "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 5)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " ADD "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        else if (type == 4)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " ADD "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        break;
+    case OpType::SUBTRACTION:
+        if (type == 7)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " SUB "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 6)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " SUB "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 5)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " SUB "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        else if (type == 4)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " SUB "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        break;
+    case OpType::MULTIPLICATION:
+        if (type == 7)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " MUL "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 6)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " MUL "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 5)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " MUL "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        else if (type == 4)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " MUL "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        break;
+    case OpType::DIVISION:
+        if (type == 7)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " DIV "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 6)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " DIV "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 5)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " DIV "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        else if (type == 4)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " DIV "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        break;
+    case OpType::MOD:
+        if (type == 7)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " MOD "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 6)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " MOD "
+                      << this->arg2.symbol->getIdName()
+                      << std::endl;
+        }
+        else if (type == 5)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.symbol->getIdName()
+                      << " MOD "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        else if (type == 4)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << " MOD "
+                      << this->arg2.target
+                      << std::endl;
+        }
+        break;
+    // case power:
+    //     if(type == 7)
+    //     {
+    //        std::cout<<"L"<<i<<":  "
+    //         <<this->result.symbol->getIdName()
+    //         <<" := "
+    //         <<this->arg1.symbol->getIdName()
+    //         <<" POW "
+    //         <<this->arg2.symbol->getIdName()
+    //         <<std::endl;
+    //     }
+    //     else if(type == 6)
+    //     {
+    //        std::cout<<"L"<<i<<":  "
+    //         <<this->result.symbol->getIdName()
+    //         <<" := "
+    //         <<this->arg1.target
+    //         <<" POW "
+    //         <<this->arg2.symbol->getIdName()
+    //         <<std::endl;
+    //     }
+    //     else if(type == 5)
+    //     {
+    //         std::cout<<"L"<<i<<":  "
+    //         <<this->result.symbol->getIdName()
+    //         <<" := "
+    //         <<this->arg1.symbol->getIdName()
+    //         <<" POW "
+    //         <<this->arg2.target
+    //         <<std::endl;
+    //     }
+    //     else if(type == 4)
+    //     {
+    //         std::cout<<"L"<<i<<":  "
+    //         <<this->result.symbol->getIdName()
+    //         <<" := "
+    //         <<this->arg1.target
+    //         <<" POW "
+    //         <<this->arg2.target
+    //         <<std::endl;
+    //     }
+    //     break;
+    case OpType::ASSIGN:
+    {
+        if (type == 6)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName()
+                      << " := "
+                      << this->arg1.target
+                      << std::endl;
+        }
+        else if (type == 7)
+        {
+            std::cout << "L" << i << ":  "
+                      << this->result.symbol->getIdName() << " := "
+                      << this->arg1.symbol->getIdName() << std::endl;
+            // std::cout<<result.symbol->getIdName()<<" offset: "<<result.var->getSymOffset()<<std::endl;
+            // std::cout<<arg1.symbol->getIdName()<<" offset: "<<arg1.var->getSymOffset()<<std::endl;
+        }
+    }
+    break;
+    case JUMP_LT:
+        if (type == 3)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " < "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 2)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " < "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 1)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " < "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 0)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " < "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+
+        break;
+    case JUMP_LE:
+        if (type == 3)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " <= "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 2)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " <= "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 1)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " <= "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 0)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " <= "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+
+        break;
+    case JUMP_GT:
+        if (type == 3)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " > "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 2)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " > "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 1)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " > "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 0)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " > "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+
+        break;
+    case JUMP_GE:
+        if (type == 3)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " >= "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 2)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " >= "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 1)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " >="
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 0)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " >= "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+
+        break;
+    case JUMP_EQ:
+        if (type == 3)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " == "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 2)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " == "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 1)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " == "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 0)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " == "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+
+        break;
+    case JUMP_NE:
+        if (type == 3)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " != "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 2)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " != "
+                      << this->arg2.symbol->getIdName()
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 1)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.symbol->getIdName()
+                      << " != "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+        else if (type == 0)
+        {
+            std::cout << "L" << i << ":  "
+                      << "if "
+                      << this->arg1.target
+                      << " != "
+                      << this->arg2.target
+                      << " goto "
+                      << "L"
+                      << this->result.target
+                      << std::endl;
+        }
+
+        break;
+    case JUMP:
+        std::cout << "L" << i << ":  "
+                  << " goto "
+                  << "L"
+                  << this->result.target
+                  << std::endl;
+        break;
+    case PRINT:
+        std::cout << "L" << i << ":  "
+                  << "print_int "
+                  << this->result.symbol->getIdName() << std::endl;
+        break;
+
+    default:
+        //    std::cout<<"\033[31m Error! No such quad! \033[0m"<<std::endl;
+
+        break;
+    }
+}
 
 // 表达式生成四元式
 Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
@@ -241,20 +858,20 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
     break;
     case static_cast<int>(NodeType::OPERATION):
     {
-        printf("############OPPPPPPPP:%s\n", node_content.c_str());
+        // printf("############OPPPPPPPP:%s\n", node_content.c_str());
         // 对于加减乘除生成四元式
         if (node_content == "Add" || node_content == "Sub" || node_content == "Mul" || node_content == "Div" || node_content == "Mod")
         {
-            printf("operation\n");
+            // printf("operation\n");
             Symbol *arg1 = Exp_Stmt_Generate(node->getChildNode(), area);
 
-            // arg1->setIsUsed();
+            arg1->setIsUsed();
             Symbol *arg2 = Exp_Stmt_Generate(node->getChildNode()->getBrotherNode(), area);
-            // arg2->setIsUsed();
+            arg2->setIsUsed();
             Symbol *result = new Symbol("temp " + std::to_string(this->temp_list.size()), SymbolType::temp_var, 4);
             this->temp_list.push_back(result);
             OpType op;
-            printf("operation222\n");
+            // printf("operation222\n");
             if (node_content == "Add")
             {
                 op = OpType::ADDTION;
@@ -276,9 +893,9 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
                 op = OpType::MOD;
             }
             QuadItem *quad;
-            printf("operation333 %s\n", node_content.c_str());
-            printf("%s\n", arg1->getIdName().c_str());
-            printf("%d\n", isNumber(arg1->getIdName().c_str()));
+            // printf("operation333 %s\n", node_content.c_str());
+            // printf("%s\n", arg1->getIdName().c_str());
+            // printf("%d\n", isNumber(arg1->getIdName().c_str()));
             if (isNumber(arg1->getIdName()) && isNumber(arg2->getIdName()))
             {
                 quad = new QuadItem(result, op, std::stoi(arg1->getIdName()), std::stoi(arg2->getIdName()));
@@ -295,16 +912,17 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 quad = new QuadItem(result, op, arg1, arg2);
             }
-            printf("operation444\n");
+            // printf("operation444\n");
             this->quad_list.push_back(quad);
             return result;
         }
         // 对于赋值生成四元式
         else if (node_content == "Assign")
         {
+            printf("ASSIGNAssign\n");
             OpType op = ASSIGN;
             Symbol *result = Exp_Stmt_Generate(node->getChildNode(), area);
-            // result->setIsUsed();
+            result->setIsUsed();
             Symbol *arg1 = Exp_Stmt_Generate(node->getChildNode()->getBrotherNode(), area);
             SymbolType result_symbol_type = result->getSymbolType();
             SymbolType arg1_symbol_type = arg1->getSymbolType();
@@ -325,10 +943,12 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             QuadItem *quad;
             if (isNumber(arg1->getIdName()))
             {
+                printf("ADD AN QUAD：isNumber ASSIGN %s \n", arg1->getIdName().c_str());
                 quad = new QuadItem(result, op, std::stoi(arg1->getIdName()));
             }
             else
             {
+                printf("ADD AN QUAD：isNotNumber %s \n", arg1->getIdName().c_str());
                 quad = new QuadItem(result, op, arg1);
             }
             this->quad_list.push_back(quad);
@@ -337,14 +957,14 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
         // 对于基本的逻辑运算
         else if (node_content == "Equal_Operation" || node_content == "Not_Equal_Operation" || node_content == "Greater_Operation" || node_content == "Greater_Equal_Operation" || node_content == "Less_Operation" || node_content == "Less_Equal_Operation")
         {
-            printf("logic operation\n");
+            // printf("logic operation\n");
             std::cout << area << std::endl;
             Symbol *arg1 = Exp_Stmt_Generate(node->getChildNode(), area);
-            printf("logic operation1\n");
-            // arg1->setIsUsed();
+            // printf("logic operation1\n");
+            arg1->setIsUsed();
             Symbol *arg2 = Exp_Stmt_Generate(node->getChildNode()->getBrotherNode(), area);
-            // arg2->setIsUsed();
-            printf("logic operation2\n");
+            arg2->setIsUsed();
+            // printf("logic operation2\n");
             OpType op;
             if (node_content == "Equal_Operation")
             {
@@ -370,7 +990,7 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 op = JUMP_LE;
             }
-            printf("logic operation3\n");
+            // printf("logic operation3\n");
 
             QuadItem *quad_true;
             if (isNumber(arg1->getIdName()) && isNumber(arg2->getIdName()))
@@ -389,7 +1009,7 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 quad_true = new QuadItem(int(NULL), op, arg1, arg2);
             }
-            printf("logic operation4\n");
+            // printf("logic operation4\n");
 
             QuadItem *quad_false = new QuadItem(int(NULL), JUMP);
             std::list<int> this_true_list;
@@ -503,7 +1123,8 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             tresult->setPointerAddr(offset);
             return tresult;
         }
-        else if (node_content == "Negative"){
+        else if (node_content == "Negative")
+        {
             BaseNode *child = node->getChildNode();
             Symbol *result = Exp_Stmt_Generate(child, area);
             std::string result_name = result->getIdName();
@@ -526,10 +1147,10 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             std::string id_name = node->getChildNode()->getChildNode()->getContent();
             // printf("Identifier_Expression %s\n", id_name.c_str());
             // std::cout << area << std::endl;
-            
+
             Symbol *id = area->findSymbolGlobally(id_name);
             std::cout << "aaaaaaaaaaaaaaaaaaaa:" << id << std::endl;
-            printf("Identifier_Expression %s\n", id_name.c_str());
+            // printf("Identifier_Expression %s\n", id_name.c_str());
             return id;
         }
         else if (node_content == "For_Expression")
@@ -538,10 +1159,10 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "Braces")
         {
-            printf("braces begin\n");
+            // printf("braces begin\n");
             Symbol *symbol = Exp_Stmt_Generate(node->getChildNode(), area);
-            // symbol->setIsUsed();
-            printf("braces csdsa\n");
+            symbol->setIsUsed();
+            // printf("braces csdsa\n");
             return symbol;
         }
     }
@@ -575,8 +1196,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
     case static_cast<int>(NodeType::STATEMENT):
     {
         printf("-----------------NodeContent: %s\n", node_content.c_str());
-        if (node_content == "If_Statement")
-        {
+        if (node_content == "If_Statement"){
             BaseNode *condition = node->getChildNode();
             Exp_Stmt_Generate(condition, area);
             int start = this->quad_list.size();
@@ -593,7 +1213,6 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             QuadItem *item = new QuadItem(end, OpType::JUMP);
             this->quad_list.push_back(item);
         }
-
         else if (node_content == "If_Else_Statement")
         {
             BaseNode *condition = node->getChildNode();
@@ -609,7 +1228,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             //回填if的条件为真该跳转的位置的trueList
             backpatch(&ifTrue, start);
             //创建一个新的符号表,是if为真的符号表
-            printf("add if area\n");
+            // printf("add if area\n");
             SymbolArea *ifSymbelArea = area->addNewChildArea();
             //生成if的body
             BaseNode *ifContent = condition->getBrotherNode();
@@ -625,7 +1244,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             backpatch(&ifFalse, elseStart);
 
             //生成else的body
-            printf("add else area\n");
+            // printf("add else area\n");
             SymbolArea *elseSymbelArea = area->addNewChildArea();
             BaseNode *elseContent = ifContent->getBrotherNode();
             Body_Generate(elseContent, elseSymbelArea);
@@ -635,11 +1254,11 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "While_Statement")
         {
-            printf("while-------------------\n");
+            // printf("while-------------------\n");
             BaseNode *condition = node->getChildNode();
             //去生成While的条件的三地址码
             Exp_Stmt_Generate(condition, area);
-            printf("while----------kjhkjkjhkjhkjh---------\n");
+            // printf("while----------kjhkjkjhkjhkjh---------\n");
 
             int start = quad_list.size();
             //存着While的条件为真该跳转的位置的trueList
@@ -668,40 +1287,43 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "For_Def_SEMI_Expression_SEMI_Expression")
         {
-            printf("For_Def_SEMI_Expression_SEMI_Expression\n");
+            // printf("For_Def_SEMI_Expression_SEMI_Expression\n");
             //生成for的初始化声明
             BaseNode *forDeclear = node->getChildNode();
-            printf("aaaaaaaaaaaaaaaaaa\n");
+            // printf("aaaaaaaaaaaaaaaaaa\n");
             // std::cout << "dasdasd" << area << std::endl;
             // printf("Start to find\n\n");
             // area->findSymbolGlobally("a");
             SymbolArea *forDeclearArea = area->addNewChildArea();
-            printf("bbbbbbbbbb\n");
+            // printf("bbbbbbbbbb\n");
             Body_Generate(forDeclear->getChildNode(), forDeclearArea);
-            printf("forDeclearArea\n");
+            // printf("forDeclearArea\n");
             //下一句是for循环的开始
             int forStart = quad_list.size();
             BaseNode *forCondition = forDeclear->getBrotherNode();
-            printf("forConditiowawsdfasdn\n");
+            // printf("forConditiowawsdfasdn\n");
             Exp_Stmt_Generate(forCondition, forDeclearArea);
-            printf("forConditio111n\n");
+            // printf("forConditio111n\n");
             std::list<int> forTrue = trueList.top();
             std::list<int> forFalse = falseList.top();
             trueList.pop();
             falseList.pop();
-            printf("forCondition\n");
+            // printf("forCondition\n");
             //???
             backpatch(&forTrue, forTrue.back() + 2);
             // SymbolArea *forBodyArea = area->addNewChildArea();
             BaseNode *forBody = forCondition->getBrotherNode()->getBrotherNode();
             Body_Generate(forBody, forDeclearArea);
-            printf("forBody\n");
+            // printf("forBody\n");
             BaseNode *forUpdate = forCondition->getBrotherNode();
             Exp_Stmt_Generate(forUpdate, forDeclearArea);
             QuadItem *temp = new QuadItem(forStart, OpType::JUMP);
             this->quad_list.push_back(temp);
             backpatch(&forFalse, quad_list.size());
         }
+        else if(node_content == "Expression_Statement"){
+            Exp_Stmt_Generate(node->getChildNode(), area);
+        }   
         else
         {
             BaseNode *child = node->getChildNode();
@@ -716,7 +1338,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
     {
         if (node_content == "Declare_Statement")
         {
-            printf("kjh1\n");
+            // printf("kjh1\n");
             int type = static_cast<int>(SymbolType::integer); //默认为int
             BaseNode *child = node->getChildNode();
             if (child->getContent() == "void_type")
@@ -736,7 +1358,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "Declare_Variable" || node_content == "Declare_Variables")
         {
-            printf("kjh2\n");
+            // printf("kjh2\n");
             // printf("aaaa:%s\n", node->getContent());
             BaseNode *child = node->getChildNode();
             // printf("bbbb:%s\n", node->getParentNode()->getContent());
@@ -791,7 +1413,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                     }
                     else
                     {
-                        std::string identifier_name = "*" + ccNode->getContent();
+                        std::string identifier_name = ccNode->getChildNode()->getContent();
                         Symbol *identifier_symbol = area->findSymbolLocally(identifier_name);
                         if (identifier_symbol != nullptr && static_cast<int>(identifier_symbol->getSymbolType()) == static_cast<int>(SymbolType::integer))
                         {
@@ -801,6 +1423,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                         Symbol *symbol = new Symbol(identifier_name, SymbolType::var, 4);
                         area->setOffset(area->getOffset() + symbol->getWidth());
                         symbol->setPointerAddr(area->getOffset());
+                        printf("add symbol : %s\n", symbol->getIdName().c_str());
                         area->addSymbol(symbol);
                     }
                 }
@@ -832,7 +1455,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                     }
                     else
                     {
-                        printf("kjh5\n");
+                        printf("enter INT type\n");
 
                         std::string identifier_name = child->getChildNode()->getChildNode()->getContent();
                         Symbol *identifier_symbol = area->findSymbolLocally(identifier_name);
@@ -841,27 +1464,27 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                             std::cout << "error: redefinition of " << identifier_name << std::endl;
                             exit(1);
                         }
-                        printf("xp-1\n");
+                        // printf("xp-1\n");
                         BaseNode *ccNode = child->getChildNode()->getBrotherNode();
-                        printf("xp-1.5\n");
-                        printf("%s\n",ccNode->getContent().c_str());
+                        // printf("xp-1.5\n");
+                        printf("%s\n", ccNode->getContent().c_str());
                         Symbol *symbol = Exp_Stmt_Generate(ccNode, area);
-                        printf("xp-2\n");
+                        // printf("xp-2\n");
                         std::string symbol_name = symbol->getIdName();
 
-                        printf("xp1\n");
+                        // printf("xp1\n");
                         Symbol *var = new Symbol(identifier_name, SymbolType::var, 4);
                         int var_type = static_cast<int>(var->getSymbolType());
                         int symbol_type = static_cast<int>(symbol->getSymbolType());
-                        printf("%d %d \n",var_type,symbol_type);
+                        // printf("%d %d \n", var_type, symbol_type);
                         if (var_type == 2 && symbol_type == 2)
                         {
                             area->setOffset(area->getOffset() + var->getWidth());
                             var->setPointerAddr(area->getOffset());
                             area->addSymbol(var);
-                            printf("var\n");
+                            // printf("var\n");
                         }
-                        printf("xp2\n");
+                        // printf("xp2\n");
                         QuadItem *quad;
                         if (isNumber(symbol_name))
                         {
@@ -873,9 +1496,14 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                         }
                         this->quad_list.push_back(quad);
 
-                        printf("xp3\n");
+                        // printf("xp3\n");
                     }
                 }
+            }
+            BaseNode *brother = child->getBrotherNode();
+            if (brother)
+            {
+                Body_Generate(brother, area);
             }
         }
     }

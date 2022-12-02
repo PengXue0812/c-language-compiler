@@ -46,6 +46,7 @@ public:
     Arg arg1;
     Arg arg2;
     Arg result;
+    int quad_item_type;
     QuadItem(int result,OpType op);
     QuadItem(Symbol* result, OpType op, int arg1, int arg2);
     QuadItem(Symbol* result, OpType op, Symbol* arg1, int arg2);

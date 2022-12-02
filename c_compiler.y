@@ -341,7 +341,7 @@ statement:
     //表达式;
     expression SEMI
     {
-        BaseNode * node = new BaseNode("Expression",NodeType::STATEMENT);
+        BaseNode * node = new BaseNode("Expression_Statement",NodeType::STATEMENT);
         node->addChildNode($1);
         $$ = node;
     }

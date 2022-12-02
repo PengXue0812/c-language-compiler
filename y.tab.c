@@ -1851,7 +1851,7 @@ yyreduce:
   case 31: /* statement: expression SEMI  */
 #line 343 "c_compiler.y"
     {
-        BaseNode * node = new BaseNode("Expression",NodeType::STATEMENT);
+        BaseNode * node = new BaseNode("Expression_Statement",NodeType::STATEMENT);
         node->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = node;
     }

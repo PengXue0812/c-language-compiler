@@ -9,11 +9,12 @@ enum NodeType {
   STATEMENT,   // 语句
   DEFINITION,  // 定义
   MODIFY,      // 赋值
-  CALL,        // 函数调用
+  FUNCTION_CALL,        // 函数调用
   POINTER,     // 指针
   ARRAY,       // 数组
   ADDRESS,     // 地址
   BODY         // 函数体
+
 };
 
 #endif

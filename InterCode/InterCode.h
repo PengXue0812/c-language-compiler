@@ -31,6 +31,7 @@ enum OpType
     RETURN_OP,
     PRINT,
     SCAN,
+    END
 };
 
 union Arg

@@ -472,13 +472,13 @@ statement:
     }
     | PRINTF '(' D_QUO expression D_QUO ')' SEMI
     {
-        BaseNode * node = new BaseNode ("Printf_String",NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("Print_String",NodeType::STATEMENT);
         node->addChildNode($4);
         $$ = node;
     }
     | PRINTF '(' expression ')' SEMI
     {
-        BaseNode * node = new BaseNode ("Printf_Expression",NodeType::STATEMENT);
+        BaseNode * node = new BaseNode ("Print_Expression",NodeType::STATEMENT);
         node->addChildNode($3);
         $$ = node;
     }
@@ -695,22 +695,24 @@ expression:
     }
     | IDENTIFIER '(' arguments ')'
     {
-        BaseNode * node = new BaseNode("Function_Call_With_Agrs",NodeType::CALL);
+        BaseNode * node = new BaseNode("Function_Call_With_Args",NodeType::FUNCTION_CALL);
         BaseNode * Identifier_Node = new BaseNode ($1,NodeType::ID);
         node->addChildNode(Identifier_Node);
         node->addChildNode($3);
         $$ = node;
     }
     | IDENTIFIER '(' ')'{
-        BaseNode * node = new BaseNode("Function_Call_Without_Agrs",NodeType::CALL);
+        BaseNode * node = new BaseNode("Function_Call_Without_Args",NodeType::FUNCTION_CALL);
         BaseNode * Identifier_Node = new BaseNode ($1,NodeType::ID);
         node->addChildNode(Identifier_Node);
         $$ = node;
     }
     | '*' IDENTIFIER
-    {
+    {   
+        // BaseNode * pointer_exp = new BaseNode("Pointer_Expression",NodeType::EXPRESSION);
         BaseNode * node = new BaseNode("*id",NodeType::OPERATION);
         BaseNode * Identifier_Node = new BaseNode ($2,NodeType::ID);
+        // pointer_exp->addChildNode(Identifier_Node);
         node->addChildNode(Identifier_Node);
         $$ = node;
     }

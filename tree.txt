@@ -1,28 +1,40 @@
-                                                                                                        program                                                                                                                                                                             
-                                                                                                           |                                                                                                                                                                                
-    ______________________________________________________________________________________________Def_Func_Block_Body______________________________________________________________________________________________                                                                         
-   /               /                                                                                                                                                                                               \                                                                        
-int_Type Function_Without_Param                                                                                                                                                                                   Body                                                                      
-                   |                                                                                                                                                                                               |                                                                        
-                  main                                                                                                                                                    _____________________________________Statements_____________________________________                              
-                                                                                                                                                                         /                                                                                    \                             
-                                                                                                                                  ___________________________________Statements___________________________________                                   _Declare_Statement__                   
-                                                                                                                                 /                                                                                \                                 /                    \                  
-                                                                                             ________________________________Statements_______________________________                                   _Declare_Statement__                    int_Type         Declare_Variable          
-                                                                                            /                                                                         \                                 /                    \                                           |                  
-                                                       _________________________________Statements_________________________________                             Body_Statement                       int_Type         Declare_Variable                           _Variable_Assign_          
-                                                      /                                                                            \                                  |                                                      |                                  /                 \         
-                                    __________Declare_Statement__________                                                      Expression                            Body                                            _Variable_Assign_                    Def_Identifier Constant_Expression
-                                   /                                     \                                                         |                                  |                                             /                 \                         |                 |         
-                                int_Type                 ________Declare_Variables_________                               _______Assign_______               _Declare_Statement__                             Def_Identifier Constant_Expression                c                200        
-                                                        /                                  \                             /                    \             /                    \                                  |                 |                                                     
-                                                _Variable_Assign_                   Declare_Variable           Identifier_Expression Constant_Expression int_Type         Declare_Variable                          c                100                                                    
-                                               /                 \                         |                            /                     |                                  |                                                                                                          
-                                         Def_Identifier Constant_Expression        _Variable_Assign_                    id                   100                         _Variable_Assign_                                                                                                  
-                                               |                 |                /                 \                   |                                               /                 \                                                                                                 
-                                               a                 1          Def_Identifier Constant_Expression          b                                         Def_Identifier Constant_Expression                                                                                        
-                                                                                  |                 |                                                                   |                 |                                                                                                 
-                                                                                  b                 1                                                                   c                100                                                                                                
+                                                                                                                                                                               program                                                                                                                                                                                                              
+                                                                                                                                                                                  |                                                                                                                                                                                                                 
+    _____________________________________________________________________________________________________________________________________________________________________Def_Func_Block_Body_____________________________________________________________________________________________________________________________________________________________________                                   
+   /               /                                                                                                                                                                                                                                                                                                                                             \                                  
+int_Type Function_Without_Param                                                                                                                                                                                                                                                                                                                                 Body                                
+                   |                                                                                                                                                                                                                                                                                                                                             |                                  
+                  main                                                                                                                                                                                                                                                                                                                   ____________________Statements___________________          
+                                                                                                                                                                                                                                                                                                                                        /                                                 \         
+                                                                                                                                                                                                                                                                                                              ______________________Statements______________________              Return_Expression 
+                                                                                                                                                                                                                                                                                                             /                                                      \                     |         
+                                                                                                                                                                                                                                                                               __________________________Statements_________________________               Expression_Statement  Constant_Expression
+                                                                                                                                                                                                                                                                              /                                                             \                       |                     |         
+                                                                                                                                                                                                                                                    ______________________Statements______________________                         Expression_Statement  Function_Call_With_Args          0         
+                                                                                                                                                                                                                                                   /                                                      \                                 |                  /      \                             
+                                                                                                                                                                                                                         ______________________Statements______________________                  Expression_Statement            Function_Call_With_Args     print Func_Arg                         
+                                                                                                                                                                                                                        /                                                      \                          |                            /      \                       |                             
+                                                                                                                                                                                            ________________________Statements_______________________                 Expression_Statement   ___________Assign___________            print Func_Arg                  *id                            
+                                                                                                                                                                                           /                                                         \                         |            /                            \                    |                      /                              
+                                                                                                                                                              _________________________Statements________________________                    Declare_Statement               Assign        *id                       ___Div___               *id                     pb                             
+                                                                                                                                                             /                                                           \                   /                \              /   \         /                        /         \              /                                                      
+                                                                                                                                _________________________Statements_________________________                     Declare_Statement        int_Type     Declare_Variable     *id *id        pa                   ___Mul____   *id             pa                                                     
+                                                                                                                               /                                                            \                    /                \                           |             /   /                              /          \  /                                                                      
+                                                                                                   ________________________Statements________________________                       Declare_Statement        int*_Type     Declare_Variable            Variable_Assign      pb  pa                        ____Mul_____   *id pb                                                                     
+                                                                                                  /                                                          \                      /                \                            |                      /         \                                     /            \  /                                                                          
+                                                                    __________________________Statements_________________________                   Expression_Statement        int*_Type     Declare_Variable             Variable_Assign         Def_Identifier *id                          Identifier_Expression *id pa                                                                         
+                                                                   /                                                             \                           |                                       |                       /         \                 |        /                                     /            /                                                                              
+                                              _________________Statements________________                               Expression_Statement      Function_Call_With_Args                     Variable_Assign          Def_Identifier &id                t        pb                                    id           pb                                                                             
+                                             /                                           \                                       |                    /             \                           /         \                  |         |                                                                |                                                                                           
+                                    _Declare_Statement__                        _Declare_Statement__                  Function_Call_With_Args       print        Func_Arg                 Def_Identifier &id                 pb        b                                                                t                                                                                           
+                                   /                    \                      /                    \                     /             \                           |                           |         |                                                                                                                                                                                         
+                                int_Type         Declare_Variable           int_Type         Declare_Variable           print        Func_Arg             Identifier_Expression                 pa        a                                                                                                                                                                                         
+                                                        |                                           |                                   |                          /                                                                                                                                                                                                                                
+                                                _Variable_Assign_                           _Variable_Assign_                 Identifier_Expression                id                                                                                                                                                                                                                               
+                                               /                 \                         /                 \                         /                           |                                                                                                                                                                                                                                
+                                         Def_Identifier Constant_Expression          Def_Identifier Constant_Expression                id                          b                                                                                                                                                                                                                                
+                                               |                 |                         |                 |                         |                                                                                                                                                                                                                                                            
+                                               a                 2                         b                 3                         a                                                                                                                                                                                                                                                            
 program
 Def_Func_Block_Body
 int_Type
@@ -33,43 +45,120 @@ Body
 -----------------NodeContent: Statements
 -----------------NodeContent: Statements
 -----------------NodeContent: Statements
-`#W˝
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+∞˚ü˝
 kjh3
 kjh4
 enter INT type
 Constant_Expression
 Constant_Expression
 nishiadsa:a
-P W˝
+∞˚ü˝
 kjh3
 kjh4
 enter INT type
 Constant_Expression
 Constant_Expression
 nishiadsa:b
------------------NodeContent: Expression
------------------NodeContent: Body_Statement
-P W˝
+-----------------NodeContent: Expression_Statement
+Function_Call_With_Args
+ENTER PRINT
+var_name = aAAA:b
+AAA:a
+END FIND
+PRINT SUCCESS
+-----------------NodeContent: Expression_Statement
+Function_Call_With_Args
+ENTER PRINT
+var_name = bAAA:b
+AAA:a
+END FIND
+PRINT SUCCESS
+‡†˝
+kjh3
+kjh4
+&id
+AAA:b
+AAA:a
+nishiadsa:pa
+†˝
+kjh3
+kjh4
+&id
+AAA:pa
+AAA:b
+AAA:a
+nishiadsa:pb
+
 kjh3
 kjh4
 enter INT type
-Constant_Expression
-Constant_Expression
-nishiadsa:c
-Ä)W˝
-kjh3
-kjh4
-enter INT type
-Constant_Expression
-Constant_Expression
-ê,W˝
-kjh3
-kjh4
-enter INT type
-Constant_Expression
-Constant_Expression
-L0:  a := 1
-L1:  b := 1
-L2:  c := 100
-L3:  c := 100
-L4:  c := 200
+*id
+*id
+AAA:pa
+AAA:pb
+AAA:b
+AAA:a
+nishiadsa:t
+-----------------NodeContent: Expression_Statement
+Assign
+ASSIGNAssign
+*id
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+*id
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+ADD AN QUADÔºöisNotNumber *pa 
+-----------------NodeContent: Expression_Statement
+Assign
+ASSIGNAssign
+*id
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+Div
+Mul
+Mul
+Identifier_Expression
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+aaaaaaaaaaaaaaaaaaaa:0x5616562b0a70
+*id
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+*id
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+*id
+AAA:pa
+AAA:t
+AAA:pb
+AAA:b
+AAA:a
+ADD AN QUADÔºöisNotNumber temp 2 
+-----------------NodeContent: Expression_Statement
+Function_Call_With_Args

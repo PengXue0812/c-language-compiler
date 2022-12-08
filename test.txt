@@ -1,16 +1,17 @@
 //#include<stdio.h>
 
-int main() {
-    int a = 1, b = 1;
-    int c;
-
-    // Fibonacci
-    for (int i = 2; i < 20; i=i+1) {
-        c = a;
-        a = a + b;
-        b = c;
-    }
-
-    //printf("%d %d\n", a, b);
+int main()
+{
+    int a = 2;
+    int b = 3;
+    print(a);
+    print(b);
+    int* pa = &a;
+    int* pb = &b;
+    int t = *pb;
+    *pb = *pa;
+    *pa = t**pb**pa / *pb;
+    print(*pa);
+    print(*pb);
     return 0;
 }

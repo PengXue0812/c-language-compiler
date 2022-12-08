@@ -135,7 +135,8 @@ InterCode::InterCode(BaseNode *root)
 void InterCode::Root_Generate()
 {
     Generate(this->root, this->rootTable);
-
+    QuadItem *item = new QuadItem(-1, END);
+    this->quad_list.push_back(item);
     int len = this->quad_list.size();
     int i = 0;
     while (i < len)
@@ -443,48 +444,6 @@ void QuadItem::printItemInfo(int i)
                       << std::endl;
         }
         break;
-    // case power:
-    //     if(type == 7)
-    //     {
-    //        std::cout<<"L"<<i<<":  "
-    //         <<this->result.symbol->getIdName()
-    //         <<" := "
-    //         <<this->arg1.symbol->getIdName()
-    //         <<" POW "
-    //         <<this->arg2.symbol->getIdName()
-    //         <<std::endl;
-    //     }
-    //     else if(type == 6)
-    //     {
-    //        std::cout<<"L"<<i<<":  "
-    //         <<this->result.symbol->getIdName()
-    //         <<" := "
-    //         <<this->arg1.target
-    //         <<" POW "
-    //         <<this->arg2.symbol->getIdName()
-    //         <<std::endl;
-    //     }
-    //     else if(type == 5)
-    //     {
-    //         std::cout<<"L"<<i<<":  "
-    //         <<this->result.symbol->getIdName()
-    //         <<" := "
-    //         <<this->arg1.symbol->getIdName()
-    //         <<" POW "
-    //         <<this->arg2.target
-    //         <<std::endl;
-    //     }
-    //     else if(type == 4)
-    //     {
-    //         std::cout<<"L"<<i<<":  "
-    //         <<this->result.symbol->getIdName()
-    //         <<" := "
-    //         <<this->arg1.target
-    //         <<" POW "
-    //         <<this->arg2.target
-    //         <<std::endl;
-    //     }
-    //     break;
     case OpType::ASSIGN:
     {
         if (type == 6)
@@ -820,8 +779,13 @@ void QuadItem::printItemInfo(int i)
         break;
     case PRINT:
         std::cout << "L" << i << ":  "
-                  << "print_int "
+                  << "print "
                   << this->result.symbol->getIdName() << std::endl;
+        break;
+
+    case END:
+        std::cout << "L" << i << ":  "
+                  << "END" << std::endl;
         break;
 
     default:
@@ -845,14 +809,35 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
     int type = static_cast<int>(node->getNodeType());
     switch (type)
     {
-    // 不知道意义何在？
-    case static_cast<int>(NodeType::DEFINITION):
+    case static_cast<int>(NodeType::FUNCTION_CALL):
     {
-        if (node_content == "id")
+        if (node_content == "Function_Call_With_Args")
         {
-            std::string id_name = node->getChildNode()->getContent();
-            Symbol *symbol = area->findSymbolGlobally(id_name);
-            return symbol;
+            BaseNode *child = node->getChildNode();
+            if (child->getContent() == "print")
+            {
+                printf("ENTER PRINT\n");
+                std::string var_name;
+                bool isPointer = false;
+                Symbol *var;
+                if (child->getBrotherNode()->getChildNode()->getContent() == "Identifier_Expression")
+                {
+                    printf("ID\n");
+                    var_name = child->getBrotherNode()->getChildNode()->getChildNode()->getChildNode()->getContent();
+                    var = area->findSymbolGlobally(var_name);
+                }
+                else
+                {
+                    printf("PON\n");
+                    var = Exp_Stmt_Generate(child->getBrotherNode()->getChildNode(), area);
+                }
+
+                // printf("END FIND\n");
+
+                QuadItem *quad = new QuadItem(var, OpType::PRINT);
+                this->quad_list.push_back(quad);
+                printf("PRINT SUCCESS\n");
+            }
         }
     }
     break;
@@ -1196,7 +1181,8 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
     case static_cast<int>(NodeType::STATEMENT):
     {
         printf("-----------------NodeContent: %s\n", node_content.c_str());
-        if (node_content == "If_Statement"){
+        if (node_content == "If_Statement")
+        {
             BaseNode *condition = node->getChildNode();
             Exp_Stmt_Generate(condition, area);
             int start = this->quad_list.size();
@@ -1321,9 +1307,10 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             this->quad_list.push_back(temp);
             backpatch(&forFalse, quad_list.size());
         }
-        else if(node_content == "Expression_Statement"){
+        else if (node_content == "Expression_Statement")
+        {
             Exp_Stmt_Generate(node->getChildNode(), area);
-        }   
+        }
         else
         {
             BaseNode *child = node->getChildNode();

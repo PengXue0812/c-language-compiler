@@ -1354,7 +1354,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             printf("%s\n", child->getContent());
             if (child->getContent() == "Variable")
             { //只声明不赋值
-                printf("dijasohuas\n");
+               
                 BaseNode *ccNode = child->getChildNode();
                 std::string name = ccNode->getContent();
                 if (name == "Def_array[Const]")

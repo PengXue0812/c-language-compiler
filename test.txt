@@ -2,16 +2,6 @@
 
 int main()
 {
-    int a = 2;
-    int b = 3;
-    print(a);
-    print(b);
-    int* pa = &a;
-    int* pb = &b;
-    int t = *pb;
-    *pb = *pa;
-    *pa = t**pb**pa / *pb;
-    print(*pa);
-    print(*pb);
-    return 0;
+    int a = -2;
+    a = -a;
 }

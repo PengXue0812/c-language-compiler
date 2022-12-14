@@ -78,25 +78,27 @@ public:
     // ADD instructor, add reg1, reg2
     void add(asmRegister reg1, asmRegister reg2);
     // ADD instructor, add reg, var
-    void genarateAdd(asmRegister reg, std::string var);
-    void genarateSub(asmRegister reg1, asmRegister reg2);
-    void genarateSub(asmRegister reg, std::string var);
-    void genarateMov(asmRegister reg1, asmRegister reg2);
-    void genarateMov(asmRegister reg, std::string var);
-    void genarateMov(std::string var, asmRegister reg);
-    void genarateMov(std::string var1, std::string var2);
-    void genarateMul(asmRegister reg1, asmRegister reg2);
-    void genarateMul(asmRegister reg, std::string var);
-    void genarateMul(std::string var1, std::string var2);
-    void genarateDiv(asmRegister reg1, asmRegister reg2);
-    void genarateDiv(asmRegister reg, std::string var);
-    void genarateDiv(std::string var, asmRegister reg);
-    void genarateDiv(std::string var1, std::string var2);
-    void genarateAsmXor(asmRegister reg1, asmRegister reg2);
-    void genaratePush(asmRegister reg);
-    void genaratePush(std::string var);
-    void genaratePop(asmRegister reg);
-    void genarateLabel(std::string label);
+    void generateAdd(asmRegister reg, std::string var);
+    void generateAdd(std::string var, asmRegister reg);
+    void generateAdd(asmRegister reg1, asmRegister reg2);
+    void generateSub(asmRegister reg1, asmRegister reg2);
+    void generateSub(asmRegister reg, std::string var);
+    void generateMov(asmRegister reg1, asmRegister reg2);
+    void generateMov(asmRegister reg, std::string var);
+    void generateMov(std::string var, asmRegister reg);
+    void generateMov(std::string var1, std::string var2);
+    void generateMul(asmRegister reg1, asmRegister reg2);
+    void generateMul(asmRegister reg, std::string var);
+    void generateMul(std::string var1, std::string var2);
+    void generateDiv(asmRegister reg1, asmRegister reg2);
+    void generateDiv(asmRegister reg, std::string var);
+    void generateDiv(std::string var, asmRegister reg);
+    void generateDiv(std::string var1, std::string var2);
+    void generateAsmXor(asmRegister reg1, asmRegister reg2);
+    void generatePush(asmRegister reg);
+    void generatePush(std::string var);
+    void generatePop(asmRegister reg);
+    void generateLabel(std::string label);
     void addCode(std::string code);
     friend std::ostream& operator<<(std::ostream& os, const AsmCode& asmcode);
     std::string getcodeBuffer(){return codeBuffer;}

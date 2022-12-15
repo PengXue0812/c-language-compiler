@@ -76,7 +76,7 @@ public:
     void generateUnaryInstructor(std::string instructor, asmRegister reg);
     std::string findValueByAddress(asmRegister reg);
     // ADD instructor, add reg1, reg2
-    void add(asmRegister reg1, asmRegister reg2);
+    void generateAdd(asmRegister reg1, asmRegister reg2);
     // ADD instructor, add reg, var
     void generateAdd(asmRegister reg, std::string var);
     void generateAdd(std::string var, asmRegister reg);

@@ -78,9 +78,127 @@ asmRegister AsmGenerate::findRegister(std::string var) {
 
 }
 
+void AsmGenerate::generateJump(QuadItem q){
+    OpType optype = q.getOpType();
+    std::string label = "label" + std::to_string(labelMap[q.getArg(3).target]);
+    if (optype == OpType::JUMP) {
+        this -> asmcode.generateUnaryInstructor(ASM_JUMP,label);
+    }
+    else{
+        int flag = q.quad_item_type;
+        if( flag == 0 ){
+            std::string value1 = std::to_string(q.getArg(1).target);
+            std::string value2 = std::to_string(q.getArg(2).target);
+            this->asmcode.generateMov(asmRegister::edx, value1);
+            this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, value2);
+        }
+        else if(flag == 1){
+            std::string value2 = this->asmcode.generateInstanceNumber(q.getArg(2).target);
+            std::string var1Name = q.getArg(1).symbol->getIdName();
+            if(var1Name[0] == 't'){
+                asmRegister var1Reg = this->findRegister(var1Name);
+                this->releaseRegister(var1Reg);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, var1Reg, value2);
+            }
+            else{
+                int offset = q.getArg(1).symbol->getPointerAddr();
+                std::string offsetStr = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, offsetStr,value2);                
+            }
+        }
+        else if(flag == 2){
+            std::string value1 = this->asmcode.generateInstanceNumber(q.getArg(1).target);
+            std::string var2Name = q.getArg(2).symbol->getIdName();
+            if(var2Name[0] == 't'){
+                asmRegister var2Reg = this->findRegister(var2Name);
+                this->asmcode.generateMov(asmRegister::edx, value1);
+                this->releaseRegister(var2Reg);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, var2Reg);
+            }
+            else{
+                int offset = q.getArg(2).symbol->getPointerAddr();
+                std::string offsetStr =  this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, offsetStr ,value1);
+            }
+        }
+        else if(flag == 3){
+            std::string value1 = std::to_string(q.getArg(1).target);
+            std::string value2 = std::to_string(q.getArg(2).target);
+            if(value1[0] == 't' && value2[0] == 't'){
+                asmRegister var1Reg = this->findRegister(value1);
+                asmRegister var2Reg = this->findRegister(value2);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, var1Reg, var2Reg);
+            }
+            else if(value1[0] == 't'){
+                asmRegister var1Reg = this->findRegister(value1);
+                int offset = q.getArg(2).symbol->getPointerAddr();
+                std::string offsetStr = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, var1Reg, offsetStr);
+            }
+            else if(value2[0] == 't'){
+                asmRegister var2Reg = this->findRegister(value2);
+                int offset = q.getArg(1).symbol->getPointerAddr();
+                std::string offsetStr = this->asmcode.generateVar(offset);
+                this->asmcode.generateMov(asmRegister::edx, value1);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, var2Reg);
+            }
+            else{
+                std::string var1Offset = this->asmcode.generateVar(q.getArg(1).symbol->getPointerAddr());
+                std::string var2Offset = this->asmcode.generateVar(q.getArg(2).symbol->getPointerAddr());
+                this->asmcode.generateMov(asmRegister::edx, value1);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, var2Offset);
+            }
+        }
+    
+        if(optype==OpType::JUMP_GE){
+            this->asmcode.generateUnaryInstructor(ASM_JGE,label);
+        }
+        else if(optype == OpType::JUMP_GT){
+            this->asmcode.generateUnaryInstructor(ASM_JG,label);
+        }
+        else if(optype == OpType::JUMP_LE){
+            this->asmcode.generateUnaryInstructor(ASM_JLE,label);
+        }
+        else if (optype==OpType::JUMP_LT) {
+            this->asmcode.generateUnaryInstructor(ASM_JL, label);
+        }
+         else if (optype==OpType::JUMP_EQ) {
+            this->asmcode.generateUnaryInstructor(ASM_JE, label);
+        }
+         else if (optype==OpType::JUMP_NE) {
+            this->asmcode.generateUnaryInstructor(ASM_JNE, label);
+        }
+    }
+}
 
 
+void AsmGenerate::preSetLabel(){
+    std::vector<QuadItem*> quad;
+    int labelNumber = 0;
 
+    for(auto item : quad_list){
+        OpType optype = item->getOpType();
+        if(this->isJumpQuad(optype)){
+            int lineNum = item->getArg(3).target;
+
+            if(this->labelMap.count(lineNum) == 0){
+                labelMap[lineNum] = labelNumber;
+                labelNumber++;
+            }
+        }
+    }
+
+    size_t i = 0;
+    for(auto item : quad_list){
+        if(this->labelMap.count(i) != 0){
+            QuadItem *q = new QuadItem((Symbol*)NULL, OpType::LABEL, (Symbol*)NULL);
+            quad.push_back(q);
+        }
+        quad.push_back(item);
+    }
+    quad_list = quad;
+    
+}
 
 
 // code here
@@ -116,8 +234,8 @@ void AsmGenerate::generateArithmetic(QuadItem q){
 
 void AsmGenerate::generate()
 {
-    currentTable = rootTable->getfirstChildTable();
-    currentTable->showSymbols();
+    currentTable = rootTable->getFirstChildArea();
+    currentTable->showSymbolArea();
     // Set header info
     std::cout<<"begin _asm\n";
     std::cout<<"size="<<quad_list.size()<<"\n";
@@ -145,7 +263,7 @@ void AsmGenerate::generate()
         } */
         else if (optype==OpType::LABEL) {
             int labelIndex = q->getArg(1).target;
-            this->asmcode.label("\nlabel" + std::to_string(labelIndex));
+            this->asmcode.generateLabel("\nlabel" + std::to_string(labelIndex));
         } else if (this->isJumpQuad(optype)) {
             this->generateJump(*q);
         }else if (optype==OpType::UMINUS) {

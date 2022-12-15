@@ -95,6 +95,7 @@ public:
     void generateDiv(std::string var, asmRegister reg);
     void generateDiv(std::string var1, std::string var2);
     void generateAsmXor(asmRegister reg1, asmRegister reg2);
+    void generateAsmXor(asmRegister reg1, std::string var);
     void generatePush(asmRegister reg);
     void generatePush(std::string var);
     void generatePop(asmRegister reg);

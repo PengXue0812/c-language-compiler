@@ -1,10 +1,11 @@
 #include"AsmCodeGenerate.h"
 #include<string>
+#include<cstring>
 
 Symbol* AsmGenerate::getoffsetofarray(Symbol* arg)
 {
     Symbol *result;
-    string result_name=arg->getIDName();
+    string result_name=arg->getIdName();
     char *splited_result=strtok((char*)result_name.c_str(), "[");
     
     string firstname=splited_result;
@@ -83,7 +84,22 @@ asmRegister AsmGenerate::findRegister(std::string var) {
 
 
 // code here
-
+void AsmGenerate::generateArithmetic(QuadItem q){
+    std::string instructor;
+    OpType optype = q.getOpType();
+    int flag = q.quad_item_type;
+    int offset;
+    if(optype==OpType::ASSIGN){
+        Symbol *result = q.getArg(3).symbol;
+        string result_name=result->getIdName();
+        //对于不是数组的情况
+        if(result_name.find("[") < result_name.length()){
+            result=getoffsetofarray(result);
+        }
+        offset = result->getPointerAddr();
+        
+    }
+}
 
 
 
@@ -110,14 +126,14 @@ void AsmGenerate::generate()
     {
         QuadItem *q = quad_list[i];
         OpType optype = q->getOpType();
-        q->printItemInfor(i);
+        q->printItemInfo(i);
         //Symbol* argu1 = quad_list[i]->arg1.var;
         //Symbol* argu2 = quad_list[i]->arg2.var;
         //if(argu1 != NULL)quad_list[i]->arg1.var->showSymbolInfor();
         //if(argu2 != NULL)quad_list[i]->arg2.var->showSymbolInfor();
-        if (optype==OpType::addtion || optype==OpType::substract ||
-                 optype==OpType::divide || optype==OpType::multiply ||
-                 optype==OpType::assign || optype==OpType::mod) {
+        if (optype==OpType::ADDTION || optype==OpType::SUBTRACTION ||
+                 optype==OpType::DIVISION || optype==OpType::MULTIPLICATION ||
+                 optype==OpType::ASSIGN || optype==OpType::MOD) {
             this->generateArithmetic(*q);
         }
         /*else if (optype==OpType::CALL) {
@@ -127,14 +143,12 @@ void AsmGenerate::generate()
         } else if (optype==OpType::RETURN) {
             this->generateReturn(q);
         } */
-        else if (optype==OpType::label) {
+        else if (optype==OpType::LABEL) {
             int labelIndex = q->getArg(1).target;
             this->asmcode.label("\nlabel" + std::to_string(labelIndex));
         } else if (this->isJumpQuad(optype)) {
             this->generateJump(*q);
-        } else if (optype==OpType::power) {
-            this->generatePower(*q);
-        } else if (optype==OpType::uminus) {
+        }else if (optype==OpType::UMINUS) {
             this->generateNeg(*q);
         }
         else if (optype==OpType::PRINT){

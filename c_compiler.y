@@ -5,6 +5,8 @@
 #include "Node/BTNode.h"
 #include "Symbol/Symbol.h"
 #include "InterCode/InterCode.h"
+#include "AsmCode/AsmCode.h"
+#include "AsmCode/AsmCodeGenerate.h"
 
 BaseNode* root;
 extern int yylex(void); 
@@ -89,6 +91,11 @@ program:
         InterCode interCode = InterCode(root);
         printer.print();
         interCode.Root_Generate();
+        // interCode.getTable()->getFirstChildArea()->showSymbolArea();
+        printf("=========begin generate asm code=========\n");
+        AsmGenerate* asmgenerate = new AsmGenerate(interCode.getQuadlist(),  interCode.getTable());
+        asmgenerate->generate();
+
         
 
     };

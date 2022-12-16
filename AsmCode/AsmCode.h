@@ -80,7 +80,7 @@ public:
     // ADD instructor, add reg, var
     void generateAdd(asmRegister reg, std::string var);
     void generateAdd(std::string var, asmRegister reg);
-    void generateAdd(asmRegister reg1, asmRegister reg2);
+  
     void generateSub(asmRegister reg1, asmRegister reg2);
     void generateSub(asmRegister reg, std::string var);
     void generateMov(asmRegister reg1, asmRegister reg2);

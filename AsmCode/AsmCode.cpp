@@ -45,13 +45,6 @@ std::string AsmCode::generateInstanceNumber(int value)
     ans += " " + std::to_string(value);
     return ans;
 }
-std::string AsmCode::generateInstanceNumber(int value)
-{
-    std::string ans = DOUBLE_WORD;
-    ans += " " + std::to_string(value);
-    return ans;
-}
-
 void AsmCode::generateBinaryInstructor(std::string instructor, asmRegister reg1, asmRegister reg2)
 {
     this->codeBuffer += instructor + std::string(" ") + this->transRegister(reg1) + "," + this->transRegister(reg2) + "\n";

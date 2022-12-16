@@ -3,7 +3,9 @@ c_compiler:
 		sed -i "1i \#include \"Node/BaseNode.h\"" y.tab.h
 		sed -i "2i \#include \"Node/BTNode.h\"" y.tab.h
 		sed -i "3i \#include \"Symbol/Symbol.h\"" y.tab.h
-		g++ y.tab.c lex.yy.c Node/BaseNode.cpp Symbol/Symbol.cpp InterCode/InterCode.cpp  -o a.out
+		sed -i "4i \#include \"AsmCode/AsmCode.h\"" y.tab.h
+		sed -i "5i \#include \"AsmCode/AsmCodeGenerate.h\"" y.tab.h
+		g++ y.tab.c lex.yy.c Node/BaseNode.cpp Symbol/Symbol.cpp InterCode/InterCode.cpp AsmCode/AsmCode.cpp AsmCode/AsmCodeGenerate.cpp -o a.out
 		./a.out
 clean:
 	rm -f y.tab.c y.tab.h a.out

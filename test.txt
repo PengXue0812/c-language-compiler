@@ -2,6 +2,16 @@
 
 int main()
 {
-    int a = -2;
-    a = -a;
+    int* a;
+    int b = 10;
+    a = &b;
+
+    if(*a>20){
+        b =1;
+    }else{
+        b = 2;
+    }
+    
+    b = 20;
+    
 }

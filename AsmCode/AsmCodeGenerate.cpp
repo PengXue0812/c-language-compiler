@@ -212,6 +212,7 @@ void AsmGenerate::preSetLabel()
         OpType optype = item->getOpType();
         if (this->isJumpQuad(optype))
         {
+            printf("这个是跳转指令\n");
             int lineNum = item->getArg(3).target;
 
             if (this->labelMap.count(lineNum) == 0)
@@ -227,10 +228,12 @@ void AsmGenerate::preSetLabel()
     {
         if (this->labelMap.count(i) != 0)
         {
-            QuadItem *q = new QuadItem((Symbol *)NULL, OpType::LABEL, (Symbol *)NULL);
+            printf("添加LABEL\n");
+            QuadItem *q = new QuadItem((Symbol *)NULL, OpType::LABEL, labelMap[i], (Symbol *)NULL);
             quad.push_back(q);
         }
         quad.push_back(item);
+        i++;
     }
     quad_list = quad;
 }
@@ -821,9 +824,10 @@ bool AsmGenerate::isJumpQuad(OpType optype) {
 
 void AsmGenerate::generate()
 {
-    currentTable = rootTable->getFirstChildArea();
+    currentTable = rootTable;
     currentTable->showSymbolArea();
     // Set header info
+    printf("Generating asm code!!!\n");
     std::cout << "begin _asm\n";
     std::cout << "size=" << quad_list.size() << "\n";
     this->asmcode.addCode("section .text\nglobal main\nmain:\npush ebx\nmov ebp,esp\n");
@@ -831,6 +835,7 @@ void AsmGenerate::generate()
     {
         QuadItem *q = quad_list[i];
         OpType optype = q->getOpType();
+        printf("optype: %d\n", optype);
         q->printItemInfo(i);
         // Symbol* argu1 = quad_list[i]->arg1.var;
         // Symbol* argu2 = quad_list[i]->arg2.var;
@@ -851,6 +856,7 @@ void AsmGenerate::generate()
         } */
         else if (optype == OpType::LABEL)
         {
+            printf("gengrate LABEL\n");
             int labelIndex = q->getArg(1).target;
             this->asmcode.generateLabel("\nlabel" + std::to_string(labelIndex));
         }
@@ -880,6 +886,7 @@ void AsmGenerate::generate()
 
     std::ofstream out("asm/asm_kjh.asm", ios::app);
     out << (out, this->asmcode);
+    std::cout<<this->asmcode;
     std::cout << "write ok!!\n";
     out.close();
 }

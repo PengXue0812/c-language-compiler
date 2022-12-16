@@ -769,6 +769,56 @@ void AsmGenerate::generateArithmetic(QuadItem q)
     }
 }
 
+void AsmGenerate::generateNeg(QuadItem q) {
+    std::string varName = q.getArg(1).symbol->getIdName();
+    std::string result = q.getArg(3).symbol->getIdName();
+    if (varName[0] == 't' && result[0] == 't') {
+        asmRegister varReg = this->findRegister(varName);
+        this->releaseRegister(varReg);
+        asmRegister resultReg = this->getRegister(result);
+        if (resultReg != varReg) {
+            this->asmcode.generateMov(resultReg, varReg);
+        }
+        this->asmcode.generateUnaryInstructor(ASM_NEG, resultReg);
+    } else if (varName[0] == 't') {
+        asmRegister varReg = this->findRegister(varName);
+        this->releaseRegister(varReg);
+        int offset = q.getArg(3).symbol->getPointerAddr();
+        std::string ebpOffset = this->asmcode.generateVar(offset);
+        this->asmcode.generateUnaryInstructor(ASM_NEG, varReg);
+        this->asmcode.generateMov(ebpOffset, varReg);
+    } else if (result[0] == 't') {
+        int offset = q.getArg(1).symbol->getPointerAddr();
+        std::string ebpOffset = this->asmcode.generateVar(offset);
+        asmRegister resultReg = this->getRegister(result);
+        this->asmcode.generateMov(resultReg, ebpOffset);
+        this->asmcode.generateUnaryInstructor(ASM_NEG, resultReg);
+    } else {
+        int varOff = q.getArg(1).symbol->getPointerAddr();
+        int resultOff = q.getArg(3).symbol->getPointerAddr();
+        std::string varEbpOff = this->asmcode.generateVar(varOff);
+        std::string resultEBPOff = this->asmcode.generateVar(resultOff);
+        this->asmcode.generateMov(asmRegister::edx, varEbpOff);
+        this->asmcode.generateUnaryInstructor(ASM_NEG, asmRegister::edx);
+        this->asmcode.generateMov(resultEBPOff, asmRegister::edx);
+    }
+}
+
+
+void AsmGenerate::generateprint(QuadItem q){
+    Symbol* result = q.getArg(3).symbol;
+    int offset = result->getPointerAddr();
+    std::string result_ebp_offset = this->asmcode.generateVar(offset);
+    this->asmcode.addCode("mov eax,"+result_ebp_offset+"\n");
+    this->asmcode.addCode("call print_int_i\n");
+}
+
+bool AsmGenerate::isJumpQuad(OpType optype) {
+    return optype==OpType::JUMP || optype==OpType::JUMP_LT || optype==OpType::JUMP_LE||
+        optype==OpType::JUMP_GT || optype==OpType::JUMP_GE || optype==OpType::JUMP_EQ ||
+        optype==OpType::JUMP_NE;
+}
+
 void AsmGenerate::generate()
 {
     currentTable = rootTable->getFirstChildArea();

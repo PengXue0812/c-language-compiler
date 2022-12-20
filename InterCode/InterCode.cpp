@@ -885,11 +885,11 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 quad = new QuadItem(result, op, std::stoi(arg1->getIdName()), std::stoi(arg2->getIdName()));
             }
-            else if (isNumber(arg1->getIdName()) && !isNumber(arg1->getIdName()))
+            else if (isNumber(arg1->getIdName()) && !isNumber(arg2->getIdName()))
             {
                 quad = new QuadItem(result, op, std::stoi(arg1->getIdName()), arg2);
             }
-            else if (!isNumber(arg1->getIdName()) && isNumber(arg1->getIdName()))
+            else if (!isNumber(arg1->getIdName()) && isNumber(arg2->getIdName()))
             {
                 quad = new QuadItem(result, op, arg1, std::stoi(arg2->getIdName()));
             }
@@ -1464,7 +1464,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                         int var_type = static_cast<int>(var->getSymbolType());
                         int symbol_type = static_cast<int>(symbol->getSymbolType());
                         // printf("%d %d \n", var_type, symbol_type);
-                        if (var_type == 2 && symbol_type == 2)
+                        if (var_type == 2 && (symbol_type == 2||symbol_type==3))
                         {
                             area->setOffset(area->getOffset() + var->getWidth());
                             var->setPointerAddr(area->getOffset());

@@ -628,7 +628,11 @@ expression:
     }
     | '-' expression
     {
-        BaseNode * node = new BaseNode("Negative",NodeType::OPERATION);
+        BaseNode * node = new BaseNode("Sub",NodeType::OPERATION);
+        BaseNode * subleft = new BaseNode("Constant_Expression",NodeType::EXPRESSION);
+        BaseNode * Constant_Node_0 = new BaseNode ("0",NodeType::CONST_INT);
+        subleft->addChildNode(Constant_Node_0);
+        node->addChildNode(subleft);
         node->addChildNode($2);
         $$ = node;
     }

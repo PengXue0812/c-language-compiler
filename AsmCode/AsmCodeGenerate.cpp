@@ -884,7 +884,7 @@ void AsmGenerate::generate()
     this->asmcode.addCode("pop ebx\nret\n");
     // write to asm
 
-    std::ofstream out("asm/asm_kjh.asm", ios::app);
+    std::ofstream out("AsmCode/asm_io.asm", ios::app);
     out << (out, this->asmcode);
     std::cout<<this->asmcode;
     std::cout << "write ok!!\n";

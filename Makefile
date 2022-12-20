@@ -7,5 +7,9 @@ c_compiler:
 		sed -i "5i \#include \"AsmCode/AsmCodeGenerate.h\"" y.tab.h
 		g++ y.tab.c lex.yy.c Node/BaseNode.cpp Symbol/Symbol.cpp InterCode/InterCode.cpp AsmCode/AsmCode.cpp AsmCode/AsmCodeGenerate.cpp -o a.out
 		./a.out
+		nasm -g -f elf -d ELF_TYPE ./AsmCode/test.asm -o ./AsmCode/test.o		
+		ld -m elf_i386 ./AsmCode/test.o -o test --entry main -lc -dynamic-linker /lib/ld-linux.so.2
+		./test
+
 clean:
 	rm -f y.tab.c y.tab.h a.out

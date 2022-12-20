@@ -1,3 +1,7 @@
+extern exit
+
+%include './AsmCode/print_int_i.asm'
+
 section .text
 global main
 main:
@@ -10,5 +14,5 @@ mov eax,[ebp-4]
 call print_int_i
 
 pop ebx
-ret
-
+push 0
+call exit

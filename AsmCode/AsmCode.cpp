@@ -209,6 +209,11 @@ void AsmCode::generateLabel(std::string label)
 
 std::ostream &operator<<(std::ostream &os, const AsmCode &code)
 {
-    os << code.codeBuffer;
+    std::string content = code.codeBuffer;
+    while (content[content.length() - 1] == '\n')
+    {
+        content = content.substr(0, content.length() - 1);
+    }    
+    os << content;
     return os;
 }

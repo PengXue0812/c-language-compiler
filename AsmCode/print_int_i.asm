@@ -9,8 +9,8 @@ print_int_i:
     push  eax
     push  format
     call  printf
-	pop	ecx
-	pop	ecx
+	pop     ecx
+	pop     ecx
 
 	popf
 	popa

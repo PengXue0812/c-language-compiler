@@ -27,12 +27,12 @@ std::string AsmCode::generateVar(int offset)
     std::string ans = ASM_LB + std::string(ASM_EBP);
     if (offset > 0)
     {
-        ans += "-";
+        ans += "+";
         ans += std::to_string(offset);
     }
     else
     {
-        ans += "+";
+        ans += "-";
         ans += std::to_string(-offset);
     }
     ans += ASM_RB;

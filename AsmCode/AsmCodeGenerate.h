@@ -16,7 +16,7 @@ private:
     int eax;
     int ebx;
     int ecx;
-    int edx;
+    int edx;;
     AsmCode asmcode;
     std::string registerUsedVar[6];
     //std::vector<Symbol*> tempVar;

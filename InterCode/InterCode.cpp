@@ -1277,13 +1277,16 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             // printf("For_Def_SEMI_Expression_SEMI_Expression\n");
             //生成for的初始化声明
             BaseNode *forDeclear = node->getChildNode();
-            // printf("aaaaaaaaaaaaaaaaaa\n");
-            // std::cout << "dasdasd" << area << std::endl;
-            // printf("Start to find\n\n");
-            // area->findSymbolGlobally("a");
             SymbolArea *forDeclearArea = area->addNewChildArea();
-            // printf("bbbbbbbbbb\n");
-            Body_Generate(forDeclear->getChildNode(), forDeclearArea);
+            if(forDeclear->getContent() == "For_Expression")
+            {
+                Exp_Stmt_Generate(forDeclear, forDeclearArea);
+            }else
+            {
+                Body_Generate(forDeclear->getChildNode(), forDeclearArea);
+            }
+            
+            
             // printf("forDeclearArea\n");
             //下一句是for循环的开始
             int forStart = quad_list.size();

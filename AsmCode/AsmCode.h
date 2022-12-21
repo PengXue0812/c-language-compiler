@@ -58,7 +58,7 @@ enum class asmRegister {
     ecx = 3,
     edx = 4,
     esp = 5,
-    ebp = 6
+    ebp = 6,
 };
 
 class AsmCode {

@@ -49,7 +49,7 @@ class SymbolArea {
   SymbolArea* parentArea;
   SymbolArea* firstChildArea;
   SymbolArea* firstBrotherArea;
-  int total_offset;
+  static int total_offset;
   int symbolNumber;
   SymbolArea* baseArea;
 

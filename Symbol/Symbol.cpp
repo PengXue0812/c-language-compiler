@@ -2,6 +2,7 @@
 
 #include "../Node/BaseNode.h"
 
+int SymbolArea::total_offset = 0;
 Symbol::Symbol()
 {
     this->idName = "";
@@ -35,7 +36,7 @@ SymbolArea::SymbolArea()
     this->parentArea = nullptr;
     this->firstChildArea = nullptr;
     this->firstBrotherArea = nullptr;
-    this->total_offset = 0;
+    // this->total_offset = 0;
     this->symbolNumber = 0;
     this->baseArea = nullptr;
 }
@@ -98,12 +99,12 @@ SymbolArea *SymbolArea::getBaseArea() { return this->baseArea; }
 
 int SymbolArea::getSymbolNumber() { return this->symbolNumber; }
 
-int SymbolArea::getOffset() { return this->total_offset; }
+int SymbolArea::getOffset() { return total_offset; }
 
 int SymbolArea::setOffset(int offset)
 {
-    this->total_offset = offset;
-    return this->total_offset;
+    total_offset = offset;
+    return total_offset;
 }
 
 void SymbolArea::setParentArea(SymbolArea *parentArea)

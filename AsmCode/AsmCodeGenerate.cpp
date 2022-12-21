@@ -85,6 +85,7 @@ asmRegister AsmGenerate::getRegister(std::string var)
         this->registerUsedVar[index - 1] = var;
         return asmRegister::edx;
     }
+    
      printf("?????\n");
 }
 

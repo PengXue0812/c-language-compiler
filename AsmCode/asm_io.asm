@@ -12,25 +12,30 @@ mov [ebp-4],dword 50
 mov ebx,dword 0
 sub ebx,dword 1
 mov [ebp-8],ebx
-mov [ebp-12],dword 1
-mov [ebp-16],dword 1
+mov [ebp-4],dword 0
+
+label2:
 xor edx,edx
-mov eax,[ebp-12]
-mul dword[ebp-16]
+mov eax,dword[ebp-4]
+mov ebx,dword 2
+mul ebx
 mov ebx,eax
-xor edx,edx
-mov ecx,dword 2
-mov eax,ebx
-div ecx
-mov ecx,eax
-add [ebp-8],ebx
-mov ebx,[ebp-8]
-xor edx,edx
-mov eax,[ebp-12]
-mul dword[ebp-16]
-mov edx,eax
-add ebx,edx
-mov [ebp-8],ebx
+mov edx,[ebp-4]
+cmp edx,ebx
+jl label0
+jmp label1
+
+label0:
+mov ecx,[ebp-8]
+add ecx,[ebp-4]
+mov [ebp-8],ecx
+xor ecx,ecx
+mov ecx,dword[ebp-4]
+add ecx,dword 1
+mov [ebp-4],ecx
+jmp label2
+
+label1:
 mov eax,[ebp-8]
 
 call print_int_i

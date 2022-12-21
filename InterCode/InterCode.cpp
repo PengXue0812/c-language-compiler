@@ -1243,10 +1243,11 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             // printf("while-------------------\n");
             BaseNode *condition = node->getChildNode();
             //去生成While的条件的三地址码
+            int start = quad_list.size();
             Exp_Stmt_Generate(condition, area);
             // printf("while----------kjhkjkjhkjhkjh---------\n");
 
-            int start = quad_list.size();
+            
             //存着While的条件为真该跳转的位置的trueList
             std::list<int> whileTrue = trueList.top();
             //存着While的条件为假该跳转的位置的falseList
@@ -1417,11 +1418,11 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             }
             else if (child->getContent() == "Variable_Assign")
             {
-                printf("kjh3\n");
+                // printf("kjh3\n");
 
                 if (child->getChildNode()->getContent() == "Def_Identifier")
                 {
-                    printf("kjh4\n");
+                    // printf("kjh4\n");
 
                     if (mod_node->getContent() == "int*_Type")
                     {
@@ -1442,7 +1443,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                     }
                     else
                     {
-                        printf("enter INT type\n");
+                        // printf("enter INT type\n");
 
                         std::string identifier_name = child->getChildNode()->getChildNode()->getContent();
                         Symbol *identifier_symbol = area->findSymbolLocally(identifier_name);
@@ -1454,7 +1455,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                         // printf("xp-1\n");
                         BaseNode *ccNode = child->getChildNode()->getBrotherNode();
                         // printf("xp-1.5\n");
-                        printf("%s\n", ccNode->getContent().c_str());
+                        // printf("%s\n", ccNode->getContent().c_str());
                         Symbol *symbol = Exp_Stmt_Generate(ccNode, area);
                         // printf("xp-2\n");
                         std::string symbol_name = symbol->getIdName();
@@ -1511,11 +1512,11 @@ std::list<int> *InterCode::merge(std::list<int> *list1,
 void InterCode::backpatch(std::list<int> *backList, int target)
 {
     std::list<int>::iterator it;
-    std::cout << "====backlist_begin=====" << *(backList->begin())
-              << "==========" << std::endl;
-    std::cout << "====backlist_end=====" << *(backList->end())
-              << "==========" << std::endl;
-    std::cout << "====target=====" << target << "==========" << std::endl;
+    // std::cout << "====backlist_begin=====" << *(backList->begin())
+    //           << "==========" << std::endl;
+    // std::cout << "====backlist_end=====" << *(backList->end())
+    //           << "==========" << std::endl;
+    // std::cout << "====target=====" << target << "==========" << std::endl;
     for (it = backList->begin(); it != backList->end(); it++)
     {
         quad_list[*it]->backpatch(target);

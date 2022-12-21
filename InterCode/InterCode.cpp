@@ -1194,10 +1194,12 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             SymbolArea *ifSymbelArea = area->addNewChildArea();
             BaseNode *ifContent = condition->getBrotherNode();
             Body_Generate(ifContent, ifSymbelArea);
-            int end = this->quad_list.size();
-            backpatch(&ifFalse, end);
-            QuadItem *item = new QuadItem(end, OpType::JUMP);
-            this->quad_list.push_back(item);
+            // int end = this->quad_list.size();
+            // backpatch(&ifFalse, end);
+            // QuadItem *item = new QuadItem(end, OpType::JUMP);
+            // QuadItem *item = new QuadItem(this->q, OpType::JUMP);
+
+            // this->quad_list.push_back(item);
         }
         else if (node_content == "If_Else_Statement")
         {

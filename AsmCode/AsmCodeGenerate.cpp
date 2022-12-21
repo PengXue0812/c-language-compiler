@@ -667,7 +667,7 @@ void AsmGenerate::generate()
     std::cout << "begin _asm\n";
     std::cout << "size=" << quad_list.size() << "\n";
     this->asmcode.addCode("extern exit\n");
-    this->asmcode.addCode("\%include './AsmCode/print_int_i.asm'\n");
+    // this->asmcode.addCode("\%include './AsmCode/print_int_i.asm'\n");
     this->asmcode.addCode("section .text\nglobal main\nmain:\npush ebx\nmov ebp,esp\n");
     for (size_t i = 0; i < this->quad_list.size(); i++)
     {
@@ -716,6 +716,8 @@ void AsmGenerate::generate()
     }
     // end
     this->asmcode.addCode("pop ebx\npush 0\ncall exit");
+
+    this->asmcode.addCode("\%include './AsmCode/print_int_i.asm'\n");
 
     //覆盖写入
     std::ofstream out("AsmCode/asm_io.asm", ios::trunc);

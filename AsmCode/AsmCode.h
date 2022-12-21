@@ -60,6 +60,7 @@ enum class asmRegister {
     esp = 5,
     ebp = 6
 };
+
 class AsmCode {
 private:
     std::string codeBuffer;

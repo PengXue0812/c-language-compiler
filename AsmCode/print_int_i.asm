@@ -1,7 +1,5 @@
 extern printf
 
-section .data
-  format db "%d",0ah,0dh
 
 print_int_i:
 	enter	0,0
@@ -18,3 +16,7 @@ print_int_i:
 	popa
 	leave
 	ret
+
+
+section .data
+  format db "%d",0ah,0dh

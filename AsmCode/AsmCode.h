@@ -8,7 +8,7 @@
 #define ASM_NEG "neg"
 #define ASM_SUB "sub"
 #define ASM_MUL "mul"
-#define ASM_DIV "div"
+#define ASM_DIV "idiv"
 #define ASM_PUSH "push"
 #define ASM_POP "pop"
 #define ASM_CALL "call"

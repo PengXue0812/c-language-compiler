@@ -1,21 +1,17 @@
+//#include<stdio.h>
 
-
-int main() {
-    int a = 50;
-    int sum = -1;
-
-    // outer loop
-        // inner loop
-        for (int j = 0; j < a ; j = j + 1) {
-          
-            while (sum > j || !(sum % 2 == 1)) {
-                sum = sum - 3 / 2;
-            }
-   
-        }
-        print(sum);
-
-
-
+int main()
+{
+    int a = 2;
+    int b = 3;
+    print(a);
+    print(b);
+    int* pa = &a;
+    int* pb = &b;
+    int x = *pb;
+    *pb = *pa;
+    *pa = x**pb**pa / *pb;
+    print(*pa);
+    print(*pb);
     return 0;
 }

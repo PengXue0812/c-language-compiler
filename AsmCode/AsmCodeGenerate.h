@@ -16,9 +16,11 @@ private:
     int eax;
     int ebx;
     int ecx;
-    int edx;;
+    int edx;
+    int esi;
+    int edi;
     AsmCode asmcode;
-    std::string registerUsedVar[6];
+    std::string registerUsedVar[8];
     //std::vector<Symbol*> tempVar;
     std::vector<QuadItem*> quad_list;
     std::map<int, int> labelMap;

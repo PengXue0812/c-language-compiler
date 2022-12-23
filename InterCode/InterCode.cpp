@@ -1253,7 +1253,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
             trueList.pop();
             falseList.pop();
             //回填While的条件为真该跳转的位置的trueList
-            backpatch(&whileTrue, whileTrue.back() + 2);
+            backpatch(&whileTrue, whileTrue.back() + 1);
             //创建一个新的符号表,是while的body的符号表
             SymbolArea *whileSymbelArea = area->addNewChildArea();
             //生成while的body

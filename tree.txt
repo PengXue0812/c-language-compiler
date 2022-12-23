@@ -6,106 +6,208 @@ sed -i "4i \#include \"AsmCode/AsmCode.h\"" y.tab.h
 sed -i "5i \#include \"AsmCode/AsmCodeGenerate.h\"" y.tab.h
 g++ y.tab.c lex.yy.c Node/BaseNode.cpp Symbol/Symbol.cpp InterCode/InterCode.cpp AsmCode/AsmCode.cpp AsmCode/AsmCodeGenerate.cpp -o a.out
 ./a.out
-                                                      program                                                                                                                                            
-                                                         |                                                                                                                                               
-    ____________________________________________Def_Func_Block_Body_____________________________________________                                                                                         
-   /               /                                                                                            \                                                                                        
-int_Type Function_Without_Param                                                                                Body                                                                                      
-                   |                                                                                            |                                                                                        
-                  main                        _______________________________________________For_Def_SEMI_Expression_SEMI_Expression________________________________________________                     
-                                             /                                                  /                                         \                                         \                    
-                                        For_Declare                                    ___Less_Operation___                      ________Add_________                         Body_Statement             
-                                             |                                        /                    \                    /                    \                              |                    
-                                    _Declare_Statement__                    Identifier_Expression Constant_Expression Identifier_Expression Constant_Expression                    Body                  
-                                   /                    \                            /                    /                    /                     |                              |                    
-                                int_Type         Declare_Variable                    id                   10                   id                    1                     Expression_Statement          
-                                                        |                            |                                         |                                                    |                    
-                                                _Variable_Assign_                    i                                         i                                           ________Add_________          
-                                               /                 \                                                                                                        /                    \         
-                                         Def_Identifier Constant_Expression                                                                                     Identifier_Expression Constant_Expression
-                                               |                 |                                                                                                       /                     |         
-                                               i                 0                                                                                                       id                    1         
-                                                                                                                                                                         |                               
-                                                                                                                                                                         i                               
+                                                                                                                                                                   program                                                                                                                                                                                                                                       
+                                                                                                                                                                      |                                                                                                                                                                                                                                          
+    _________________________________________________________________________________________________________________________________________________________Def_Func_Block_Body__________________________________________________________________________________________________________________________________________________________                                                                       
+   /               /                                                                                                                                                                                                                                                                                                                      \                                                                      
+int_Type Function_Without_Param                                                                                                                                                                                                                                                                                                          Body                                                                    
+                   |                                                                                                                                                                                                                                                                                                                      |                                                                      
+                  main                                                                                                                                                                                                                                                         _______________________________________________________Statements_______________________________________________________          
+                                                                                                                                                                                                                                                                              /                                                                                                                        \         
+                                                                                                                                                                                   _______________________________________________________________________________________Statements_______________________________________________________________________________________                    Return_Expression 
+                                                                                                                                                                                  /                                                                                                                                                                                        \                           |         
+                                                                                                     _________________________________________________________________________Statements________________________________________________________________________                                                                                                  Expression_Statement        Constant_Expression
+                                                                                                    /                                                                                                                                                           \                                                                                                          |                           |         
+                                                                    ____________________________Statements___________________________                                                                                  __________________________________While_Statement__________________________________                                                      Function_Call_With_Args                0         
+                                                                   /                                                                 \                                                                                /                                                                                   \                                                         /             \                              
+                                              _________________Statements________________                                   _Declare_Statement__                                          ____________________________Or___________________________                                                 Body_Statement                                                print        Func_Arg                          
+                                             /                                           \                                 /                    \                                        /                                                         \                                                      |                                                                       |                              
+                                    _Declare_Statement__                        _Declare_Statement__                    int_Type         Declare_Variable                      __Greater_Operation__                                              Not                                                    Body                                                           Identifier_Expression                    
+                                   /                    \                      /                    \                                           |                             /                     \                                              |                                                      |                                                                       |                              
+                                int_Type         Declare_Variable           int_Type         Declare_Variable                           _Variable_Assign_           Identifier_Expression Identifier_Expression                                  Braces                                          Expression_Statement                                                             id                             
+                                                        |                                           |                                  /                 \                    |                    /                                               |                                                      |                                                                       |                              
+                                                _Variable_Assign_                           _Variable_Assign_                    Def_Identifier Constant_Expression           id                   id                                _______Equal_Operation________                      _______________Assign_______________                                                    sum                             
+                                               /                 \                         /                 \                         |                 |                    |                    |                                /                              \                    /                                    \                                                                                   
+                                         Def_Identifier Constant_Expression          Def_Identifier Constant_Expression                j                 2                   sum                   j                       ________Mod_________           Constant_Expression Identifier_Expression            _____________Sub______________                                                                    
+                                               |                /                          |                /                                                                                                             /                    \                   |                    |                     /                              \                                                                   
+                                               a                50                        sum               99                                                                                                  Identifier_Expression Constant_Expression          1                    id          Identifier_Expression           ________Div________                                                          
+                                                                                                                                                                                                                          |                    |                                        |                     |                    /                   \                                                         
+                                                                                                                                                                                                                          id                   2                                       sum                    id          Constant_Expression Constant_Expression                                                
+                                                                                                                                                                                                                          |                                                                                   |                    |                   |                                                         
+                                                                                                                                                                                                                         sum                                                                                 sum                   3                   2                                                         
 program
 Def_Func_Block_Body
 int_Type
 Function_Without_Param
 main
 Body
------------------NodeContent: For_Def_SEMI_Expression_SEMI_Expression
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+-----------------NodeContent: Statements
+�
+#�
+Constant_Expression
+nishiadsa:a
+�
+#�
+Constant_Expression
+nishiadsa:sum
+ #�
+Constant_Expression
+nishiadsa:j
+-----------------NodeContent: While_Statement
+Or
+Greater_Operation
+0x55a4eed79090
+Identifier_Expression
+AAA:j
+AAA:sum
+AAA:a
+aaaaaaaaaaaaaaaaaaaa:0x55a4eed7a890
+Identifier_Expression
+AAA:j
+AAA:sum
+AAA:a
+aaaaaaaaaaaaaaaaaaaa:0x55a4eed7a990
+Not
+Braces
+Equal_Operation
+0x55a4eed79090
+Mod
+Identifier_Expression
+AAA:j
+AAA:sum
+AAA:a
+aaaaaaaaaaaaaaaaaaaa:0x55a4eed7a890
+Constant_Expression
+Constant_Expression
 begin add area
 add first area
-@ ���
-Constant_Expression
-nishiadsa:i
-Less_Operation
-0x55c69f050710
-Identifier_Expression
-AAA:i
-aaaaaaaaaaaaaaaaaaaa:0x55c69f0507e0
-Constant_Expression
 -----------------NodeContent: Body_Statement
 -----------------NodeContent: Expression_Statement
-Add
+Assign
+ASSIGNAssign
 Identifier_Expression
-AAA:i
-aaaaaaaaaaaaaaaaaaaa:0x55c69f0507e0
-Constant_Expression
-Add
+AAA:j
+AAA:sum
+AAA:a
+aaaaaaaaaaaaaaaaaaaa:0x55a4eed7a890
+Sub
 Identifier_Expression
-AAA:i
-aaaaaaaaaaaaaaaaaaaa:0x55c69f0507e0
+AAA:j
+AAA:sum
+AAA:a
+aaaaaaaaaaaaaaaaaaaa:0x55a4eed7a890
+Div
 Constant_Expression
-L0:  i := 0
-L1:  if i < 10 goto L3
-L2:   goto L6
-L3:  temp 0 := i ADD 1
-L4:  temp 1 := i ADD 1
-L5:   goto L1
-L6:  END
+Constant_Expression
+ADD AN QUAD：isNotNumber temp 2 
+begin add area
+add not first area
+-----------------NodeContent: Expression_Statement
+Function_Call_With_Args
+ENTER PRINT
+ID
+AAA:j
+AAA:sum
+AAA:a
+PRINT SUCCESS
+-----------------NodeContent: Return_Expression
+L0:  a := 50
+L1:  sum := 99
+L2:  j := 2
+L3:  if sum > j goto L9
+L4:   goto L5
+L5:  temp 0 := sum MOD 2
+L6:  if temp 0 == 1 goto L12
+L7:   goto L9
+L8:  temp 1 := 3 DIV 2
+L9:  temp 2 := sum SUB temp 1
+L10:  sum := temp 2
+L11:   goto L3
+L12:  print sum
+L13:  END
 =========begin generate asm code=========
 这个是跳转指令
 这个是跳转指令
 这个是跳转指令
+这个是跳转指令
+这个是跳转指令
 添加LABEL
 添加LABEL
 添加LABEL
-Symbol Area: 0x55c69f04edd0
+添加LABEL
+Symbol Area: 0x55a4eed79090
+Symbol Name: j	Symbol Addr: 0x55a4eed7a990	Symbol Value: 0	pointer Addr: 12	witdth: 4	Symbol Type: 2	isUsed: 1
+Symbol Name: sum	Symbol Addr: 0x55a4eed7a890	Symbol Value: 0	pointer Addr: 8	witdth: 4	Symbol Type: 2	isUsed: 1
+Symbol Name: a	Symbol Addr: 0x55a4eed7a720	Symbol Value: 0	pointer Addr: 4	witdth: 4	Symbol Type: 2	isUsed: 0
 
 Generating asm code!!!
 begin _asm
-size=10
+size=18
 optype: 5
-L0:  i := 0
+L0:  a := 50
+flag = 6
+optype: 5
+L1:  sum := 99
+flag = 6
+optype: 5
+L2:  j := 2
 flag = 6
 optype: 10
 gengrate LABEL
-optype: 12
-L2:  if i < 10 goto L3
-jump_flag= 1
+optype: 14
+L4:  if sum > j goto L9
+jump_flag= 3
+value1= sum;value2=j
 optype: 11
-L3:   goto L6
+L5:   goto L5
 jump_flag= 3
 optype: 10
 gengrate LABEL
-optype: 0
-L5:  temp 0 := i ADD 1
+optype: 4
+L7:  temp 0 := sum MOD 2
 flag = 5
 tempVar1Reg=-1, tempVar2Reg=-1, resultReg=-1
 ebx == 0
-optype: 0
-L6:  temp 1 := i ADD 1
-flag = 5
-tempVar1Reg=-1, tempVar2Reg=-1, resultReg=-1
-ecx == 0
+optype: 16
+L8:  if temp 0 == 1 goto L12
+jump_flag= 1
+registerUsedVar[0] = 
+registerUsedVar[1] = temp 0
 optype: 11
-L7:   goto L1
+L9:   goto L9
+jump_flag= 3
+optype: 3
+L10:  temp 1 := 3 DIV 2
+flag = 4
+ebx == 0
+optype: 10
+gengrate LABEL
+optype: 1
+L12:  temp 2 := sum SUB temp 1
+flag = 7
+registerUsedVar[0] = 
+registerUsedVar[1] = temp 1
+ebx == 0
+arg1IdName = sum, arg2IdName = temp 1, resultIdName = temp 2
+tempVar1Reg = -1, tempVar2Reg = 2, resultReg = 2
+optype: 5
+L13:  sum := temp 2
+flag = 7
+registerUsedVar[0] = 
+registerUsedVar[1] = temp 2
+optype: 11
+L14:   goto L3
 jump_flag= 3
 optype: 10
 gengrate LABEL
+optype: 19
+L16:  print sum
 optype: 21
-L9:  END
+L17:  END
 extern exit
 
 section .text
@@ -114,23 +216,42 @@ main:
 push ebx
 mov ebp,esp
 
-mov [ebp+4],dword 0
+mov [ebp+4],dword 50
+mov [ebp+8],dword 99
+mov [ebp+12],dword 2
 
-label2:
-cmp [ebp+4],dword 10
-jl label0
+label3:
+mov edx,[ebp+8]
+cmp edx,[ebp+12]
+jg label0
 jmp label1
 
-label0:
-xor ebx,ebx
-mov ebx,dword[ebp+4]
-add ebx,dword 1
-xor ecx,ecx
-mov ecx,dword[ebp+4]
-add ecx,dword 1
-jmp label2
-
 label1:
+xor edx,edx
+mov eax,dword[ebp+8]
+mov ebx,dword 2
+div ebx
+mov ebx,edx
+cmp ebx,dword 1
+je label2
+jmp label0
+xor edx,edx
+mov eax,dword 3
+mov ebx,dword 2
+div ebx
+mov ebx,eax
+
+label0:
+sub [ebp+8],ebx
+mov ebx,[ebp+8]
+mov [ebp+8],ebx
+jmp label3
+
+label2:
+mov eax,[ebp+8]
+
+call print_int_i
+
 pop ebx
 push 0
 call exit

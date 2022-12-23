@@ -57,6 +57,18 @@ void AsmGenerate::releaseRegister(asmRegister reg)
         int index = (int)asmRegister::ecx;
         this->registerUsedVar[index - 1] = "";
     }
+    else if (reg == asmRegister::esi)
+    {
+        esi = 0;
+        int index = (int)asmRegister::esi;
+        this->registerUsedVar[index - 1] = "";
+    }
+    else if (reg == asmRegister::edi)
+    {
+        edi = 0;
+        int index = (int)asmRegister::edi;
+        this->registerUsedVar[index - 1] = "";
+    }
 }
 
 asmRegister AsmGenerate::getRegister(std::string var)
@@ -77,13 +89,21 @@ asmRegister AsmGenerate::getRegister(std::string var)
         this->registerUsedVar[index - 1] = var;
         return asmRegister::ecx;
     }
-    else if (edx == 0)
+    else if (esi == 0)
     {
-        printf("edx == 0\n");
-        edx = 1;
-        int index = (int)asmRegister::edx;
+        printf("esi == 0\n");
+        esi = 1;
+        int index = (int)asmRegister::esi;
         this->registerUsedVar[index - 1] = var;
-        return asmRegister::edx;
+        return asmRegister::esi;
+    }
+    else if (edi == 0)
+    {
+        printf("edi == 0\n");
+        edi = 1;
+        int index = (int)asmRegister::edi;
+        this->registerUsedVar[index - 1] = var;
+        return asmRegister::edi;
     }
     
      printf("?????\n");
@@ -91,7 +111,7 @@ asmRegister AsmGenerate::getRegister(std::string var)
 
 asmRegister AsmGenerate::findRegister(std::string var)
 {
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 8; i++)
     {
         printf("registerUsedVar[%d] = %s\n", i, this->registerUsedVar[i].c_str());
         if (this->registerUsedVar[i] == var)

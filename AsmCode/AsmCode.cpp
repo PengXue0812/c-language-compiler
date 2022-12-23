@@ -18,6 +18,10 @@ std::string AsmCode::transRegister(asmRegister reg)
         return ASM_EBP;
     else if (reg == asmRegister::esp)
         return ASM_ESP;
+    else if (reg == asmRegister::edi)
+        return ASM_EDI;
+    else if (reg == asmRegister::esi)
+        return ASM_ESI;
     else
         return "";
 }

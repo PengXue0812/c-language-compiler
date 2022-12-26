@@ -18,7 +18,7 @@ bool isNumber(std::string str)
     return true;
 }
 
-//所有四元式的构造函数
+// 所有四元式的构造函数
 
 QuadItem::QuadItem(int result, OpType op, int arg1, int arg2)
 {
@@ -151,11 +151,11 @@ void InterCode::Generate(BaseNode *node, SymbolArea *symbolArea)
 
     if (node == NULL)
     {
-        printf("node is NULL\n");
+        // printf("node is NULL\n");
         exit(1);
     }
     std::string node_content = node->getContent();
-    std::cout << node_content << std::endl;
+    // std::cout << node_content << std::endl;
     int type = static_cast<int>(node->getNodeType());
     switch (type)
     {
@@ -800,12 +800,12 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
 {
     if (node == NULL)
     {
-        printf("node is NULL\n");
+        // printf("node is NULL\n");
         exit(1);
     }
     // 确定节点的类型和内容
     std::string node_content = node->getContent();
-    std::cout << node_content << std::endl;
+    // std::cout << node_content << std::endl;
     int type = static_cast<int>(node->getNodeType());
     switch (type)
     {
@@ -816,38 +816,38 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             BaseNode *child = node->getChildNode();
             if (child->getContent() == "print")
             {
-                printf("ENTER PRINT\n");
+                // printf("ENTER PRINT\n");
                 std::string var_name;
                 bool isPointer = false;
                 Symbol *var;
                 if (child->getBrotherNode()->getChildNode()->getContent() == "Identifier_Expression")
                 {
-                    printf("ID\n");
+                    // printf("ID\n");
                     var_name = child->getBrotherNode()->getChildNode()->getChildNode()->getChildNode()->getContent();
                     var = area->findSymbolGlobally(var_name);
                 }
                 else
                 {
-                    printf("PON\n");
+                    // printf("PON\n");
                     var = Exp_Stmt_Generate(child->getBrotherNode()->getChildNode(), area);
                 }
 
-                // printf("END FIND\n");
+                // // printf("END FIND\n");
 
                 QuadItem *quad = new QuadItem(var, OpType::PRINT);
                 this->quad_list.push_back(quad);
-                printf("PRINT SUCCESS\n");
+                // printf("PRINT SUCCESS\n");
             }
         }
     }
     break;
     case static_cast<int>(NodeType::OPERATION):
     {
-        // printf("############OPPPPPPPP:%s\n", node_content.c_str());
+        // // printf("############OPPPPPPPP:%s\n", node_content.c_str());
         // 对于加减乘除生成四元式
         if (node_content == "Add" || node_content == "Sub" || node_content == "Mul" || node_content == "Div" || node_content == "Mod")
         {
-            // printf("operation\n");
+            // // printf("operation\n");
             Symbol *arg1 = Exp_Stmt_Generate(node->getChildNode(), area);
 
             arg1->setIsUsed();
@@ -856,7 +856,7 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             Symbol *result = new Symbol("temp " + std::to_string(this->temp_list.size()), SymbolType::temp_var, 4);
             this->temp_list.push_back(result);
             OpType op;
-            // printf("operation222\n");
+            // // printf("operation222\n");
             if (node_content == "Add")
             {
                 op = OpType::ADDTION;
@@ -878,9 +878,9 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
                 op = OpType::MOD;
             }
             QuadItem *quad;
-            // printf("operation333 %s\n", node_content.c_str());
-            // printf("%s\n", arg1->getIdName().c_str());
-            // printf("%d\n", isNumber(arg1->getIdName().c_str()));
+            // // printf("operation333 %s\n", node_content.c_str());
+            // // printf("%s\n", arg1->getIdName().c_str());
+            // // printf("%d\n", isNumber(arg1->getIdName().c_str()));
             if (isNumber(arg1->getIdName()) && isNumber(arg2->getIdName()))
             {
                 quad = new QuadItem(result, op, std::stoi(arg1->getIdName()), std::stoi(arg2->getIdName()));
@@ -897,14 +897,14 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 quad = new QuadItem(result, op, arg1, arg2);
             }
-            // printf("operation444\n");
+            // // printf("operation444\n");
             this->quad_list.push_back(quad);
             return result;
         }
         // 对于赋值生成四元式
         else if (node_content == "Assign")
         {
-            printf("ASSIGNAssign\n");
+            // printf("ASSIGNAssign\n");
             OpType op = ASSIGN;
             Symbol *result = Exp_Stmt_Generate(node->getChildNode(), area);
             result->setIsUsed();
@@ -928,12 +928,12 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             QuadItem *quad;
             if (isNumber(arg1->getIdName()))
             {
-                printf("ADD AN QUAD：isNumber ASSIGN %s \n", arg1->getIdName().c_str());
+                // printf("ADD AN QUAD：isNumber ASSIGN %s \n", arg1->getIdName().c_str());
                 quad = new QuadItem(result, op, std::stoi(arg1->getIdName()));
             }
             else
             {
-                printf("ADD AN QUAD：isNotNumber %s \n", arg1->getIdName().c_str());
+                // printf("ADD AN QUAD：isNotNumber %s \n", arg1->getIdName().c_str());
                 quad = new QuadItem(result, op, arg1);
             }
             this->quad_list.push_back(quad);
@@ -942,14 +942,14 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
         // 对于基本的逻辑运算
         else if (node_content == "Equal_Operation" || node_content == "Not_Equal_Operation" || node_content == "Greater_Operation" || node_content == "Greater_Equal_Operation" || node_content == "Less_Operation" || node_content == "Less_Equal_Operation")
         {
-            // printf("logic operation\n");
+            // // printf("logic operation\n");
             std::cout << area << std::endl;
             Symbol *arg1 = Exp_Stmt_Generate(node->getChildNode(), area);
-            // printf("logic operation1\n");
+            // // printf("logic operation1\n");
             arg1->setIsUsed();
             Symbol *arg2 = Exp_Stmt_Generate(node->getChildNode()->getBrotherNode(), area);
             arg2->setIsUsed();
-            // printf("logic operation2\n");
+            // // printf("logic operation2\n");
             OpType op;
             if (node_content == "Equal_Operation")
             {
@@ -975,7 +975,7 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 op = JUMP_LE;
             }
-            // printf("logic operation3\n");
+            // // printf("logic operation3\n");
 
             QuadItem *quad_true;
             if (isNumber(arg1->getIdName()) && isNumber(arg2->getIdName()))
@@ -994,7 +994,7 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             {
                 quad_true = new QuadItem(int(NULL), op, arg1, arg2);
             }
-            // printf("logic operation4\n");
+            // // printf("logic operation4\n");
 
             QuadItem *quad_false = new QuadItem(int(NULL), JUMP);
             std::list<int> this_true_list;
@@ -1059,14 +1059,14 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
             }
             else if (node_content == "Not")
             {
-                // printf("------------------not operation\n");
+                // // printf("------------------not operation\n");
                 BaseNode *child = node->getChildNode();
                 while (child != nullptr)
                 {
                     Exp_Stmt_Generate(child, area);
                     child = child->getBrotherNode();
                 }
-                // printf("------------------not operation1\n");
+                // // printf("------------------not operation1\n");
                 std::list<int> this_true_list, this_false_list;
                 this_true_list = trueList.top();
                 trueList.pop();
@@ -1074,7 +1074,7 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
                 falseList.pop();
                 trueList.push(this_false_list);
                 falseList.push(this_true_list);
-                // printf("------------------not operation2\n");
+                // // printf("------------------not operation2\n");
                 break;
             }
         }
@@ -1128,14 +1128,14 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "Identifier_Expression")
         {
-            // printf("Identifier_Expression\n");
+            // // printf("Identifier_Expression\n");
             std::string id_name = node->getChildNode()->getChildNode()->getContent();
-            // printf("Identifier_Expression %s\n", id_name.c_str());
+            // // printf("Identifier_Expression %s\n", id_name.c_str());
             // std::cout << area << std::endl;
 
             Symbol *id = area->findSymbolGlobally(id_name);
-            std::cout << "aaaaaaaaaaaaaaaaaaaa:" << id << std::endl;
-            // printf("Identifier_Expression %s\n", id_name.c_str());
+            // std::cout << "aaaaaaaaaaaaaaaaaaaa:" << id << std::endl;
+            // // printf("Identifier_Expression %s\n", id_name.c_str());
             return id;
         }
         else if (node_content == "For_Expression")
@@ -1144,16 +1144,16 @@ Symbol *InterCode::Exp_Stmt_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "Braces")
         {
-            // printf("braces begin\n");
+            // // printf("braces begin\n");
             Symbol *symbol = Exp_Stmt_Generate(node->getChildNode(), area);
             symbol->setIsUsed();
-            // printf("braces csdsa\n");
+            // // printf("braces csdsa\n");
             return symbol;
         }
     }
     break;
     default:
-        printf("Error: Unknown node type in Exp_Stmt_Generate");
+        // printf("Error: Unknown node type in Exp_Stmt_Generate");
         exit(1);
     }
 }
@@ -1161,7 +1161,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
 {
     if (node == NULL)
     {
-        printf("node is NULL\n");
+        // printf("node is NULL\n");
         exit(1);
     }
     std::string node_content = node->getContent();
@@ -1180,7 +1180,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
     break;
     case static_cast<int>(NodeType::STATEMENT):
     {
-        printf("-----------------NodeContent: %s\n", node_content.c_str());
+        // printf("-----------------NodeContent: %s\n", node_content.c_str());
         if (node_content == "If_Statement")
         {
             BaseNode *condition = node->getChildNode();
@@ -1200,63 +1200,62 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         else if (node_content == "If_Else_Statement")
         {
             BaseNode *condition = node->getChildNode();
-            //去生成if的条件的三地址码
+            // 去生成if的条件的三地址码
             Exp_Stmt_Generate(condition, area);
             int start = quad_list.size();
-            //存着if的条件为真该跳转的位置的trueList
+            // 存着if的条件为真该跳转的位置的trueList
             std::list<int> ifTrue = trueList.top();
-            //存着if的条件为假该跳转的位置的falseList
+            // 存着if的条件为假该跳转的位置的falseList
             std::list<int> ifFalse = falseList.top();
             trueList.pop();
             falseList.pop();
-            //回填if的条件为真该跳转的位置的trueList
+            // 回填if的条件为真该跳转的位置的trueList
             backpatch(&ifTrue, start);
-            //创建一个新的符号表,是if为真的符号表
-            // printf("add if area\n");
+            // 创建一个新的符号表,是if为真的符号表
+            //  // printf("add if area\n");
             SymbolArea *ifSymbelArea = area->addNewChildArea();
-            //生成if的body
+            // 生成if的body
             BaseNode *ifContent = condition->getBrotherNode();
             Body_Generate(ifContent, ifSymbelArea);
 
-            //执行完if的body后,需要跳转else后面的三地址码
+            // 执行完if的body后,需要跳转else后面的三地址码
             QuadItem *temp = new QuadItem((int)NULL, OpType::JUMP);
             this->quad_list.push_back(temp);
             temp = quad_list.back();
 
-            //回填if的条件为假该跳转的位置的falseList
+            // 回填if的条件为假该跳转的位置的falseList
             int elseStart = quad_list.size();
             backpatch(&ifFalse, elseStart);
 
-            //生成else的body
-            // printf("add else area\n");
+            // 生成else的body
+            //  // printf("add else area\n");
             SymbolArea *elseSymbelArea = area->addNewChildArea();
             BaseNode *elseContent = ifContent->getBrotherNode();
             Body_Generate(elseContent, elseSymbelArea);
-            //回填执行完if的body后,需要跳转else后面的三地址码
+            // 回填执行完if的body后,需要跳转else后面的三地址码
             int end = quad_list.size();
             temp->backpatch(end);
         }
         else if (node_content == "While_Statement")
         {
-            // printf("while-------------------\n");
+            // // printf("while-------------------\n");
             BaseNode *condition = node->getChildNode();
-            //去生成While的条件的三地址码
+            // 去生成While的条件的三地址码
             int start = quad_list.size();
             Exp_Stmt_Generate(condition, area);
-            // printf("while----------kjhkjkjhkjhkjh---------\n");
+            // // printf("while----------kjhkjkjhkjhkjh---------\n");
 
-            
-            //存着While的条件为真该跳转的位置的trueList
+            // 存着While的条件为真该跳转的位置的trueList
             std::list<int> whileTrue = trueList.top();
-            //存着While的条件为假该跳转的位置的falseList
+            // 存着While的条件为假该跳转的位置的falseList
             std::list<int> whileFalse = falseList.top();
             trueList.pop();
             falseList.pop();
-            //回填While的条件为真该跳转的位置的trueList
+            // 回填While的条件为真该跳转的位置的trueList
             backpatch(&whileTrue, whileTrue.back() + 1);
-            //创建一个新的符号表,是while的body的符号表
+            // 创建一个新的符号表,是while的body的符号表
             SymbolArea *whileSymbelArea = area->addNewChildArea();
-            //生成while的body
+            // 生成while的body
             BaseNode *while_content = condition->getBrotherNode();
             while (while_content != NULL)
             {
@@ -1264,7 +1263,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                 while_content = while_content->getBrotherNode();
                 SymbolArea *whileSymbelArea = area->addNewChildArea();
             }
-            //回填执行完while的body后,条件为假需要跳出循环后面的三地址码
+            // 回填执行完while的body后,条件为假需要跳出循环后面的三地址码
             int end = quad_list.size();
             QuadItem *temp = new QuadItem(start, OpType::JUMP);
             this->quad_list.push_back(temp);
@@ -1272,37 +1271,37 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "For_Def_SEMI_Expression_SEMI_Expression")
         {
-            // printf("For_Def_SEMI_Expression_SEMI_Expression\n");
-            //生成for的初始化声明
+            // // printf("For_Def_SEMI_Expression_SEMI_Expression\n");
+            // 生成for的初始化声明
             BaseNode *forDeclear = node->getChildNode();
             SymbolArea *forDeclearArea = area->addNewChildArea();
-            if(forDeclear->getContent() == "For_Expression")
+            if (forDeclear->getContent() == "For_Expression")
             {
                 Exp_Stmt_Generate(forDeclear, forDeclearArea);
-            }else
+            }
+            else
             {
                 Body_Generate(forDeclear->getChildNode(), forDeclearArea);
             }
-            
-            
-            // printf("forDeclearArea\n");
-            //下一句是for循环的开始
+
+            // // printf("forDeclearArea\n");
+            // 下一句是for循环的开始
             int forStart = quad_list.size();
             BaseNode *forCondition = forDeclear->getBrotherNode();
-            // printf("forConditiowawsdfasdn\n");
+            // // printf("forConditiowawsdfasdn\n");
             Exp_Stmt_Generate(forCondition, forDeclearArea);
-            // printf("forConditio111n\n");
+            // // printf("forConditio111n\n");
             std::list<int> forTrue = trueList.top();
             std::list<int> forFalse = falseList.top();
             trueList.pop();
             falseList.pop();
-            // printf("forCondition\n");
+            // // printf("forCondition\n");
             //???
             backpatch(&forTrue, forTrue.back() + 2);
             // SymbolArea *forBodyArea = area->addNewChildArea();
             BaseNode *forBody = forCondition->getBrotherNode()->getBrotherNode();
             Body_Generate(forBody, forDeclearArea);
-            // printf("forBody\n");
+            // // printf("forBody\n");
             BaseNode *forUpdate = forCondition->getBrotherNode();
             Exp_Stmt_Generate(forUpdate, forDeclearArea);
             QuadItem *temp = new QuadItem(forStart, OpType::JUMP);
@@ -1327,8 +1326,8 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
     {
         if (node_content == "Declare_Statement")
         {
-            // printf("kjh1\n");
-            int type = static_cast<int>(SymbolType::integer); //默认为int
+            // // printf("kjh1\n");
+            int type = static_cast<int>(SymbolType::integer); // 默认为int
             BaseNode *child = node->getChildNode();
             if (child->getContent() == "void_type")
             {
@@ -1347,16 +1346,16 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
         }
         else if (node_content == "Declare_Variable" || node_content == "Declare_Variables")
         {
-            // printf("kjh2\n");
-            // printf("aaaa:%s\n", node->getContent());
+            // // printf("kjh2\n");
+            // // printf("aaaa:%s\n", node->getContent());
             BaseNode *child = node->getChildNode();
-            // printf("bbbb:%s\n", node->getParentNode()->getContent());
+            // // printf("bbbb:%s\n", node->getParentNode()->getContent());
             BaseNode *mod_node = node->getParentNode()->getChildNode();
-            // printf("aaaaaaaaaa\n");
-            printf("%s\n", child->getContent());
+            // // printf("aaaaaaaaaa\n");
+            // printf("%s\n", child->getContent());
             if (child->getContent() == "Variable")
-            { //只声明不赋值
-               
+            { // 只声明不赋值
+
                 BaseNode *ccNode = child->getChildNode();
                 std::string name = ccNode->getContent();
                 if (name == "Def_array[Const]")
@@ -1397,8 +1396,8 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                             exit(1);
                         }
                         Symbol *symbol = new Symbol(pointer_name, SymbolType::pointer, 4);
-                        symbol->setPointerAddr(-1); //野指针
-                        area->addSymbol(symbol);    //指针加入符号表，并不会改变offset
+                        symbol->setPointerAddr(-1); // 野指针
+                        area->addSymbol(symbol);    // 指针加入符号表，并不会改变offset
                     }
                     else
                     {
@@ -1412,18 +1411,18 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                         Symbol *symbol = new Symbol(identifier_name, SymbolType::var, 4);
                         area->setOffset(area->getOffset() + symbol->getWidth());
                         symbol->setPointerAddr(area->getOffset());
-                        printf("add symbol : %s\n", symbol->getIdName().c_str());
+                        // printf("add symbol : %s\n", symbol->getIdName().c_str());
                         area->addSymbol(symbol);
                     }
                 }
             }
             else if (child->getContent() == "Variable_Assign")
             {
-                // printf("kjh3\n");
+                // // printf("kjh3\n");
 
                 if (child->getChildNode()->getContent() == "Def_Identifier")
                 {
-                    // printf("kjh4\n");
+                    // // printf("kjh4\n");
 
                     if (mod_node->getContent() == "int*_Type")
                     {
@@ -1444,7 +1443,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                     }
                     else
                     {
-                        // printf("enter INT type\n");
+                        // // printf("enter INT type\n");
 
                         std::string identifier_name = child->getChildNode()->getChildNode()->getContent();
                         Symbol *identifier_symbol = area->findSymbolLocally(identifier_name);
@@ -1453,27 +1452,27 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                             std::cout << "error: redefinition of " << identifier_name << std::endl;
                             exit(1);
                         }
-                        // printf("xp-1\n");
+                        // // printf("xp-1\n");
                         BaseNode *ccNode = child->getChildNode()->getBrotherNode();
-                        // printf("xp-1.5\n");
-                        // printf("%s\n", ccNode->getContent().c_str());
+                        // // printf("xp-1.5\n");
+                        // // printf("%s\n", ccNode->getContent().c_str());
                         Symbol *symbol = Exp_Stmt_Generate(ccNode, area);
-                        // printf("xp-2\n");
+                        // // printf("xp-2\n");
                         std::string symbol_name = symbol->getIdName();
 
-                        // printf("xp1\n");
+                        // // printf("xp1\n");
                         Symbol *var = new Symbol(identifier_name, SymbolType::var, 4);
                         int var_type = static_cast<int>(var->getSymbolType());
                         int symbol_type = static_cast<int>(symbol->getSymbolType());
-                        // printf("%d %d \n", var_type, symbol_type);
-                        if (var_type == 2 && (symbol_type == 2||symbol_type==3))
+                        // // printf("%d %d \n", var_type, symbol_type);
+                        if (var_type == 2 && (symbol_type == 2 || symbol_type == 3))
                         {
                             area->setOffset(area->getOffset() + var->getWidth());
                             var->setPointerAddr(area->getOffset());
                             area->addSymbol(var);
-                            // printf("var\n");
+                            // // printf("var\n");
                         }
-                        // printf("xp2\n");
+                        // // printf("xp2\n");
                         QuadItem *quad;
                         if (isNumber(symbol_name))
                         {
@@ -1485,7 +1484,7 @@ SymbolArea *InterCode::Body_Generate(BaseNode *node, SymbolArea *area)
                         }
                         this->quad_list.push_back(quad);
 
-                        // printf("xp3\n");
+                        // // printf("xp3\n");
                     }
                 }
             }

@@ -1496,7 +1496,7 @@ yyreduce:
         printer.print();
         interCode.Root_Generate();
         // interCode.getTable()->getFirstChildArea()->showSymbolArea();
-        printf("=========begin generate asm code=========\n");
+        // printf("=========begin generate asm code=========\n");
         AsmGenerate* asmgenerate = new AsmGenerate(interCode.getQuadlist(),  interCode.getTable());
         asmgenerate->generate();
 

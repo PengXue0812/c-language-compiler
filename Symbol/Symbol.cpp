@@ -62,7 +62,7 @@ Symbol *SymbolArea::findSymbolGlobally(std::string name)
     {
         for (auto i : area->SymbolMap)
         {
-            printf("AAA:%s\n", i.first.c_str());
+            // printf("AAA:%s\n", i.first.c_str());
         }
         cnt++;
         if (area->SymbolMap.find(name) != area->SymbolMap.end())
@@ -71,7 +71,7 @@ Symbol *SymbolArea::findSymbolGlobally(std::string name)
         }
         area = area->getParentArea();
     }
-    printf("finddeep：%d\n", cnt);
+    // printf("finddeep：%d\n", cnt);
     // std::cout << name << std::endl;
     printf("Variable %s Undefined!\n", name.c_str());
     exit(1);
@@ -85,7 +85,7 @@ bool SymbolArea::addSymbol(Symbol *symbol)
     }
     this->SymbolMap[symbol->getIdName()] = symbol;
     this->symbolNumber++;
-    printf("nishiadsa:%s\n", symbol->getIdName().c_str());
+    // printf("nishiadsa:%s\n", symbol->getIdName().c_str());
     return true;
 }
 
@@ -121,16 +121,16 @@ SymbolArea *SymbolArea::addNewChildArea()
 {
     SymbolArea *newArea = new SymbolArea();
     newArea->setParentArea(this);
-    printf("begin add area\n");
+    // printf("begin add area\n");
     if (this->firstChildArea == nullptr)
     {
-        printf("add first area\n");
+        // printf("add first area\n");
 
         this->firstChildArea = newArea;
     }
     else
     {
-        printf("add not first area\n");
+        // printf("add not first area\n");
 
         SymbolArea *temp = this->firstChildArea;
         while (temp->getFirstBrotherArea() != nullptr)
